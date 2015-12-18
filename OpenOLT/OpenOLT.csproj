@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8FED0E73-EE8D-4269-9BFE-6CFBC4D07064}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenOLT</RootNamespace>
+    <AssemblyName>OpenOLT</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>OpenOLT.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\OnlineEMS.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\OnlineEMS.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Gigasoft.ProEssentials, Version=4.0.4162.23147, Culture=neutral, PublicKeyToken=38150f10c0d12be5, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataLogger.cs" />
+    <Compile Include="DataValueInfo\ChartSet.cs" />
+    <Compile Include="DataValueInfo\ValueInfo.cs" />
+    <Compile Include="DiagDataKeeper.cs" />
+    <Compile Include="Firmware\FirmwareManager.cs" />
+    <Compile Include="GUI\DiagValueControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\DiagValueControl.Designer.cs">
+      <DependentUpon>DiagValueControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DiagValuesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\DiagValuesPanel.Designer.cs">
+      <DependentUpon>DiagValuesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DiagValuesSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DiagValuesSelectForm.Designer.cs">
+      <DependentUpon>DiagValuesSelectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ErrorCodesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ErrorCodesForm.Designer.cs">
+      <DependentUpon>ErrorCodesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\RTGridPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\RTGridPanel.Designer.cs">
+      <DependentUpon>RTGridPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Intro\IntroWindow.xaml.cs">
+      <DependentUpon>IntroWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoadFirmwareToEcuType.cs" />
+    <Compile Include="Map\FirmwareMap.cs" />
+    <Compile Include="GUI\DiagChartPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\DiagChartPanel.Designer.cs">
+      <DependentUpon>DiagChartPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DiagGaugePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\DiagGaugePanel.Designer.cs">
+      <DependentUpon>DiagGaugePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FirmwareEditPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\FirmwareEditPanel.Designer.cs">
+      <DependentUpon>FirmwareEditPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Map\Table.cs" />
+    <Compile Include="OnlineManager.cs" />
+    <Compile Include="GUI\OpenCharts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\OpenCharts.Designer.cs">
+      <DependentUpon>OpenCharts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PluginManager.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+    <Content Include="unpacker.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="..\OpenOltPlugins\RamTableManager\tables.map">
+      <Link>tables.map</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="check-engine.ru.png" />
+    <Content Include="app.ico" />
+    <Content Include="errors.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="error_status.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="firmwares\i205dm53.bir" />
+    <Content Include="Gigasoft.ProEssentials.dll" />
+    <None Include="maps\i205do54.xdf" />
+    <None Include="firmwares\j7es_v15.bin" />
+    <None Include="Resources\exit.ico" />
+    <None Include="Resources\layout.png" />
+    <None Include="Resources\layout_add.png" />
+    <None Include="Resources\cross.png" />
+    <SplashScreen Include="Resources\Intro.png" />
+    <Content Include="TODO.txt" />
+    <None Include="Resources\table.png" />
+    <None Include="Resources\page_right.gif" />
+    <None Include="Resources\page_left.gif" />
+    <None Include="Resources\chart_line_add.png" />
+    <None Include="Resources\chart_line_edit.png" />
+    <None Include="Resources\decScale.png" />
+    <None Include="Resources\incScale.png" />
+    <None Include="Resources\chart_curve_go.png" />
+    <None Include="Resources\action_go.gif" />
+    <Content Include="PEGRP32E.DLL">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\open_bin.png" />
+    <Content Include="Resources\open_map.png" />
+    <None Include="Resources\icon_extension.gif" />
+    <EmbeddedResource Include="GUI\DiagChartPanel.resx">
+      <DependentUpon>DiagChartPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DiagGaugePanel.resx">
+      <DependentUpon>DiagGaugePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DiagValueControl.resx">
+      <DependentUpon>DiagValueControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DiagValuesPanel.resx">
+      <DependentUpon>DiagValuesPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DiagValuesSelectForm.resx">
+      <DependentUpon>DiagValuesSelectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ErrorCodesForm.resx">
+      <DependentUpon>ErrorCodesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FirmwareEditPanel.resx">
+      <DependentUpon>FirmwareEditPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\RTGridPanel.resx">
+      <DependentUpon>RTGridPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\OpenCharts.resx">
+      <DependentUpon>OpenCharts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AGauge\AGauge.csproj">
+      <Project>{FB89F830-9695-466E-B495-6D7E1E3AD198}</Project>
+      <Name>AGauge</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CalibrGui\CalibrGui.csproj">
+      <Project>{59559ff7-2b8d-4f03-b0fa-238453ef8dcb}</Project>
+      <Name>CalibrGui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CalibrTable\CalibrTable.csproj">
+      <Project>{8AD1538A-7B41-4A7A-ACCD-A29A0648644A}</Project>
+      <Name>CalibrTable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crad.Windows.Forms.Actions\Crad.Windows.Forms.Actions.csproj">
+      <Project>{6E50D1BD-D8EA-4992-8B25-C5A0D7E179A5}</Project>
+      <Name>Crad.Windows.Forms.Actions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CtpMaps\CtpMaps.csproj">
+      <Project>{F953B960-87FF-4DE6-BB8B-BD7E8117618C}</Project>
+      <Name>CtpMaps</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECUAdapter\EcuCommunication.csproj">
+      <Project>{74911440-552F-4FD9-AFB3-347D587F7209}</Project>
+      <Name>EcuCommunication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Helper\Helper.csproj">
+      <Project>{83873DFF-6031-413F-B649-3D4730F26C02}</Project>
+      <Name>Helper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InnovateCommunication\WidebandLambdaCommunication.csproj">
+      <Project>{25C10F15-FF86-4506-9530-C06A2F5CF7C4}</Project>
+      <Name>WidebandLambdaCommunication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenOltPlugins\IoControlPlugin\IoControlPlugin.csproj">
+      <Project>{582148c2-15d0-442a-86a1-1dbde36cee94}</Project>
+      <Name>IoControlPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenOltPlugins\OltEditorPlugin\OltEditorPlugin.csproj">
+      <Project>{7ff36601-1434-450a-885f-ee620787684b}</Project>
+      <Name>OltEditorPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenOltPlugins\RamTableManager\RamTablePlugin.csproj">
+      <Project>{0570686e-107d-4e8c-9995-91db5512f335}</Project>
+      <Name>RamTablePlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenOltTypes\OpenOltTypes.csproj">
+      <Project>{07070496-C690-4D4B-B4E7-1065F8D4E180}</Project>
+      <Name>OpenOltTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SerialPortEx\SerialPortLib.csproj">
+      <Project>{E590B30C-D681-4F9D-9C53-C058366F52F3}</Project>
+      <Name>SerialPortLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tools.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\connect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disconnect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gauge2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\open_log.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Intro\IntroWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>rem copy $(SolutionDir)OpenOltPlugins\RamTableManager\$(OutDir)*.dll $(TargetDir)
+rem copy $(SolutionDir)OpenOltPlugins\RamTableManager\$(OutDir)*.map $(TargetDir)
+rem copy $(SolutionDir)OpenOltPlugins\IoControlPlugin\$(OutDir)*.dll $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

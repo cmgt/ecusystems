@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{365A054F-3406-41E8-9F95-3D324AAF6E9B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SokolovSport</RootNamespace>
+    <AssemblyName>SokolovSport</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>SokolovSport.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="C1.Win.C1Command.4, Version=4.0.20113.19499, Culture=neutral, PublicKeyToken=e808566f358766d8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="C1.Win.C1FlexGrid.4, Version=4.6.20113.647, Culture=neutral, PublicKeyToken=79882d576c6336da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Gigasoft.ProEssentials">
+      <HintPath>..\..\..\ProEssentials7\DotNet20\Gigasoft.ProEssentials.dll</HintPath>
+    </Reference>
+    <Reference Include="SMSIntro, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dat\CalibrItem.cs" />
+    <Compile Include="Dat\DatFile.cs" />
+    <Compile Include="Dat\DatHelper.cs" />
+    <Compile Include="Dat\Enums.cs" />
+    <Compile Include="Dat\ItemInfo.cs" />
+    <Compile Include="Dispatcher.cs" />
+    <Compile Include="EcuComm\CommunicationHelper.cs" />
+    <Compile Include="EcuComm\EcuCommunication.cs" />
+    <Compile Include="EcuComm\Request.cs" />
+    <Compile Include="GUI\Calibr3DControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Calibr3DControl.Designer.cs">
+      <DependentUpon>Calibr3DControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\CalibrInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\CalibrInfo.Designer.cs">
+      <DependentUpon>CalibrInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Logs\CalibrLogger.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Options\OptionsHelper.cs" />
+    <Compile Include="Options\OptionsEntity.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="GUI\Calibr3DControl.resx">
+      <DependentUpon>Calibr3DControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CalibrInfo.resx">
+      <DependentUpon>CalibrInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Info\запись и чтение всех калибровок.LOG" />
+    <None Include="Info\запись код файла в блок и дат файла.LOG" />
+    <None Include="Info\просто работа программы чтение таблиц топлива и зажигания из блока.LOG" />
+    <None Include="Properties\DataSources\SokolovSport.Dat.BaseItem.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="sisert_w4.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="C1.Win.C1Command.4.dll" />
+    <Content Include="C1.Win.C1FlexGrid.4.dll" />
+    <Content Include="Gigasoft.ProEssentials.dll" />
+    <Content Include="Info\DatFormat.txt" />
+    <Content Include="SMSIntro.dll" />
+    <None Include="Resources\grid.png" />
+    <None Include="Resources\chart.png" />
+    <None Include="Resources\tools.ico" />
+    <None Include="Resources\Open.ico" />
+    <None Include="Info\WinJMon.exe" />
+    <Content Include="PEGRP32E.DLL">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CalibrGui\CalibrGui.csproj">
+      <Project>{59559FF7-2B8D-4F03-B0FA-238453EF8DCB}</Project>
+      <Name>CalibrGui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CalibrTable\CalibrTable.csproj">
+      <Project>{8AD1538A-7B41-4A7A-ACCD-A29A0648644A}</Project>
+      <Name>CalibrTable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Helper\Helper.csproj">
+      <Project>{83873DFF-6031-413F-B649-3D4730F26C02}</Project>
+      <Name>Helper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SerialPortEx\SerialPortLib.csproj">
+      <Project>{E590B30C-D681-4F9D-9C53-C058366F52F3}</Project>
+      <Name>SerialPortLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

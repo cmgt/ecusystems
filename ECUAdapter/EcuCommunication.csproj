@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{74911440-552F-4FD9-AFB3-347D587F7209}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EcuCommunication</RootNamespace>
+    <AssemblyName>EcuCommunication</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ECUError.cs" />
+    <Compile Include="ECUErrorFactory.cs" />
+    <Compile Include="Protocols\DiagData.cs" />
+    <Compile Include="JRequest.cs" />
+    <Compile Include="Protocols\DiagProtocolHelper.cs" />
+    <Compile Include="Protocols\IDiagDataRequest.cs" />
+    <Compile Include="Protocols\IoControlType.cs" />
+    <Compile Include="Protocols\J7esDiagData.cs" />
+    <Compile Include="Protocols\Requests\IoControlRequest.cs" />
+    <Compile Include="Protocols\Requests\J7esOltDiagDataRequest.cs" />
+    <Compile Include="Protocols\Requests\OltDiagV1DataRequest.cs" />
+    <Compile Include="Protocols\IDiagProtocol.cs" />
+    <Compile Include="Protocols\Requests\OltDiagV3DataRequest.cs" />
+    <Compile Include="Protocols\OltProtocol.cs" />
+    <Compile Include="Protocols\OltProtocolVersion.cs" />
+    <Compile Include="Protocols\Requests\ReadErrorDataRequest.cs" />
+    <Compile Include="Protocols\Requests\ReadRamRequest.cs" />
+    <Compile Include="Protocols\Requests\Rus83DiagDataRequest.cs" />
+    <Compile Include="Protocols\Requests\SimpleADCDataRequest.cs" />
+    <Compile Include="Protocols\Requests\Euro2DiagDataRequest.cs" />
+    <Compile Include="Protocols\Requests\StartCaptureRequest.cs" />
+    <Compile Include="Protocols\Requests\WriteRamRequest.cs" />
+    <Compile Include="Request.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Helper\Helper.csproj">
+      <Project>{83873DFF-6031-413F-B649-3D4730F26C02}</Project>
+      <Name>Helper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

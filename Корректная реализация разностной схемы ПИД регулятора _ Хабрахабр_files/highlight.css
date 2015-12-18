@@ -1,0 +1,102 @@
+pre code {
+    font-size: 12px;
+    padding: 0.5em;
+    background: #f8f8f8;
+    display: block;
+    }
+    code .subst,
+    code .title {
+      font-weight: normal;
+      color: #000;
+    }
+
+    code .comment,
+    code .template_comment,
+    code .javadoc,
+    code .diff .header {
+      color: #808080;
+    }
+
+    code .annotation,
+    code .decorator,
+    code .preprocessor,
+    code .doctype,
+    code .pi,
+    code .chunk,
+    code .shebang,
+    code .apache .cbracket {
+      color: #808000;
+    }
+
+    code .tag,
+    code .tag .title,
+    code .pi
+    code .id,
+    code .attr_selector,
+    code .pseudo,
+    code .literal,
+    code .keyword,
+    code .hexcolor,
+    code .css .function,
+    code .ini .title,
+    code .css .class,
+    code .list .title,
+    code .tex .command {
+      color: #4d7386;
+    }
+
+    code .attribute,
+    code .rules .keyword,
+    code .number,
+    code .date,
+    code .regexp,
+    code .tex .special {
+      color: #2f98ff;
+    }
+
+    code .number,
+    code .regexp {
+      font-weight: normal;
+    }
+
+    code .string,
+    code .value,
+    code .filter .argument,
+    code .css .function .params,
+    code .apache .tag {
+      color: #339900;
+    }
+
+    code .symbol,
+    code .ruby .symbol .string,
+    code .ruby .symbol .keyword,
+    code .ruby .symbol .keymethods,
+    code .char,
+    code .tex .formula {
+      color: #968e5b;
+    }
+
+    code .phpdoc,
+    code .yardoctag,
+    code .javadoctag {
+      text-decoration: underline;
+    }
+
+    code .variable,
+    code .envvar,
+    code .apache .sqbracket,
+    code .nginx .built_in {
+      color: #968e5b;
+    }
+
+    code .addition {
+      background: #baeeba;
+    }
+
+    code .deletion {
+      background: #ffc8bd;
+    }
+
+    code .diff .change {
+      background: #bccff9;
+    }

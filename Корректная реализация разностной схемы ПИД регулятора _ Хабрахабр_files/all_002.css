@@ -1,0 +1,1273 @@
+
+
+/*   ==reset==   */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	outline:0;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+b{font-weight:bold;}
+i{font-style:italic;}
+
+*:focus,
+input:focus,
+textarea:focus,
+select:focus{/*outline:none;*/}
+textarea{resize:none;}
+
+
+
+/*   ==global==   */
+/**
+ * Глобальные стили, которые применяются на всех страницах Хабрахабра.
+ */
+
+body{font-family:Verdana, sans-serif;text-align:center;font-size:12px;background:#fff;}
+
+.hidden{display:none;}
+.clear{clear:both;}
+.error{color:red;}
+a.dotted,
+a.dotted:hover{border-bottom: 1px dashed;text-decoration: none}
+
+h1{font-size:24px;color:#999;}
+h2{font-size:20px;color:#999;}
+h3{font-size:16px;color:#999;}
+h4{font-size:12px;color:#999;}
+
+/* standart links */
+a{color:#6DA3BD;}
+a:hover{color:#4d7285;}
+
+/* active links - dotted */
+.dotted,
+a.dotted,
+a.dotted:hover{text-decoration:none;border-bottom:1px dashed;}
+
+/* silver links */
+.silver a,
+a.silver{color:#999999;}
+.silver a:hover,
+a:hover.silver{color:#333333;}
+
+/* grey links */
+.grey a,
+a.grey{color:#666;}
+.grey a:hover,
+a:hover.grey{color:#A3A3A3;}
+
+/* dark links */
+.dark,
+.dark a,
+a.dark{color:#343434;}
+.dark a:hover,
+a:hover.dark{color:#858585;}
+
+a.user_link {
+	padding-left: 14px;
+	color: #666;
+	font: normal 92.4%/1.5em arial;
+	background: url(/i/bg-user2.gif) 0 60% no-repeat;
+}
+
+/* таблицы */
+table.table{width:100%;color: dimGray;text-align: left}
+table.table tr{background:#F4F3ED;}
+table.table tr:nth-child(2n){background:#fff;}
+table.table tr:hover{background: #F8F8FF;}   
+table.table tr td{padding:10px;}
+table.table tr th{padding:10px;font-size:11px;background:#fff;border-bottom:1px solid #ccc;font-weight: bold;}
+
+
+
+.buttons{}
+
+
+.buttons input:disabled{/*background-color: #DDD;color: #EEE;border-style: solid;*/}
+
+.buttons .description{font-size:11px;color:#999999;clear:both;padding-top:10px;}
+
+
+
+.buttons input.loading,
+.buttons input.loading:active,
+.buttons input.loading:hover,
+input.loading{background: url(/i/form/loader_button.gif) repeat;}
+
+.buttons input:disabled:active,
+.buttons input {
+		font-size: 12px;
+    padding: 5px 10px;
+    background: #EAECEA;
+    color: #222;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: solid 1px #aaa;
+    /*text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);*/
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    cursor: pointer;
+}
+.buttons input:hover {
+    background: #dddddd;
+    border: solid 1px #999;
+    text-decoration: none;
+}
+.buttons input:active {
+    -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    background: #a9a9a9;
+    border: solid 1px #777;
+}
+.buttons input:disabled:active,
+.buttons input:disabled{
+	background: #fAfCfA;
+  color: #aaa;
+  border: solid 1px #eee;
+}
+	
+
+
+.buttons input.big,
+.buttons input:hover.big,
+.buttons input:active.big{font-size:20px;} 
+
+
+/* Banner 100% X 90px */
+#topline{height:90px;width:100%;overflow: hidden;}
+
+/* Layout */
+#layout{text-align:left;margin:0 auto;padding:0 35px;padding-left:60px;min-width:800px;max-width:1154px;border:0px solid red;}
+
+/* Header */
+#header{text-align:center;position:relative;padding-bottom:24px;padding-top:10px;}
+
+/* logotype */
+#header .logo{margin:10px auto;background: url("/i/bg-multilogo.png") -76px -144px;display: block;height: 110px;width: 111px;}
+
+/* userpanel */
+#header .userpanel{position:absolute;left:0;top:10px;width:350px;border:0px solid green;text-align:left;font-family:arial;}
+#header .userpanel a{margin-right:10px;}
+#header .userpanel a.username{font-weight:bold;margin-right:0;}
+#header .userpanel sup{color:#999999;font-size:11px;vertical-align:super;}
+#header .userpanel sup a{margin-right:0;}
+#header .userpanel a.nav-settings{margin-left: 10px;}
+#header .userpanel .top{margin-bottom:1px;}
+#header .userpanel .bottom{margin-bottom:5px;}
+#header .userpanel .charge{font-size:11px;line-height:13px;color:#999999;}
+#header .userpanel .habrauser-newmail {
+    background: url("/i/icos/new-message.gif") no-repeat scroll 0 2px transparent;
+    margin-left: -21px;
+    padding-left: 21px;
+}
+
+/* search form */
+#header .search{position:absolute;right:0;top:32px;width:30%;border:0px solid green;}
+#header .search form{width:280px;float:right;}
+#header .search form input[type="text"]{font-size:12px;font-family:arial;border:1px solid #D1D1D1;background:#fff;color:#CCCCCC;padding:2px 4px;height:15px;width:226px;float:right;display:block;}
+#header .search form input[type="submit"]{border:0;background:url("/i/bg-button-enter.png") no-repeat 0 0;width:21px;height:21px;display:block;float:right;margin-left:5px;}
+
+#header .main_menu{text-align:left;font-size:30px;font-family:Verdana,sans-serif;text-transform:lowercase;padding-top:15px;overflow:hidden;}
+#header .main_menu a{margin-right:26px;display:block;float:left;}
+#header .main_menu a.active{text-decoration:none;color:#000;}
+#header .main_menu .banner_special{float:left;}
+
+.content_left{float:left;margin-right:2%;width:65.5%;}
+
+.content_left .add_post{margin-right:1px;margin-left:-35px;float:left;}
+.content_left .add_post a{display:block;background: url(/i/write-topic.png);width:34px;height:35px;}
+.content_left .add_post a:hover{}
+
+.content_left table.menu{width:100%;}
+.content_left table.menu tr{}
+.content_left table.menu tr td{text-align:center;border-right:1px solid #fff;border-bottom:1px solid #fff;line-height:19px;}
+.content_left table.menu tr td span.disabled,
+.content_left table.menu tr td a{display:block;padding:0px 15px;padding-top:7px;padding-bottom:9px;font-size:16px;background: #EAECEA;color:#666666;
+                                -webkit-border-top-left-radius: 10px;
+                                -webkit-border-top-right-radius: 10px;
+                                -moz-border-radius-topleft: 10px;
+                                -moz-border-radius-topright: 10px;
+                                border-top-left-radius: 10px;
+                                border-top-right-radius: 10px;
+                                text-decoration: none;
+                                }
+.content_left table.menu tr td a .name{text-decoration: underline}
+.content_left table.menu tr td a:hover{color:#a3a3a3;}
+.content_left table.menu tr td.active{border-bottom:1px solid #D3E2F0;}
+.content_left table.menu tr td.active a{color:#000;background:#D3E2F0;text-decoration:none;}
+.content_left table.menu tr td.active a .name{text-decoration: none;}
+.content_left table.menu tr td span.disabled{color:#bbb;}
+.content_left table.menu tr td span.count{}
+.content_left table.menu tr td span.count_new{color:green;}
+
+.content_left .submenu{margin-bottom:20px;float:left;overflow:hidden;padding:0px 3px;background:#D3E2F0;color:#666666;margin-right:1px;
+                                -webkit-border-bottom-left-radius: 10px;
+                                -webkit-border-bottom-right-radius: 10px;
+                                -moz-border-radius-bottomleft: 10px;
+                                -moz-border-radius-bottomright: 10px;
+                                border-bottom-left-radius: 10px;
+                                border-bottom-right-radius: 10px;}
+.content_left .submenu.right{float:right;}
+.content_left .submenu .item{float:left;padding:6px 7px;}
+.content_left .submenu .item a{color:#666666;text-decoration: none;}
+.content_left .submenu .item a .name{text-decoration: underline;}
+.content_left .submenu .item a:hover{color:#a3a3a3;}
+.content_left .submenu .item.active,
+.content_left .submenu .item.active a{color:#000;}
+.content_left .submenu .item.active a .name{text-decoration:none;}
+.content_left .submenu .item .count{}
+.content_left .submenu .item .count_new{color:green;}
+
+
+.sidebar_right{float:left;width:32.5%;}
+
+
+
+
+/* footer */
+#footer{font-size:11px;font-family:Tahoma, Arial;color:#949494;overflow:hidden;padding-top:30px;margin-top:40px;margin-bottom:30px;border-top:1px solid #CCCCCC;}
+#footer dl{display:block;float:left;width:15%;} 
+#footer dl dt{margin-bottom:5px;font-size:13px;}
+#footer dl dt a{font-weight:bold;}
+#footer dl dd{margin-bottom:5px;line-height:150%;}
+#footer .copyright{float:left;width:25%;}
+#footer .copyright a.footer_logo{background: url("/i/tm_logo_sharp.gif") no-repeat left top transparent;display: block;float: left;height: 29px;margin: 0;outline: medium none;text-indent: -9999px;width: 31px;margin-left:100px;}
+#footer .copyright a:hover.footer_logo{background: url("/i/tm_logo_sharp.gif") no-repeat left bottom transparent;}
+#footer .copyright .about{float:left;margin-left:10px;width:130px;font-size:11px;}
+
+/* search */
+.autocomplete{background:#fff;border:1px solid #D1D1D1;font-size:12px;text-align:left;}
+.autocomplete div{border-bottom:0px solid #D1D1D1;padding:2px 5px;color:#666;margin-bottom:5px;cursor:pointer;}
+.autocomplete div:hover{background:#f0f0f0;}
+.autocomplete div strong{font-weight:bold;}
+
+/* постраничный навигатор */
+.page-nav{font-family:Tahoma,sans-serif;}
+.page-nav ul.next-prev{font-size:24px;overflow: hidden;}
+.page-nav ul.next-prev li{float:left;margin-right:15px;}
+.page-nav ul.next-prev li a{}
+.page-nav #nav-pages{clear:left;padding-top:10px;font-size:14px;overflow: hidden;}
+.page-nav #nav-pages li{float:left;margin-right:5px;}
+.page-nav #nav-pages li em{background:#7A9BAC;display:block;padding:2px 5px;color:#fff;}
+.page-nav #nav-pages li a{display:block;padding:2px 5px;}
+
+/* сортировки (зеленые ссылки, с рыжим фоном открытые вкладки ) */
+ul.sort_menu{overflow: hidden;font-family: Arial, sans-serif;font-size: 13px;margin-bottom:20px;}
+ul.sort_menu li{display:inline;margin-right:3px;}
+ul.sort_menu li a{color:#093;text-decoration: none;padding: 0 2px;}
+ul.sort_menu li.current{}
+ul.sort_menu li.current a{color: white;background-color: #FF9525;padding: 0 5px;}
+
+
+/* Global notify */
+#global_notify{}
+#global_notify .inner{margin-bottom:20px;padding:20px;background:#d3f2c0;color:#333;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;position:relative;}
+#global_notify a.close{position:absolute;right:10px;top:5px;text-align:right;text-decoration:none;border-bottom:1px dashed;font-size:10px;}
+
+
+
+
+
+
+
+
+/*   ==htmlformat==   */
+/**
+ * Стили для пользовательского HTML кода.
+ */
+.html_format a:visited{color:#909;}
+.html_format img{max-width:100%;vertical-align: middle;}
+.html_format img[align="left"] {margin-right: 30px;margin-top: 5px;margin-bottom: 5px;}
+.html_format img[align="right"] {margin-left: 30px;margin-top: 5px;margin-bottom: 5px;}
+.html_format ul,
+.html_format ul li{list-style:disc outside;margin-left:20px;}
+.html_format ol,
+.html_format ol li{list-style:decimal outside;margin-left:20px;}
+.html_format h1, 
+.html_format h2, 
+.html_format h3, 
+.html_format h4, 
+.html_format h5, 
+.html_format h6 {color:#999999;font-family:Verdana,sans-serif;font-weight:normal;margin:0 0 0 0;padding:0;}
+.html_format h1 {font-size:162.5%;letter-spacing:-1px;margin-bottom:0.7em;}
+.html_format h2 {font-size:150%;}
+.html_format h3 {font-size: 137.5%;}
+.html_format h4 {font-size: 120%;}
+.html_format h5 {font-size: 110%;}
+.html_format h6 {font-size: 100%;}
+.html_format b,
+.html_format strong{font-weight:bold;}
+.html_format i,
+.html_format em{font-style: italic;}
+
+.html_format table {clear: both;width: 100%;margin: 1.5em 0;border: 1px solid #ccc; }
+.html_format table caption {text-align: left;text-indent: 1em;}
+.html_format table td, 
+.html_format table th {padding: .3em;border: 1px solid #ccc;word-break: break-word;}
+
+.html_format code{white-space:normal; font-family: Menlo, Monaco, "Courier New", monospace;color:#222;}
+.html_format pre code{white-space:pre-wrap; font-family: Menlo, Monaco, "Courier New", monospace;padding:1px 4px;color:#222;background-color: #F7F7F9;border: 1px solid #E1E1E8;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;}
+
+.html_format blockquote {border-left: 2px solid #bbb;margin: .83em 0;padding-left: 15px;clear: both;}
+.html_format sup {vertical-align: super;font-size: smaller;}
+.html_format sub {vertical-align: sub;font-size: smaller;}
+
+
+.html_format .spoiler{overflow: hidden;}
+.html_format .spoiler .spoiler_title{border-bottom:1px dashed;color:#6DA3BD;font-weight:normal;cursor: pointer;}
+.html_format .spoiler:before{
+	float:left;
+	content: ' ';
+	width:16px;
+	height:16px;
+	margin-top:2px;
+	display: block;
+	border:0px solid red;
+	background: url(/images/spoiler.icon.png) no-repeat left top;
+}
+.html_format .spoiler .spoiler_text{display:none;padding-top:10px;padding-bottom:10px;padding:10px;border:1px solid #eee;background: #f9f9f9;margin-top:10px;}
+.html_format .spoiler.spoiler_open{}
+.html_format .spoiler.spoiler_open:before{
+	background: url(/images/spoiler.icon.png) no-repeat left bottom;
+}
+
+
+
+
+
+/*   ==_parts/_sidebar==   */
+/**
+ * Стили для различных блоков справа.
+ */ 
+
+.sidebar_right .block{font-family:tahoma, arial;overflow:hidden;padding:15px 20px;margin-bottom:20px;background:#f0f0e7;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;}
+.sidebar_right .block.no_bg{background:none;-webkit-border-radius: 0px;-moz-border-radius: 0px;border-radius: 0px;}
+
+.sidebar_right .block > .title{color:#999999;margin-bottom:20px;font-size: 24px;letter-spacing: -1px;font-family:Verdana, sans-serif;}
+.sidebar_right .block > .title sup{font-size:15px;vertical-align:super;}
+
+.sidebar_right .block .all{text-align:right;color:#999999;}
+
+/**
+ * Cтили для блока с различного рода списками постов (последние, похожие и пр)
+ */
+.sidebar_right .block .posts_list{}
+.sidebar_right .block .posts_list .post_item{margin-bottom:10px;clear:both;color:#999;line-height:18px;}
+.sidebar_right .block .posts_list .post_item a.bookmate{}
+.sidebar_right .block .posts_list .post_item a.user_name{color:#999;background:url("/i/bg-user2.gif") no-repeat scroll 1px 50% transparent;padding-left:17px;}
+.sidebar_right .block .posts_list .post_item a:hover.user_name{color:#333;}
+.sidebar_right .block .posts_list .post_item a.blog_name{color:#999;}
+.sidebar_right .block .posts_list .post_item a:hover.blog_name{color:#333;}
+.sidebar_right .block .posts_list .post_item a.post_name{color:#666;}
+.sidebar_right .block .posts_list .post_item a:hover.post_name{color:#a3a3a3;}
+.sidebar_right .block .posts_list .post_item a:visited.post_name{color:#B5B5B5;}
+.sidebar_right .block .posts_list .post_item a:visited:hover.post_name{color:#A3A3A3;}
+.sidebar_right .block .posts_list .post_item a img {display:block;float: left;margin-right: 10px;margin-top: 4px;vertical-align: top;}
+.sidebar_right .block .posts_list .post_item .count{color:#CC0000;}
+
+/**
+ * Cтили для блока со списком блогов.
+ */
+.sidebar_right .block .blogs_list{}
+.sidebar_right .block .blogs_list .label{text-align:right;font-family: tahoma, arial;color:#999;margin-bottom:5px;}
+.sidebar_right .block .blogs_list .blog_item{margin-bottom:10px;clear:both;color:#999;overflow:hidden;position:relative;}
+.sidebar_right .block .blogs_list .blog_item .title{margin-right:45px;}
+.sidebar_right .block .blogs_list .blog_item .title a{font-size:15px;line-height:16px;color:#666;font-weight:bold;font-family:'Lucida Grande', Verdana, Sans-Serif;}
+.sidebar_right .block .blogs_list .blog_item .title a:hover{color:#333;}
+.sidebar_right .block .blogs_list .blog_item .value{color:#CC66CC;font-size:14px;position:absolute;right:0;top:0;font-family:arial;}
+ 
+/**
+ * Cтили для блока со списком компаний.
+ */
+.sidebar_right .block .companies_list{}
+.sidebar_right .block .companies_list .label{text-align:right;font-family: tahoma, arial;color:#999;margin-bottom:5px;}
+.sidebar_right .block .companies_list .blog_item{margin-bottom:10px;clear:both;color:#999;overflow:hidden;position:relative;}
+.sidebar_right .block .companies_list .blog_item .favicon{position:absolute;left:0;top:0;}
+.sidebar_right .block .companies_list .blog_item .title{margin-right:45px;margin-left:25px}
+.sidebar_right .block .companies_list .blog_item .title a{font-size:15px;color:#666;font-weight:bold;font-family:'Lucida Grande', Verdana, Sans-Serif;}
+.sidebar_right .block .companies_list .blog_item .title a:hover{color:#333;}
+.sidebar_right .block .companies_list .blog_item .value{color:#CC66CC;font-weight:bold;font-size:14px;position:absolute;right:0;top:0;font-family:arial;}
+ 
+
+
+/**
+ * Cтили для блока "Хабранавигатор" на странице с постами и внутри поста.
+ */
+.sidebar_right .block.fast_navigator{}
+.sidebar_right .block.fast_navigator form{}
+.sidebar_right .block.fast_navigator form select{width:100%;margin-bottom:10px;}
+.sidebar_right .block.fast_navigator form .blog_select{}
+
+/**
+ * Cтили для блока "karmograph" на странице со списком пользователей.
+ */
+.sidebar_right .block.people_karmograph{color: #666;font-family: Verdana, sans-serif;font-size: 12px;}
+.sidebar_right .block.people_karmograph p{margin-bottom:10px}
+.sidebar_right .block.people_karmograph p:last-child{margin-bottom:0px}
+
+/**
+ * Cтили для блока "statistics" на странице со списком пользователей.
+ */
+.sidebar_right .block.people_statistics{color: #666;font-family: Verdana, sans-serif;font-size: 14px;}
+.sidebar_right .block.people_statistics dt{float: left;clear: left;margin-right: 4px;}
+.sidebar_right .block.people_statistics dd{float:left;}
+.sidebar_right .block.people_statistics .global{margin-top: 30px;}
+
+/**
+ * Cтили для блока "people_location_cloud" на странице со списком пользователей.
+ */
+.sidebar_right .block.people_location_cloud{}
+
+.sidebar_right .block.people_location_cloud .tag-cloud {width: 98%;float:none;margin:0 auto;margin-bottom:20px;}
+.sidebar_right .block.people_location_cloud	.tag-cloud ul {white-space: normal;}
+.sidebar_right .block.people_location_cloud	.tag-cloud ul,
+.sidebar_right .block.people_location_cloud	.tag-cloud ul li {display: inline;}
+.sidebar_right .block.people_location_cloud		.tag-cloud a {font-family: Verdana, sans-serif;font-size: 12px;color: #369;text-decoration: none;line-height:1.4em;}
+.sidebar_right .block.people_location_cloud		.tag-cloud a:hover {color: #85A3C2;}
+.sidebar_right .block.people_location_cloud		.tag-cloud a.w1  { font-size: 80%; }
+.sidebar_right .block.people_location_cloud		.tag-cloud a.w2  { font-size: 100%; }
+.sidebar_right .block.people_location_cloud		.tag-cloud a.w3  { font-size: 120%; }
+.sidebar_right .block.people_location_cloud		.tag-cloud a.w4  { font-size: 140%; }
+.sidebar_right .block.people_location_cloud		.tag-cloud a.w5  { font-size: 160%; }
+.sidebar_right .block.people_location_cloud		.tag-cloud a.w6  { font-size: 180%; }
+.sidebar_right .block.people_location_cloud		.tag-cloud a.w7  { font-size: 200%; }
+.sidebar_right .block.people_location_cloud		.tag-cloud a.w8  { font-size: 220%; }
+.sidebar_right .block.people_location_cloud		.tag-cloud a.w9  { font-size: 240%; }
+.sidebar_right .block.people_location_cloud		.tag-cloud a.w10  { font-size: 260%; }
+		
+		
+		
+/**
+ * Cтили для блока "corporative_text" на странице с корпоративными постами и внутри корпоративного поста.
+ */
+.sidebar_right .block.corporative_text{}
+.sidebar_right .block.corporative_text p{margin-bottom:10px}
+.sidebar_right .block.corporative_text p:last-child{margin-bottom:0px}
+
+
+/**
+ * Cтили для блока "sandbox_text_***" на странице песочницы
+ */
+.sidebar_right .block.sandbox_text{}
+.sidebar_right .block.sandbox_text p{margin-bottom:10px}
+.sidebar_right .block.sandbox_text p:last-child{margin-bottom:0px}
+
+/**
+ * Cтили для блока "_add_help" на странице событий
+ */
+.sidebar_right .block.add_help{}
+.sidebar_right .block.add_help p{margin-bottom:10px}
+.sidebar_right .block.add_help p:last-child{margin-bottom:0px}
+
+/**
+ * Cтили для блока "add_topic_text_***" на странице добавления/редактирования топиков
+ */
+.sidebar_right .block.add_topic_text{}
+.sidebar_right .block.add_topic_text p{margin-bottom:10px}
+.sidebar_right .block.add_topic_text p:last-child{margin-bottom:0px}
+
+/**
+ * Cтили для блока "add_qa_text_***" на странице добавления/редактирования вопроса
+ */
+.sidebar_right .block.add_qa_text{}
+.sidebar_right .block.add_qa_text p{margin-bottom:15px;position: relative;min-height:23px;}
+.sidebar_right .block.add_qa_text p .number{font-size:16px;display:block;position:absolute;top:0;left:0;background: orange;color:white;padding:2px 7px;-webkit-border-radius: 50%;-moz-border-radius: 50%;border-radius: 50%;}
+.sidebar_right .block.add_qa_text p .text{margin-left:35px;display: block;}
+.sidebar_right .block.add_qa_text p:last-child{margin-bottom:0px}
+
+/**
+ * Cтили для блока "Виджеты компаний" на странице обычной (не брендированной) компании.
+ */
+.sidebar_right .company_widgets{}
+.sidebar_right .company_widgets .company_widget{margin-bottom:40px;}
+.sidebar_right .company_widgets .company_widget img{max-width:100%;}
+
+/**
+ * Cтили для блока со списком категорий  на странице со списком компаний
+ */
+.sidebar_right .company_categories{color: #999;padding:0 4px;font-family: Verdana, sans-serif;font-size: 16px;}
+.sidebar_right .company_categories .description{margin-bottom:79px}
+.sidebar_right .company_categories ul.categories{}
+.sidebar_right .company_categories ul.categories li{margin-bottom:16px;font-family: Arial, sans-serif;}
+.sidebar_right .company_categories ul.categories li a{}
+.sidebar_right .company_categories ul.categories li.active{}
+.sidebar_right .company_categories ul.categories li.active a{background:#C5DAE5;color:#333;text-decoration: none;padding:0 4px;margin-left:-4px;}
+
+.sidebar_right .company_categories .add_company{margin-top:30px;}
+
+
+/**
+ * Cтили для блока со списком категорий  на странице со списком компаний
+ */
+.sidebar_right .hubs_categories{color: #999;padding:0 4px;font-family: Verdana, sans-serif;font-size: 16px;}
+.sidebar_right .hubs_categories ul.categories{margin-top:66px;}      
+.sidebar_right .hubs_categories ul.categories li{margin-bottom:16px;font-family: Arial, sans-serif;}
+.sidebar_right .hubs_categories ul.categories li a{}
+.sidebar_right .hubs_categories ul.categories li.active{}
+.sidebar_right .hubs_categories ul.categories li.active a{background:#C5DAE5;color:#333;text-decoration: none;padding:0 4px;margin-left:-4px;}
+.sidebar_right .hubs_categories ul.categories li .new{font-size:11px;color:green;vertical-align: top;}
+
+
+/**
+ * Cтили для блока "фильтр" на странице "события".
+ */
+.sidebar_right .block.events_search_filter{margin-left:40px;}
+.sidebar_right .block.events_search_filter .items{margin-bottom:30px;}
+.sidebar_right .block.events_search_filter .items .item{margin-bottom:5px;font-size:16px;}
+.sidebar_right .block.events_search_filter .items .item a.active{font-weight:bold;color:#3a3a3a;}
+.sidebar_right .block.events_search_filter .items .item .count{color:#999;}
+.sidebar_right .block.events_search_filter .items .item a.remove{color:#999;text-decoration:none;font-size:10px;}
+.sidebar_right .block.events_search_filter .items .item a:hover.remove{color:red;}
+
+/**
+ * Cтили для блока "Администрирование" на странице обычной (не брендированной) компании.
+ */
+.sidebar_right .block.company_admin{}
+.sidebar_right .block.company_admin .links{}
+.sidebar_right .block.company_admin .links p{margin-bottom:10px;}
+.sidebar_right .block.company_admin .links p:last-child{margin-bottom:0px;}
+.sidebar_right .block.company_admin .links p a{}
+
+/**
+ * Cтили для блока "Настройки" на странице вопросов в админке компании
+ */
+.sidebar_right .block.company_questions_settings{}
+.sidebar_right .block.company_questions_settings .settings{}
+.sidebar_right .block.company_questions_settings .settings p{margin-bottom:10px;}
+.sidebar_right .block.company_questions_settings .settings p label{color:darkGray;}
+
+/**
+ * Cтили для блока "Блог компании" на странице админки в разделе "Блог".
+ */
+.sidebar_right .block.company_blog_info{}
+.sidebar_right .block.company_blog_info .info_text{}
+.sidebar_right .block.company_blog_info .info_text p{margin-bottom:10px;line-height: 140%;}
+.sidebar_right .block.company_blog_info .info_text p:last-child{margin-bottom:0px;}
+
+/**
+ * Cтили для блока "Ссылки" на странице админки в разделе "Описание".
+ */
+.sidebar_right .block.company_links{}
+.sidebar_right .block.company_links .links_list{margin-top:10px;}
+.sidebar_right .block.company_links .links_list .link{border-bottom:1px solid #aaa;padding-bottom:10px;margin-bottom:10px;}
+.sidebar_right .block.company_links .links_list .link label{display: block;font-size:11px;color:#999;margin-bottom:5px;}
+.sidebar_right .block.company_links .links_list .link input{display: block;width:99%;margin-bottom:10px;}
+.sidebar_right .block.company_links .links_list .link .delete{float:right;font-size: 11px;}
+.sidebar_right .block.company_links .add_link{font-size:11px;margin-bottom:10px;margin-top:10px;}
+
+
+
+/**
+ * tpl/company/common/sidebar/_links.tpl
+ * 
+ * Стили для блока "ссылки" для не брендированой компании
+ */
+.sidebar_right .block.company_links{}
+.sidebar_right .block.company_links .links{color:#999;line-height:18px;}
+.sidebar_right .block.company_links .links .link{margin-bottom:10px;overflow:hidden;}
+.sidebar_right .block.company_links .links .link a{color:#666666;}
+.sidebar_right .block.company_links .links .link a:hover{color:#a3a3a3;}
+.sidebar_right .block.company_links .links .link small{font-size:11px;}
+
+
+/**
+ * Cтили для блока "Сотрудники компании" на странице админки в разделе "сотрудники".
+ */
+.sidebar_right .block.company_workers_info{}
+.sidebar_right .block.company_workers_info .info_text{}
+.sidebar_right .block.company_workers_info .info_text p{margin-bottom:10px;line-height: 140%;}
+.sidebar_right .block.company_workers_info .info_text p:last-child{margin-bottom:0px;}
+
+
+/**
+ * Cтили для блока "Помощь" на странице настройки профиля пользователя.
+ */
+.sidebar_right .block.settings_profile_help{margin-top:400px;}
+.sidebar_right .block.settings_profile_help .text{}
+.sidebar_right .block.settings_profile_help .text p{margin-bottom:10px;line-height: 140%;}
+.sidebar_right .block.settings_profile_help .text p:last-child{margin-bottom:0px;}
+
+/**
+ * Cтили для блока "RSS пресс-релизов" на странице админки.
+ */
+.sidebar_right .block.company_news_settings{}
+.sidebar_right .block.company_news_settings .settings{}
+.sidebar_right .block.company_news_settings .settings .description_text{margin-bottom:20px;line-height:140%;}
+.sidebar_right .block.company_news_settings .settings form{}
+.sidebar_right .block.company_news_settings .settings form .item{margin-bottom:0px;}
+
+
+
+/** 
+ * Стили для блока "похожие события".
+ */
+.sidebar_right .block.similar_events{}
+.sidebar_right .block.similar_events .events{}
+.sidebar_right .block.similar_events .events .event{margin-bottom:10px;overflow: hidden;}
+.sidebar_right .block.similar_events .events .event .date{width:80px;float:left;color:#343434;overflow:hidden;}
+.sidebar_right .block.similar_events .events .event .date .dayname{float:left;width:14px;height:14px;margin-top:5px;margin-right:5px;}
+.sidebar_right .block.similar_events .events .event .date .dayname_0{background:url('/i/day_names.png') no-repeat 0px 0px;}
+.sidebar_right .block.similar_events .events .event .date .dayname_6{background:url('/i/day_names.png') no-repeat 0px -14px;}
+.sidebar_right .block.similar_events .events .event .date .dayname_5{background:url('/i/day_names.png') no-repeat 0px -28px;}
+.sidebar_right .block.similar_events .events .event .date .dayname_4{background:url('/i/day_names.png') no-repeat 0px -42px;}
+.sidebar_right .block.similar_events .events .event .date .dayname_3{background:url('/i/day_names.png') no-repeat 0px -56px;}
+.sidebar_right .block.similar_events .events .event .date .dayname_2{background:url('/i/day_names.png') no-repeat 0px -70px;}
+.sidebar_right .block.similar_events .events .event .date .dayname_1{background:url('/i/day_names.png') no-repeat 0px -84px;height:15px;}
+.sidebar_right .block.similar_events .events .event .date .day{font-weight:bold;font-size:20px;float:left;line-height:22px;margin-right:5px;}
+.sidebar_right .block.similar_events .events .event .date .month{float:left;font-size:10px;font-weight:normal;}
+.sidebar_right .block.similar_events .events .event .date .month .year{}
+.sidebar_right .block.similar_events .events .event .title{margin-left:80px;}
+.sidebar_right .block.similar_events .events .event .title a{color:#666666;}
+.sidebar_right .block.similar_events .events .event .title a:hover{color:#a3a3a3;}
+
+/**
+ * _last_links.tpl
+ * 
+ * Стили для блока "ссылки".
+ */
+.sidebar_right .block.last_links{}
+.sidebar_right .block.last_links .links{color:#999;line-height:18px;}
+.sidebar_right .block.last_links .links .link{margin-bottom:10px;overflow:hidden;}
+.sidebar_right .block.last_links .links .link a{color:#666666;}
+.sidebar_right .block.last_links .links .link a:hover{color:#a3a3a3;}
+.sidebar_right .block.last_links .links .link a.count{color:#C00;text-decoration:none;}
+.sidebar_right .block.last_links .links .link small{font-size:11px;}
+
+/**
+ * tpl/_parts/banners/_240x400.tpl
+ *
+ * Стили для баннера 240х400
+ */
+.sidebar_right .banner_240x400{margin-bottom:20px;text-align:center;}
+.sidebar_right .banner_240x400 iframe{margin:0 auto;}
+
+/**
+ * tpl/posts/_sidebar/_hub_info.tpl
+ *
+ * Стили для блока "Информация о хабе" 
+ */
+.sidebar_right .block.hub_info{}
+.sidebar_right .block.hub_info .info{overflow:hidden;}
+.sidebar_right .block.hub_info .stats{color:#999999;font-size:16px;float:left;}
+.sidebar_right .block.hub_info .stats .members_count{}
+.sidebar_right .block.hub_info .stats .posts_count{}
+.sidebar_right .block.hub_info .join{float:left;margin-left:15px;margin-top:5px;}
+.sidebar_right .block.hub_info .join .is_banned{}
+.sidebar_right .block.hub_info .join a{padding: 5px;height: 16px;display: block;background: #dbdbdb url(/i/join_button_bg.png) repeat-x left top;text-shadow: 0 1px #ededed;color: #6b6b6b;text-decoration: none;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;border-style: solid;border-width: 1px;font-weight: bold;border-color: #afafaf #a9a9a9 #a3a3a3;}
+.sidebar_right .block.hub_info .join a.hidden{display:none;}
+.sidebar_right .block.hub_info .join a.loading{background: #dbdbdb url(/i/form/loader_button.gif);}
+
+
+/**
+ * tpl/company/common/_sidebar/_company_info.tpl
+ *
+ * Стили для блока "Информация о компании" 
+ */
+.sidebar_right .block.company_info{}
+.sidebar_right .block.company_info .info{overflow:hidden;}
+.sidebar_right .block.company_info .stats{color:#999999;font-size:16px;float:left;}
+.sidebar_right .block.company_info .stats .members_count{}
+.sidebar_right .block.company_info .stats .posts_count{}
+.sidebar_right .block.company_info .join{float:left;margin-left:15px;margin-top:5px;}
+.sidebar_right .block.company_info .join .is_banned{}
+.sidebar_right .block.company_info .join a{padding: 5px;height: 16px;display: block;background: #dbdbdb url(/i/join_button_bg.png) repeat-x left top;text-shadow: 0 1px #ededed;color: #6b6b6b;text-decoration: none;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;border-style: solid;border-width: 1px;font-weight: bold;border-color: #afafaf #a9a9a9 #a3a3a3;}
+.sidebar_right .block.company_info .join a.hidden{display:none;}
+.sidebar_right .block.company_info .join a.loading{background: #dbdbdb url(/i/form/loader_button.gif);}
+.sidebar_right .block.company_info .i_work_in_company{padding-top:10px;}
+
+
+/**
+ * Cтили для блока "Статистика" на странице фанатов не брендированной компании.
+ */
+.sidebar_right .block.fans_statistics{color:#666;font-family:Verdana, sans-serif;font-size:14px}
+
+
+
+/**
+ * tpl/posts/_sidebar/_qa_top_tags.tpl
+ *
+ * Стили для блока "Метки" в разделе Q&A 
+ */
+.sidebar_right .block.qa_top_tags{margin-top:60px;}
+.sidebar_right .block.qa_top_tags .tags{line-height:32px;}
+.sidebar_right .block.qa_top_tags .tags .tag{color:#999;font-size:16px;}
+.sidebar_right .block.qa_top_tags .tags .tag a{}
+.sidebar_right .block.qa_top_tags .tags .tag a:hover{}
+
+
+/**
+ * tpl/posts/_sidebar/_favorite_tags.tpl
+ *
+ * Стили для блока "Метки избранного" на странице избранного в профиле пользователя.
+ */
+.sidebar_right .block.favorite_tags{}
+.sidebar_right .block.favorite_tags .sort_menu{font-family: tahoma, arial;font-size: 13px;}
+.sidebar_right .block.favorite_tags .top-tags { list-style: none; margin-bottom: 15px;margin-left:-20px;margin-right:-20px;font-family: font-family: tahoma, arial;font-size: 12px; }
+.sidebar_right .block.favorite_tags .top-tags .count { font-style: normal; float: right; text-align: right; color: #999; text-decoration: none; }
+.sidebar_right .block.favorite_tags .top-tags a { display: block; padding: 4px 20px; overflow: hidden; text-decoration: none; }
+.sidebar_right .block.favorite_tags .top-tags a .name { text-decoration: underline; }
+.sidebar_right .block.favorite_tags .top-tags a:hover, 
+.sidebar_right .block.favorite_tags .top-tags a.current { background: #d2d2c9; color: #fff; }
+.sidebar_right .block.favorite_tags .top-tags a:hover  .name, 
+.sidebar_right .block.favorite_tags .top-tags a.current  .name { text-decoration: none; }
+.sidebar_right .block.favorite_tags .top-tags a:hover .count , 
+.sidebar_right .block.favorite_tags .top-tags a.current .count  { color: #fff; }
+
+
+
+/**
+ * tpl/users/sidebar/_admin.tpl
+ *
+ * Стили для блока "Администрирование" на странице профиля пользователя.  
+ */
+.sidebar_right .block.user_admin{}
+.sidebar_right .block.user_admin .links{}
+.sidebar_right .block.user_admin .links p{margin-bottom:10px;}
+.sidebar_right .block.user_admin .links p small{font-size:11px;color:#666;}
+
+
+/**
+ * tpl/posts/_sidebar/_last_vacanies.tpl
+ *
+ * Стили для блока "О Работа!" 
+ */
+.sidebar_right .block.new_vacanies{}
+.sidebar_right .block.new_vacanies .vacancies{}
+.sidebar_right .block.new_vacanies .vacancies .job_item{overflow:hidden;margin-bottom:10px;}     
+.sidebar_right .block.new_vacanies .vacancies .job_item a{font: 1.17em Arial, sans-serif;color: #663;}
+.sidebar_right .block.new_vacanies .vacancies .job_item a:hover{color:#A3A350;}
+
+
+
+/**
+ * tpl/posts/_sidebar/_best_company.tpl
+ *
+ * Стили для блока "Компания дня" 
+ */
+{}
+.sidebar_right .block.sidebar_right .block.best_company{}
+.sidebar_right .block.best_company h3{}
+.sidebar_right .block.best_company h3 .help-tip{margin-bottom:2px;cursor:pointer;}
+.sidebar_right .block.best_company .company_info{}
+.sidebar_right .block.best_company .company_info .name{overflow:hidden;margin-bottom:10px;position: relative;}
+.sidebar_right .block.best_company .company_info .name img.favicon{float:left;font-size:33%;height:16px;margin:8px 10px 0px 0px;line-height: 1em;width: 16px;position: absolute;left:0;top:0;}
+.sidebar_right .block.best_company .company_info .name .company_name{margin-left:25px;}
+.sidebar_right .block.best_company .company_info .name .company_name a{font-size: 208%;}
+.sidebar_right .block.best_company .company_info p{margin-bottom:10px;}
+.sidebar_right .block.best_company .company_info p a{color:#666666}
+.sidebar_right .block.best_company .company_info p a:hover{color:#a3a3a3}
+.sidebar_right .block.best_company .company_info .like{overflow:hidden;}
+
+.sidebar_right .block.best_company .company_info #fans_count{float:left;margin-right:10px;color: #999999;font-size: 133%;margin-top:3px;}
+
+.sidebar_right .block.best_company .company_info .like a{
+	height: 20px;
+	display: block;
+	float: left;
+	background-repeat: no-repeat;
+	background-color: white;
+  padding: 5px;
+  height:16px;
+	display: block;
+	background: #dbdbdb url(/i/join_button_bg.png) repeat-x left top;
+	text-shadow: 0 1px #ededed;
+	color: #6b6b6b;
+	text-decoration:none;
+	-webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+	border-style: solid;
+  border-width: 1px;
+	font-weight:bold;
+	border-color: #afafaf #a9a9a9 #a3a3a3;
+}
+.sidebar_right .block.best_company .company_info .like a.hidden{display:none;}
+.sidebar_right .block.best_company .company_info .like a.loading{background: #dbdbdb url(/i/form/loader_button.gif);}
+.sidebar_right .block.best_company .company_info .like a:hover{color:#5b5b5b}
+
+/**
+ * tpl/posts/_sidebar/_habralenta_settings.tpl
+ *
+ * Стили для блока "Настройка ленты" 
+ */
+.sidebar_right .block.habralenta_settings{font-family:  tahoma, arial;}
+.sidebar_right .block.habralenta_settings p{margin-bottom:10px;}
+.sidebar_right .block.habralenta_settings .category-list{margin-bottom: 20px;}
+
+.sidebar_right .block.habralenta_settings .category-list .category_all{font-size:133%;overflow:hidden;margin-bottom:10px;position:relative;}
+.sidebar_right .block.habralenta_settings .category-list .category_all .checkbox{position:absolute;top:0;left:0;cursor:pointer;width:14px;height:14px;margin-top:0.2em;background:url(/i/form/checkbox.png) no-repeat -25px 0px;}
+.sidebar_right .block.habralenta_settings .category-list .category_all.selected .checkbox{background:url(/i/form/checkbox.png) no-repeat 0px 0px;}
+.sidebar_right .block.habralenta_settings .category-list .category_all .title{margin-left:24px;cursor:pointer;border-bottom:1px dashed;color:green;}
+.sidebar_right .block.habralenta_settings .category-list .category_all .lenta-tip{color:#666;cursor:help;}
+  
+.sidebar_right .block.habralenta_settings .category-list .category{font-size:133%;overflow:hidden;margin-bottom:10px;position:relative;}
+.sidebar_right .block.habralenta_settings .category-list .category:last-child{margin-bottom:0em;}
+.sidebar_right .block.habralenta_settings .category-list .category .checkbox{float:left;position:absolute;top:0;left:0;cursor:pointer;width:14px;height:14px;margin-top:0.2em;background:url(/i/form/checkbox.png) no-repeat -25px 0px;}
+.sidebar_right .block.habralenta_settings .category-list .category.full .checkbox{background:url(/i/form/checkbox.png) no-repeat 0px 0px;}
+.sidebar_right .block.habralenta_settings .category-list .category.part .checkbox{background:url(/i/form/checkbox.png) no-repeat -50px 0px;}
+
+.sidebar_right .block.habralenta_settings .category-list .category.disabled .checkbox{cursor:default;background:url(/i/form/checkbox.png) no-repeat -25px -75px;}
+.sidebar_right .block.habralenta_settings .category-list .category.disabled.full .checkbox{background:url(/i/form/checkbox.png) no-repeat 0px -75px;}
+.sidebar_right .block.habralenta_settings .category-list .category.disabled.part .checkbox{background:url(/i/form/checkbox.png) no-repeat -50px -75px;}
+.sidebar_right .block.habralenta_settings .category-list .category.disabled .title{color:#aaa;}
+.sidebar_right .block.habralenta_settings .category-list .category.disabled .title a,
+.sidebar_right .block.habralenta_settings .category-list .category.disabled .title a:hover{color:#aaa;border-bottom:1px dashed #aaa;cursor:default;}
+.sidebar_right .block.habralenta_settings .category-list .category.disabled .count{color:#aaa;}
+
+.sidebar_right .block.habralenta_settings .category-list .category .title{float:left;display:block;margin-left:24px;margin-bottom:1px;}
+.sidebar_right .block.habralenta_settings .category-list .category .title a{text-decoration: none;border-bottom:1px dashed #6DA3BD;}
+.sidebar_right .block.habralenta_settings .category-list .category .title a:hover{border-bottom:1px dashed #4D7285;}
+.sidebar_right .block.habralenta_settings .category-list .category .count{color:#999999;}
+.sidebar_right .block.habralenta_settings .category-list .category .new{color:green;font-size: 11px;vertical-align: top;}
+.sidebar_right .block.habralenta_settings .category-list .category .blogs{clear:both;padding-left:22px;display:none;padding-top:0.8em;}
+.sidebar_right .block.habralenta_settings .category-list .category .blogs.show{display:block;}
+.sidebar_right .block.habralenta_settings .category-list .category .blogs .blog{font-size:85%;overflow:hidden;margin-bottom:0.6em;position:relative;}
+.sidebar_right .block.habralenta_settings .category-list .category .blogs .blog:last-child{margin-bottom:0em;}
+.sidebar_right .block.habralenta_settings .category-list .category .blogs .blog .checkbox{float:left;position:absolute;top:0;left:0;cursor:pointer;width:14px;height:14px;margin-top:0.1em;background:url(/i/form/checkbox.png) no-repeat -25px 0px;}
+.sidebar_right .block.habralenta_settings .category-list .category .blogs .blog.subscription .checkbox{background:url(/i/form/checkbox.png) no-repeat 0px 0px;}
+
+.sidebar_right .block.habralenta_settings .category-list .category.disabled .blogs .blog .checkbox{cursor:default;background:url(/i/form/checkbox.png) no-repeat -25px -75px;}
+.sidebar_right .block.habralenta_settings .category-list .category.disabled .blogs .blog.subscription .checkbox{background:url(/i/form/checkbox.png) no-repeat 0px -75px;}
+.sidebar_right .block.habralenta_settings .category-list .category.disabled .blogs .blog a{color:#aaa;cursor:default;}
+
+.sidebar_right .block.habralenta_settings .category-list .category .blogs .blog a{float:left;display:block;margin-left:24px;}
+.sidebar_right .block.habralenta_settings .category-list .category .blogs .blog .new{color:green;font-size: 11px;vertical-align: top;float:left;display:block;margin-left:4px;}
+.sidebar_right .block.habralenta_settings .category-list .category .blogs .description{font-size:85%;color:#999999;margin-bottom:0.6em;}
+.sidebar_right .block.habralenta_settings #form_habralenta_settings{display:none;}
+.sidebar_right .block.habralenta_settings #form_habralenta_settings.show{display:block;}
+.sidebar_right .block.habralenta_settings a#show_habralenta_settings,
+.sidebar_right .block.habralenta_settings a#hide_habralenta_settings{text-decoration: none;border-bottom:1px dashed #6DA3BD;}
+.sidebar_right .block.habralenta_settings a:hover#show_habralenta_settings,
+.sidebar_right .block.habralenta_settings a:hover#hide_habralenta_settings{border-bottom:1px dashed #4D7285;}
+.sidebar_right .block.habralenta_settings #show_habralenta_settings.hide{display:none;}
+.sidebar_right .block.habralenta_settings img.ajax_loader{display:inline;margin-left:5px;}
+.sidebar_right .block.habralenta_settings .category-list img.ajax_loader{margin-top:3px;}
+.sidebar_right .block.habralenta_settings .or{margin-right:5px;}
+.sidebar_right .block.habralenta_settings #save_success{color:green;display:none;margin-left:10px;}
+.sidebar_right .block.habralenta_settings #save_success.show{display:inline;}
+.sidebar_right .block.habralenta_settings #form_habralenta_settings .btn{margin-right: 5px;}
+.sidebar_right .block.habralenta_settings #form_habralenta_settings .btn.loading{background: url(/i/form/loader_button.gif) repeat;}
+
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_cloud.tpl
+ *
+ * Стили для HTML_блока "cloud_htmlblock" 
+ */
+.sidebar_right .block.cloud_htmlblock{}
+.sidebar_right .block.cloud_htmlblock .logo{margin-bottom:10px;}
+.sidebar_right .block.cloud_htmlblock .description{font-size:14px;color:#333;margin-bottom:10px;}
+.sidebar_right .block.cloud_htmlblock .description .title{font-size:20px;margin-bottom:10px;}
+.sidebar_right .block.cloud_htmlblock .description p{font-size:11px;margin-bottom:10px;}
+.sidebar_right .block.cloud_htmlblock .description .digital_october{font-size:14px;font-weight:bold;}
+.sidebar_right .block.cloud_htmlblock .download{margin-bottom:10px;}
+.sidebar_right .block.cloud_htmlblock .description2{font-size:14px;color:#c50e13;}
+
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_citrix.tpl
+ *
+ * Стили для HTML_блока "citrix_htmlblock" 
+ */
+.sidebar_right .block.citrix_htmlblock{}
+.sidebar_right .block.citrix_htmlblock .logo{margin-bottom:10px;}
+.sidebar_right .block.citrix_htmlblock .description{font-size:14px;color:#333;margin-bottom:10px;}
+.sidebar_right .block.citrix_htmlblock .description .title{font-size:20px;margin-bottom:10px;}
+.sidebar_right .block.citrix_htmlblock .description p{font-size:11px;margin-bottom:10px;}
+.sidebar_right .block.citrix_htmlblock .description .digital_october{font-size:14px;font-weight:bold;}
+.sidebar_right .block.citrix_htmlblock .download{margin-bottom:10px;}
+.sidebar_right .block.citrix_htmlblock .description2{font-size:14px;color:#c50e13;}
+
+
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_it_camps.tpl
+ *
+ * Стили для HTML_блока "_it_camps_htmlblock" 
+ */
+.sidebar_right .block.it_camps_htmlblock{}
+.sidebar_right .block.it_camps_htmlblock .logo{margin-bottom:10px;}
+.sidebar_right .block.it_camps_htmlblock .description{font-size:14px;color:#000;margin-bottom:20px;}
+.sidebar_right .block.it_camps_htmlblock .download{margin-bottom:20px;}
+.sidebar_right .block.it_camps_htmlblock .description2{font-size:14px;color:#000;}
+.sidebar_right .block.it_camps_htmlblock .description2 .big{font-size: 24px;}
+
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_megafon.tpl
+ *
+ * Стили для HTML_блока "_megafon_htmlblock" 
+ */
+.sidebar_right .block.megafon_htmlblock{}
+.sidebar_right .block.megafon_htmlblock .logo{margin-bottom:10px;}
+.sidebar_right .block.megafon_htmlblock .description{font-size:18px;color:#000;margin-bottom:20px;}
+.sidebar_right .block.megafon_htmlblock .download{margin-bottom:20px;}
+.sidebar_right .block.megafon_htmlblock .description2{font-size:18px;color:#000;}
+
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_windows_phone.tpl
+ *
+ * Стили для HTML_блока "windows_phone_htmlblock" 
+ */
+.sidebar_right .block.windows_phone_htmlblock{}
+.sidebar_right .block.windows_phone_htmlblock .logo{margin-bottom:10px;}
+.sidebar_right .block.windows_phone_htmlblock .description{font-size:18px;color:#000;margin-bottom:20px;}
+.sidebar_right .block.windows_phone_htmlblock .download{margin-bottom:20px;}
+.sidebar_right .block.windows_phone_htmlblock .description2{font-size:18px;color:#000;}
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_ipadcredit.tpl
+ *
+ * Стили для HTML_блока "ipadcredit_htmlblock" 
+ */
+.sidebar_right .block.ipadcredit_htmlblock{}
+.sidebar_right .block.ipadcredit_htmlblock .title{margin-bottom:10px;}
+.sidebar_right .block.ipadcredit_htmlblock .description{font-size:14px;color:#333;margin-bottom:10px;}
+.sidebar_right .block.ipadcredit_htmlblock .description .big{font-size:20px;margin-bottom:10px;}
+.sidebar_right .block.ipadcredit_htmlblock .description .big a{color:#dd04a2;}
+.sidebar_right .block.ipadcredit_htmlblock .description p{font-size:11px;margin-bottom:10px;}
+.sidebar_right .block.ipadcredit_htmlblock .download{margin-bottom:10px;}
+.sidebar_right .block.ipadcredit_htmlblock .description2{font-size:14px;}
+
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_iphonecredit.tpl
+ *
+ * Стили для HTML_блока "iphonecredit_htmlblock" 
+ */
+.sidebar_right .block.iphonecredit_htmlblock{}
+.sidebar_right .block.iphonecredit_htmlblock .title{margin-bottom:10px;}
+.sidebar_right .block.iphonecredit_htmlblock .description{font-size:14px;color:#333;margin-bottom:10px;}
+.sidebar_right .block.iphonecredit_htmlblock .description .big{font-size:20px;margin-bottom:10px;}
+.sidebar_right .block.iphonecredit_htmlblock .description .big a{color:#dd04a2;}
+.sidebar_right .block.iphonecredit_htmlblock .description p{font-size:11px;margin-bottom:10px;}
+.sidebar_right .block.iphonecredit_htmlblock .download{margin-bottom:10px;}
+.sidebar_right .block.iphonecredit_htmlblock .description2{font-size:14px;}
+
+
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_lingvo.tpl
+ *
+ * Стили для HTML_блока "lingvo_htmlblock" 
+ */
+.sidebar_right .block.lingvo_htmlblock{}
+.sidebar_right .block.lingvo_htmlblock .logo{margin-bottom:10px;}
+.sidebar_right .block.lingvo_htmlblock .description{font-size:14px;color:#333;margin-bottom:10px;}
+.sidebar_right .block.lingvo_htmlblock .description .big{font-size:20px;margin-bottom:10px;}
+.sidebar_right .block.lingvo_htmlblock .description .big a{color:#dd04a2;}
+.sidebar_right .block.lingvo_htmlblock .description p{font-size:11px;margin-bottom:10px;}
+.sidebar_right .block.lingvo_htmlblock .download{margin-bottom:10px;}
+.sidebar_right .block.lingvo_htmlblock .description2{font-size:14px;}
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_hp.tpl
+ *
+ * Стили для HTML_блока "hp_htmlblock" 
+ */
+.sidebar_right .block.hp_htmlblock{}
+.sidebar_right .block.hp_htmlblock .logo{margin-bottom:10px;}
+.sidebar_right .block.hp_htmlblock .description{font-size:18px;color:#333;margin-bottom:10px;}
+.sidebar_right .block.hp_htmlblock .download{margin-bottom:10px;}
+.sidebar_right .block.hp_htmlblock .description2{font-size:12px;color:#333;}
+
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_toster.tpl
+ *
+ * Стили для HTML_блока "toster_htmlblock" 
+ */
+.sidebar_right .block.toster_htmlblock{}
+.sidebar_right .block.toster_htmlblock .logo{margin-bottom:10px;}
+.sidebar_right .block.toster_htmlblock .description{font-size:18px;color:#333;margin-bottom:10px;}
+.sidebar_right .block.toster_htmlblock .description p{font-size:16px;color:#333;line-height: 24px;}
+.sidebar_right .block.toster_htmlblock .description p .company_name{color:#999;font-size:12px;}
+.sidebar_right .block.toster_htmlblock .download{margin-bottom:10px;}
+
+
+
+/**
+ * tpl/posts/_sidebar/htmlblock/_2com.tpl
+ *
+ * Стили для HTML_блока "2com_htmlblock" 
+ */
+.sidebar_right .block.twocom_htmlblock{}
+.sidebar_right .block.twocom_htmlblock .logo{margin-bottom:10px;}
+.sidebar_right .block.twocom_htmlblock .big{font-size:22px;color:#333;margin-bottom:10px;font-style: arial;}
+
+
+
+
+/*   ==jquery.jgrowl==   */
+
+div.jGrowl {
+	padding: 			10px;
+	z-index: 			9999;
+	color: 				#fff;
+	font-size: 			12px;
+}
+
+/** Normal Style Positions **/
+div.jGrowl {
+	position:			absolute;
+}
+
+body > div.jGrowl {
+	position:			fixed;
+}
+
+div.jGrowl.top-left {
+	left: 				0px;
+	top: 				0px;
+}
+
+div.jGrowl.top-right {
+	right: 				0px;
+	top: 				0px;
+}
+
+div.jGrowl.bottom-left {
+	left: 				0px;
+	bottom:				0px;
+}
+
+div.jGrowl.bottom-right {
+	right: 				0px;
+	bottom: 			0px;
+}
+
+div.jGrowl.center {
+	top: 				0px;
+	width: 				50%;
+	left: 				25%;
+}
+
+/** Cross Browser Styling **/
+div.center div.jGrowl-notification, div.center div.jGrowl-closer {
+	margin-left: 		auto;
+	margin-right: 		auto;
+}
+
+
+div.jGrowl div.jGrowl-notification, 
+div.jGrowl div.jGrowl-closer {
+	background-color: 		#6690C9;
+	opacity: 				.85;
+    -ms-filter: 			"progid:DXImageTransform.Microsoft.Alpha(Opacity=85)"; 
+    filter: 				progid:DXImageTransform.Microsoft.Alpha(Opacity=85); 
+	zoom: 					1;
+	width: 					235px;
+	padding: 				10px;
+	margin-top: 			5px;
+	margin-bottom: 			5px;
+	font-family: 			Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 				1em;
+	text-align: 			left;
+	display: 				none;
+	-moz-border-radius: 	5px;
+	-webkit-border-radius:	5px;
+}
+
+/** error theme **/
+div.jGrowl div.jGrowl-notification.error{
+  background:#ed6060;
+  color:#fff;
+}
+
+/** warning theme **/
+div.jGrowl div.jGrowl-notification.warning{
+  background:#dcdf00;
+  color:#fff;
+}
+
+
+
+
+
+
+div.jGrowl div.jGrowl-notification {
+	min-height: 			20px;
+}
+
+div.jGrowl div.jGrowl-notification div.jGrowl-header {
+	font-weight: 			bold;
+	font-size:				.85em;
+}
+
+div.jGrowl div.jGrowl-notification div.jGrowl-close {
+	z-index:				99;
+	float: 					right;
+	font-weight: 			bold;
+	font-size: 				1em;
+	cursor:					pointer;
+}
+
+div.jGrowl div.jGrowl-closer {
+	padding-top: 			4px;
+	padding-bottom: 		4px;
+	cursor: 				pointer;
+	font-size:				.9em;
+	font-weight: 			bold;
+	text-align: 			center;
+}
+
+
+
+
+
+/*   ==tipTip==   */
+/* TipTip CSS - Version 1.2 */
+
+#tiptip_holder {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 99999;
+}
+
+#tiptip_holder.tip_top {
+	padding-bottom: 5px;
+}
+
+#tiptip_holder.tip_bottom {
+	padding-top: 5px;
+}
+
+#tiptip_holder.tip_right {
+	padding-left: 5px;
+}
+
+#tiptip_holder.tip_left {
+	padding-right: 5px;
+}
+
+#tiptip_content {
+	font-size: 12px;
+	color: #fff;
+	padding: 5px 10px;
+	background: #46688B;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	text-align: left;
+}
+
+#tiptip_arrow, #tiptip_arrow_inner {
+	position: absolute;
+	border-color: transparent;
+	border-style: solid;
+	border-width: 6px;
+	height: 0;
+	width: 0;
+}
+
+#tiptip_holder.tip_top #tiptip_arrow {
+	border-top-color: #fff;
+	border-top-color: #46688B;
+}
+
+#tiptip_holder.tip_bottom #tiptip_arrow {
+	border-bottom-color: #fff;
+	border-bottom-color: #46688B;
+}
+
+#tiptip_holder.tip_right #tiptip_arrow {
+	border-right-color: #fff;
+	border-right-color: #46688B;
+}
+
+#tiptip_holder.tip_left #tiptip_arrow {
+	border-left-color: #fff;
+	border-left-color: #46688B;
+}
+
+#tiptip_holder.tip_top #tiptip_arrow_inner {
+	margin-top: -7px;
+	margin-left: -6px;
+	border-top-color: #46688B;
+}
+
+#tiptip_holder.tip_bottom #tiptip_arrow_inner {
+	margin-top: -5px;
+	margin-left: -6px;
+	border-bottom-color: #46688B;
+}
+
+#tiptip_holder.tip_right #tiptip_arrow_inner {
+	margin-top: -6px;
+	margin-left: -5px;
+	border-right-color: #46688B;
+}
+
+#tiptip_holder.tip_left #tiptip_arrow_inner {
+	margin-top: -6px;
+	margin-left: -7px;
+	border-left-color: #46688B;
+}
+
+/* Webkit Hacks  */
+@media screen and (-webkit-min-device-pixel-ratio:0) {	
+	#tiptip_content {
+		padding: 4px 8px 5px 8px;
+		background-color: #46688B;
+	}
+	#tiptip_holder.tip_bottom #tiptip_arrow_inner { 
+		border-bottom-color: #46688B;
+	}
+	#tiptip_holder.tip_top #tiptip_arrow_inner { 
+		border-top-color: #46688B;
+	}
+}
+
+

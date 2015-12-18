@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8A0A000C-5700-4F74-97ED-31D3A9120D8E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KWPTest</RootNamespace>
+    <AssemblyName>KWPTest</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\KWPTest.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\KWPTest.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ByteSetter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ByteSetter.Designer.cs">
+      <DependentUpon>ByteSetter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CommonDiagForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CommonDiagForm.Designer.cs">
+      <DependentUpon>CommonDiagForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CommonDiagParams.cs" />
+    <Compile Include="DiagLogOpenForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DiagLogOpenForm.Designer.cs">
+      <DependentUpon>DiagLogOpenForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IByteSetter.cs" />
+    <Compile Include="IWordSetter.cs" />
+    <Compile Include="KWPTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KWPTestForm.Designer.cs">
+      <DependentUpon>KWPTestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LC1Emul.cs" />
+    <Compile Include="OltDiagForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OltDiagForm.Designer.cs">
+      <DependentUpon>OltDiagForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OltDiagParams.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BitSetter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BitSetter.Designer.cs">
+      <DependentUpon>BitSetter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReverseData.cs" />
+    <Compile Include="ReverseProtocolForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReverseProtocolForm.Designer.cs">
+      <DependentUpon>ReverseProtocolForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WordSetter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WordSetter.Designer.cs">
+      <DependentUpon>WordSetter.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="ByteSetter.resx">
+      <DependentUpon>ByteSetter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommonDiagForm.resx">
+      <DependentUpon>CommonDiagForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiagLogOpenForm.resx">
+      <DependentUpon>DiagLogOpenForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KWPTestForm.resx">
+      <DependentUpon>KWPTestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OltDiagForm.resx">
+      <DependentUpon>OltDiagForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="BitSetter.resx">
+      <DependentUpon>BitSetter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReverseProtocolForm.resx">
+      <DependentUpon>ReverseProtocolForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WordSetter.resx">
+      <DependentUpon>WordSetter.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\DataSources\EcuCommunication.Protocols.DiagData.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="protocol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ECUAdapter\EcuCommunication.csproj">
+      <Project>{74911440-552F-4FD9-AFB3-347D587F7209}</Project>
+      <Name>EcuCommunication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Helper\Helper.csproj">
+      <Project>{83873DFF-6031-413F-B649-3D4730F26C02}</Project>
+      <Name>Helper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

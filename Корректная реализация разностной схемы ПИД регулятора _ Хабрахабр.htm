@@ -1,0 +1,2361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru"><head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>Корректная реализация разностной схемы ПИД регулятора / Хабрахабр</title>
+		<meta name="description" content="ПИД-регулятор является простейшим регулятором, имеющим эффективные аппаратные аналоговые реализации, и потому применяемый наиболее широко. Для своей работы требует настройки 3х коэффициентов под...">		
+		<meta name="keywords" content="PID, ПИД, регулятор, реализация, математика, кодирование алгоритмов">
+
+		
+		
+			<link href="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all_002.css" rel="stylesheet" media="all">
+		
+    
+		
+  <link href="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/posts.css" rel="stylesheet" media="all">
+  <link href="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/comments.css" rel="stylesheet" media="all">
+  <link href="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/forms.css" rel="stylesheet" media="all">
+  <link href="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/highlight.css" rel="stylesheet" media="all">
+  <link href="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all.css" rel="stylesheet" media="all">
+
+
+		
+		
+			<script type="text/javascript" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all_002.js"></script>
+		
+		
+		
+		
+			
+		
+  <script type="text/javascript" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery_002.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/swfobject.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/wysiwyg.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/highlight.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/posts.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/comments.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all.js"></script>
+
+		
+		<script type="text/javascript" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/adriver.js"></script>
+		
+		
+		
+		<link title="Хабрахабр / Комментарии к публикации «Корректная реализация разностной схемы ПИД регулятора»" type="application/rss+xml" rel="alternate" href="http://habrahabr.ru/rss/post/143388/">
+		
+	<script src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/ga.js" async="true"></script></head>
+
+	<body>
+	  
+
+
+
+
+
+
+	<div id="topline"></div>
+	<script type="text/javascript">
+	(function(){
+		var custom = {};
+		
+			custom[1]	= 'controllers';
+		
+			custom[2]	= 'algorithm';
+		
+		new adriver("topline", {sid:176776, bt:52, bn:1, custom: custom});
+	})();
+	</script>
+
+
+
+
+		<div id="layout">	    
+		  <div id="header">
+  <div class="userpanel silver">
+    
+    
+      <a href="http://habrahabr.ru/login/" class="login">войти</a> <a href="http://habrahabr.ru/register/">зарегистрироваться</a>
+    
+  </div>
+  <a class="logo" href="http://habrahabr.ru/" title="На главную страницу"></a>
+  <div class="search">
+    <form id="search_form" name="search" method="get" action="/search/">
+      <input value="" type="submit">
+      <input autocomplete="off" name="q" value="поиск по сайту" onfocus="this.value = (this.value == 'поиск по сайту') ? '' : this.value" onblur="this.value = (this.value == '') ? 'поиск по сайту' : this.value" type="text">
+    </form>
+  </div>
+
+
+	<div class="main_menu">
+		<a href="http://habrahabr.ru/posts/top/" class="active">посты</a><a href="http://habrahabr.ru/qa/">q&amp;a</a><a href="http://habrahabr.ru/events/coming/">события</a><a href="http://habrahabr.ru/hubs/">хабы</a><a href="http://habrahabr.ru/companies/">компании</a>
+		<div class="banner_special">
+
+	 
+
+	 
+
+	
+	
+		<!--  AdRiver code START. Type:135x35 Site: habrahabr PZ: 0 BN: 0 -->
+		<script language="javascript" type="text/javascript"><!--
+		var RndNum4NoCash = Math.round(Math.random() * 1000000000);
+		var ar_Tail='unknown'; if (document.referrer) ar_Tail = escape(document.referrer);
+		document.write(
+		'<iframe src="http://ad.adriver.ru/cgi-bin/erle.cgi?'
+		+ 'sid=176776&target=top&w=135&h=35&bt=25&pz=0&rnd=' + RndNum4NoCash + '&tail256=' + ar_Tail
+		+ '" frameborder=0 vspace=0 hspace=0 width=135 height=35 marginwidth=0'
+		+ ' marginheight=0 scrolling=no></iframe>');
+		//--></script><iframe class=" wyclnnncnjqdfeltosbc" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/erle.htm" vspace="0" hspace="0" marginwidth="0" marginheight="0" frameborder="0" height="35" scrolling="no" width="135"></iframe>
+		<noscript>
+		<a href="http://ad.adriver.ru/cgi-bin/click.cgi?sid=176776&bt=25&pz=0&rnd=795668059" target=_top>
+		<img src="http://ad.adriver.ru/cgi-bin/rle.cgi?sid=176776&bt=25&pz=0&rnd=795668059" alt="-AdRiver-" border=0 width=135 height=35></a>
+		</noscript>
+
+		<!--  AdRiver code END  -->
+	
+	
+
+</div>
+	</div>
+
+
+</div>
+
+
+	
+		  
+	  
+		  
+
+
+	
+  <div class="content_left">
+
+	
+
+
+
+
+
+
+
+
+
+	
+
+		
+  <div class="post" id="post_143388">
+    <h1 class="title">
+      
+	    
+
+	      
+      
+        <span class="post_title">Корректная реализация разностной схемы ПИД регулятора</span>
+      
+      
+      
+
+      
+  	</h1>
+  	
+  	
+<div class="hubs">
+	
+		<a href="http://habrahabr.ru/hub/controllers/" class="hub " title="Вы не подписаны на этот хаб">Программинг микроконтроллеров</a><span class="profiled_hub" title="Профильный хаб">*</span>, 
+	
+		<a href="http://habrahabr.ru/hub/algorithm/" class="hub " title="Вы не подписаны на этот хаб">Алгоритмы</a><span class="profiled_hub" title="Профильный хаб">*</span>
+	
+</div>
+
+  	
+  	<div class="content html_format">
+  	ПИД-регулятор является простейшим регулятором, имеющим эффективные 
+аппаратные аналоговые реализации, и потому применяемый наиболее широко. 
+Для своей работы требует настройки 3х коэффициентов под конкретный 
+объект, позволяющие подобрать процесс регулирования согласно 
+требованиям. Обладая простым физическим смыслом и простой математической
+ записью, применяется широко и часто в регуляторах температуры, 
+регуляторах расхода газа и других системах, где требуется поддерживать 
+некий параметр на заданном уровне, с возможными переходами между разными
+ заданными уровнями. Разумеется, существуют более сложные регуляторы, 
+позволяющие более точно и быстро и с меньшими перерегулированиями 
+выходить на заданные параметры, а так же учитывающие нелинейность или 
+гистерезис регулируемого объекта, однако они обладают большей 
+вычислительной сложностью и сложнее в настройке.<br>
+<br>
+Несмотря на свою простоту как физического смысла, так и математической записи:<br>
+<img alt="[Image]" ilo-full-src="http://upload.wikimedia.org/wikipedia/ru/math/f/5/c/f5c567b26377841dbd22c097eb20a9b0.png" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/f5c567b26377841dbd22c097eb20a9b0.png"><br>
+при програмной реализаци ПИД регулятора очень часто допускают ошибки, которые встречаются даже в поверенных приборах автоматики.<br>
+<br>
+Причем проверить качество реализации ПИД регулятора крайне легко. <a name="habracut"></a><br>
+<br>
+Рассмотрим простейший пример: терморегулятор. Для проверки его качестве 
+лучше всего подходит быстрый, малоинерциальный, маломощный объект. 
+Классика жанра: обычная лампочка на 100Вт с прикрученной к ней тонкой 
+термопарой (ХА). И первое, на чем следует проверять ПИД регулятор — 
+деградация ПИД до просто П-регулятора. То есть коэффициенты интегральной
+ и дифференциальной ставим в ноль, а пропорциональную ставим в максимум.
+ <br>
+<br>
+Включаем регулятор, проверяем: текущая температура 22 градуса, уставка 
+16 градусов. Лампочка не горит. Начинаем начинаем увеличивать уставку: 
+16.1, 16.3, 16.7, 18… 19… лампочка загорелась. Как?! Откуда?! 
+Останавливаемся — выключилась. Итак, мы встретились с <b>первой классической ошибкой</b> реализации ПИД регулятора.<br>
+<br>
+Небольшое математическое отступление: вспомним еще раз интегральную 
+запись указанную выше. Мы реализуем её програмно, а значит — дискретно. 
+То есть с завидной регулярностью производим измерение входной величины, 
+сравниваем её с уставкой, вычисляем воздействие, выдаём, повторить. А 
+значит, надо из интегральной формы перейти в конечно-разностную схему. 
+При переходе обычно используется переход «в лоб»:<br>
+<img alt="[Image]" ilo-full-src="http://upload.wikimedia.org/wikipedia/ru/math/4/8/d/48db3840219a6b71d614001bb8a573f2.png" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/48db3840219a6b71d614001bb8a573f2.png"><br>
+где <code>E(n) = X(n) - X0(n)</code> — то есть величина рассогласования между текущим и заданным значением регулируемого параметра.<br>
+<br>
+Использование прямой формулы потребует во-1х считать и хранить интеграл 
+рассогласований за большой период, во-2х требует работы с плавающей 
+точкой высокой точности (так как интегральный коэффициент Ki всегда &lt;
+ 1), либо операции деления (представляя коэффициент в форме 1/Ki) 
+большой разрядности. Всё это требует вычислительных ресурсов, коих в 
+embedded как правило сильно ограничено… Поэтому, вместо реализации 
+прямой схемы, реализуют рекуррентную формулу:<br>
+<img alt="[Image]" ilo-full-src="http://upload.wikimedia.org/wikipedia/ru/math/c/9/9/c99d4b146296ccb5ab4dbfd1bc202c17.png" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/c99d4b146296ccb5ab4dbfd1bc202c17.png"><br>
+использование рекуррентной формулы позволяет сократить объём вычислений и разрядность промежуточных значений.<br>
+<br>
+Итак, вернёмся к нашему регулятору. Итак, есть регулируемый объект: 
+лампочка. Для управления подаваемой на неё мощностью, используют простой
+ подход: сеть питания (220В 50Гц) подаётся через симистор на нагрузку. <a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%B8%D0%BC%D0%B8%D1%81%D1%82%D0%BE%D1%80">Симистор</a>
+ в момент перехода полуволны через ноль выключается, и остаётся выключен
+ до тех пор, пока не будет подан сигнал на управляющий электрод. Таким 
+образом, чем раньше после начала полуволны мы подадим управляющий 
+сигнал, тем больше энергии от этой полуволны достигнет управляемого 
+объекта. Правильно расчитав время для линейности площади части полуволны
+ с момента времени X до конца полуволны, мы получаем возможность 
+выдавать мощность от 0 до 100% с точностью, с которой расчитали таблицу 
+линеаризации.<br>
+<br>
+Итак, мы можем выдавать мощность от 0 до 100%. В реальных объектах, 
+часто нельзя выдавать 100% мощности — например, это черевато 
+перегоранием нагревательного элемента. Поэтому, все приборы имеют 
+настройку минимальной и максимальной выдаваемой мощности на объект.<br>
+<br>
+Итак, после вычисления <code>U(n)</code> по вышестоящей формуле, добавляется еще ограничение результата:<br>
+<code>if Un &lt; Umin then Un := Umin; if Un&gt;Umax then Un := Umax;</code><br>
+После чего, вычисленное Un и есть требуемая выходная мощность на текущий
+ момент. Та-дам! Именно вот эта реализация и создаёт ошибку, о которой 
+написано выше.<br>
+<br>
+Причина банальна: в момент перехода от дикретной к конечно-разностной 
+схеме, мы «выносим за скобки» операцию вычисления интеграла, и на каждом
+ шаге мы прибавляем производную к накопленной сумме <code>U(n-1)</code>.
+ Наложив же на неё ограничение, мы весь вычисленный интеграл фактически 
+обнуляем. (Ну не сколько обнуляем, сколько приводим к диапазону 0-100, 
+что в данном случае несущественно). Таким образом, мы дифференциурем ПИД
+ регулятор, и остаётся дифференциально-ускорительный. Что в реальности 
+выглядит как просто дифференциальный регулятор — мощность при этом 
+подаётся пропорционально изменению уставки или регулируемой величины, а 
+не пропорционально разности между уставкой и регулируемой величиной.<br>
+<br>
+<b>Вывод №1</b>: вычисление U(n) нельзя ограничивать. Для ограничения 
+мощности подаваемой на выходное устройство следует заводить отдельную 
+переменную.<br>
+<br>
+Теперь, когда мы завели Urn, для ограниченной мощности, перезаливаем, продолжаем тестировать.<br>
+Включаем регулятор, проверяем: текущая температура 22 градуса, уставка 16 градусов. Лампочка не горит.<br>
+Начинаем прибавлять уставку: 16.1, 16.4, 17, 18, 20, 22, 24 (опа! засветилось! ура!), 28, 30, 40, 60… Красота! Работает!<br>
+Наблюдаем за процессом — вышло примерно на 60, болтается чуток 
+туда-сюда, но держит. Вроде, всё красиво. Выдыхаем, проверяем управление
+ с ПК: задаём 600 градусов. И… Лампочка выключается. Как так? Уставка 
+600, текущая 60, а лампочка не горит?<br>
+<br>
+Пока ждём и медленно осознаём, что мы явно напоролись на какой-то <b>«Классический Косяк №2»</b> ™ лампочка медленно разгорается, выходит на 100% мощности, и так и остаётся — 600-то градусов она выдать ну никак не может.<br>
+<br>
+Возвращаемся снова к нашей разностной схеме. <code>U(n) = U(n-1) + Kp*(dE + ...)</code>.
+ К текущему расчетному значению воздействия прибавляется разность 
+невязки помноженная на коэффициент пропорциональности. У нас была 
+уставка 60, температура 60, то есть невязка нулевая. Выходная мощность 
+так же была нулевая. И тут разом, скачком, уставку увеличили до 600 
+градусов. невязка резко стала 540 градусов, помножили еще и на 
+коэффициент пропорциональности… и вылетели за разрядность хранения U(n).
+ Не смейтесь, использование математики с фиксированной точки, вместо 
+плавающей точки. При разнице в 540 градусов и работе через 1/16, при 
+коэффициенте пропорциональности 20, получаем… 540*20*16=172800, а если у
+ нас 16тиразрядный U(n), да еще и знаковый, то фактически, в результате 
+вычисления мы получили A300h = −8960. Опачки. Вместо большого плюса — 
+ощутимый такой минус.<br>
+<br>
+<b>Вывод №2</b>: вычисления должны проводиться с корректной поддержкой 
+переполнения. Переполнилось? Ограничь предельным числом, уж никак не 
+заворачивать.<br>
+<br>
+Итак, нарастили разрядность U(n), перетранслировали, зашили, запускаем. 
+Лампочка еще не совсем остыла, там 80 градусов, уставка всё те же 600. 
+Лампочка зажигается… и тухнет. Зажигается и тухнет. Как так? Уставка 
+600, лампочка 80 — и поддерживает вполне себе свои 80! Как так-то?! Явно
+ у нас вылез <b>Жучок №3</b>.<br>
+<br>
+И снова лирически-математическое отступление. Итак, есть наша разностная схема: <code>U(n) = G(U(n-1), dE(n))</code>.
+ Еще раз: новое значение воздействия есть сумма прошлого воздействия и 
+некого воздействия, зависящего от разности невязки в текущий момент и 
+предыдущий. А что такое предыдущий момент? А какой момент предыдущий у 
+предыдущего? Ну-ка, вспомнили школу. Доказательство по индукции. Если 
+можно построить доказательство для K+1, считая что доказательство для K 
+верно, <b>И</b> доказать отдельно что верно для K=0, тогда доказательство истинно. Итак, а как мы считаем U(0)?<br>
+<br>
+Часто встречающееся решение: всё обнуляем, уставку считываем из 
+флешпамяи уставки, ждём 1 цикл опроса, и считываем X(0). Вот, ноль 
+готов, теперь работаем. И… И не правильно. Почему? Потому что 
+рекурентная формула отталкивается от изменений в невязке. А 
+проинициализировав нулём и загрузив текущие значения мы потеряли 
+стартовые условия. Всё — вместо поддержания абсолютного значения 
+температуры на уровне равном абсолютной уставке регулятор начинает 
+держать температуру равную стартовой плюс разнице уставки. То есть было 
+80 градусов и уставка 200, включили прибор — он держет 80. Сменили 
+уставку на 240 — он начал держать 120.<br>
+<br>
+Правильная инициализация разностной схемы: обнулить _вообще всё_. То есть <br>
+<code>X(0) = 0, X0(0) = 0. U(0) = 0. E(0)=X(0)-X0(0)=0.</code><br>
+И на первом же цикле вычислений у нас как бы скачком появляются уставке и текущее значение:<br>
+<code>X(1) = 80. X0(1)=200. U(1) = U(0)+Kp*(E(1)-E(0)) = U(0)+Kp*(X(1)-X0(1)-E(0)) = 0 + 20*(200 - 80 - 0) = 2400</code><br>
+Вот теперь схема работает правильно.<br>
+<br>
+<b>Вывод №3</b>: корректно инициализируй стартовые условия.<br>
+<br>
+Правильно ли? Hу-ка, ну-ка… Еще раз… Ставим уставку 20. Ждём охлаждения…
+ Выключаем. Включаем. Итак, красота: текущая 20, уставка 20. Ставим 
+скачком 600. Поехало греться. 100, 120… ставим уставку 20. Отключилось, 
+пошло охлаждаться. Ждём чуток (120… 110… 100… 90… 80...) и ставим 
+уставку 100. Поехало греться… 105 градусов, отключилось. Стоп. А почему 
+оно держит 105? У нас же сейчас работает только пропорциональная 
+составляющая. При правильной реализации из физического смысла процесса 
+колебательный процесс не может держать уставку выше чем задано. Строго 
+ниже. А держит на 5 градусов больше чем попросили. Это наблюдается <b>Прикол №4</b>.<br>
+<br>
+Итак, вспоминаем что у нас было выше: Вывод№2: U(n) нельзя ограничивать.
+ И Вывод№3: при переполнении ограничить всё-таки придётся. Да-да. Иначе 
+«рабочая точка» смещается на ограниченный момент. Что же делать? 
+Увеличить разрядость? Хорошо, если хватает вычислительной мощности. А 
+надо ли? Собственно, что плохого, что у нас U(n) = 9999.99, а не 
+29999.99? В общем-то только то, что мы потеряли 20000. Но сейчас-то для 
+работы нам так и так надо вваливать просто 100% мощности, правильно? 
+Правильно. Значит, проблемы с ограничением в полку нет, до тех пор, пока
+ мы не отходим от предела. Таким образом, в случае переполнения надо 
+ставить флаг, и по достижении, например, половины диапазона (то есть как
+ U(n) после 9999.9 опустилось ниже 5000.00), заново реинициализировать 
+схему. То есть отбрасывать историю, сказать что n=0 и см. выше Вывод №3.
+ Пытливый ум уже сообразил, что в случае полной схемы, когда все три 
+компоненты не равны нулю, обнуляя в процессе итеративный процесс, мы в 
+том числе обнуляем накопленный интеграл интегральной составляющей. 
+Однако, в связи с тем, что обнуляем мы значительно заранее, он успеет 
+подкопиться за время довырабатывания остатка. Да и не совсем корректно 
+копить интеграл на «больших» перегонах, так как цель интегральной 
+составляющей — «выбрать» невязку, которую не может отработать 
+пропорциональная составляющая отдельно.<br>
+<br>
+<b>Вывод №4</b>: если по какой-то причине U(n) было ограничено, схему 
+следует переинициализировать как только создалось впечатление, что схема
+ вернулась в нормальное состояние.<br>
+<br>
+<i>В следующем выпуске</i>: а так ли надо реализовывать разностную 
+схему? Подробная реализация прямой дискретной схемы, обладающей простыми
+ и понятными настраиваемыми коэффициентами, с прямым физическим смыслом,
+ которая без проблем вычисляет управляющее воздействие с частотой 25Гц 
+на процессоре ADuC847 (быстрый 8-битный контроллер, с ядром 8051), 
+оставляя еще море процессорного времени для других процессов.<br>
+<br>
+(Картинки с изображением формул взяты из статьи <a href="http://ru.wikipedia.net/wiki/%D0%9F%D0%98%D0%94-%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80">ПИД-Регулятор</a> в Wikipedia) 
+  	
+  	<div class="clear"></div> 	
+  	</div>
+    
+<ul class="tags">
+	<li><a href="http://habrahabr.ru/search/?q=%5BPID%5D&amp;target_type=posts" rel="tag">PID</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D0%9F%D0%98%D0%94%5D&amp;target_type=posts" rel="tag">ПИД</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%5D&amp;target_type=posts" rel="tag">регулятор</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%5D&amp;target_type=posts" rel="tag">реализация</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D0%BC%D0%B0%D1%82%D0%B5%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0%5D&amp;target_type=posts" rel="tag">математика</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5B%D0%BA%D0%BE%D0%B4%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%B0%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%BC%D0%BE%D0%B2%5D&amp;target_type=posts" rel="tag">кодирование алгоритмов</a></li>
+</ul>
+
+    <div class="infopanel" id="infopanel_post_143388">
+	
+        
+	
+	<div class="voting   ">
+
+		  				  
+		
+		<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+		<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+		
+
+		<div class="mark positive ">
+			
+			<span class="score" title="Всего 43: ↑43 и ↓0">+43</span>
+			
+			  					  
+		</div>  
+
+	</div>
+	
+	
+
+	
+
+	<div class="published"> 6 мая 2012, 08:40</div>
+
+	<div class="favorite">
+		
+		
+		<a class="guest" href="#" onclick="return false;" title="Только зарегистрированные пользователи могут добавлять посты в избранное"></a>
+		
+	</div>
+
+	<div class="favs_count" title="Количество пользователей, добавивших пост в избранное">142</div>
+
+	
+	<div class="twitter">
+		<a href="http://twitter.com/intent/tweet?text=http://habr.ru/p/143388/+%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F+%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F+%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9+%D1%81%D1%85%D0%B5%D0%BC%D1%8B+%D0%9F%D0%98%D0%94+%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0+%23habr" title="Опубликовать ссылку в Twitter" target="_blank"></a>
+	</div>
+	<div class="vkontakte"> 
+		<a href="http://vkontakte.ru/share.php?url=http://habr.ru/p/143388/" title="Опубликовать ссылку во ВКонтакте" onclick="window.open(this.href, 'Опубликовать ссылку во Вконтакте', 'width=800,height=300'); return false"></a>
+	</div>
+	<div class="facebook">
+		<a href="https://www.facebook.com/sharer/sharer.php?u=http://habr.ru/p/143388/" title="Опубликовать ссылку в Facebook" onclick="window.open(this.href, 'Опубликовать ссылку в Facebook', 'width=640,height=436,toolbar=0,status=0'); return false"></a>
+	</div>
+	<div class="googleplus">
+		<a href="https://plus.google.com/share?url=http://habr.ru/p/143388/" title="Опубликовать ссылку в Google Plus" onclick="window.open(this.href, 'Опубликовать ссылку в Google Plus', 'width=800,height=300'); return false"></a>
+	</div>
+	
+
+	
+
+	
+
+	
+	
+
+	
+	
+	<div class="author">
+		
+		<a title="Автор текста" href="http://habrahabr.ru/users/datacompboy/">datacompboy</a>
+		<span class="rating" title="рейтинг пользователя">51,7</span>
+		
+	</div>
+	
+	
+
+	
+	
+	
+
+</div>
+<div class="clear"></div>    
+    
+	</div>
+
+		
+		
+<div class="comments_list " id="comments">
+
+  <h2 class="title ">комментарии (<span id="comments_count">25</span>)
+    
+  </h2>
+
+   
+    
+<div class="comment_item" id="comment_4805110">
+	
+	
+		<div class="info  	" rel="4805110">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805110" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark positive ">
+						<span class="score" title="Всего 8: ↑8 и ↓0">+8</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/harlov91/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/1c/c2/2b/15335/small_15335.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_15335.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/harlov91/" class="username">harlov91</a>
+			<time datetime="2012-05-06T09:06:05+04:00"> 6 мая 2012, 09:06</time>
+			<a href="#comment_4805110" class="link_to_comment">#</a>
+			
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Отличное легкое чтиво в воскресенье, под кофе. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805110">
+	
+	</div>
+</div>
+
+   
+    
+<div class="comment_item" id="comment_4805229">
+	
+	
+		<div class="info  	" rel="4805229">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805229" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/Den_Fisher/" class="avatar"><img ilo-full-src="http://habrahabr.ru/i/avatars/stub-user-small.gif" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+			<a href="http://habrahabr.ru/users/Den_Fisher/" class="username">Den_Fisher</a>
+			<time datetime="2012-05-06T11:04:58+04:00"> 6 мая 2012, 11:04</time>
+			<a href="#comment_4805229" class="link_to_comment">#</a>
+			
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			О, мне как раз скоро ТАУ сдавать, спасибо. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805229">
+	 
+		
+<div class="comment_item" id="comment_4805243">
+	
+	
+		<div class="info  	" rel="4805243">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805243" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark positive ">
+						<span class="score" title="Всего 1: ↑1 и ↓0">+1</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/datacompboy/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/6b/b1/17/25291/small_25291.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_25291.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/datacompboy/" class="username">datacompboy</a>
+			<time datetime="2012-05-06T11:10:17+04:00"> 6 мая 2012, 11:10</time>
+			<a href="#comment_4805243" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805229" data-id="4805243" data-parent_id="4805229" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Для сдачи не пойдёт, это именно относительно практики, а не теории. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805243">
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+   
+    
+<div class="comment_item" id="comment_4805250">
+	
+	
+		<div class="info  	" rel="4805250">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805250" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark positive ">
+						<span class="score" title="Всего 1: ↑1 и ↓0">+1</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/boolivar/" class="avatar"><img ilo-full-src="http://habrahabr.ru/i/avatars/stub-user-small.gif" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+			<a href="http://habrahabr.ru/users/boolivar/" class="username">boolivar</a>
+			<time datetime="2012-05-06T11:12:49+04:00"> 6 мая 2012, 11:12</time>
+			<a href="#comment_4805250" class="link_to_comment">#</a>
+			
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			С'И'мистор, простите 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805250">
+	 
+		
+<div class="comment_item" id="comment_4805259">
+	
+	
+		<div class="info  	" rel="4805259">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805259" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/datacompboy/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/6b/b1/17/25291/small_25291.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_25291.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/datacompboy/" class="username">datacompboy</a>
+			<time datetime="2012-05-06T11:19:40+04:00"> 6 мая 2012, 11:19</time>
+			<a href="#comment_4805259" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805250" data-id="4805259" data-parent_id="4805250" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			уже исправлено, да. очепятка. my bad. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805259">
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+   
+    
+<div class="comment_item" id="comment_4805555">
+	
+	
+		<div class="info  	" rel="4805555">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805555" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark positive ">
+						<span class="score" title="Всего 2: ↑2 и ↓0">+2</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/DEHiCKA/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/46/60/0b/3728/small_3728.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_3728.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/DEHiCKA/" class="username">DEHiCKA</a>
+			<time datetime="2012-05-06T14:37:02+04:00"> 6 мая 2012, 14:37</time>
+			<a href="#comment_4805555" class="link_to_comment">#</a>
+			
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Списибо! Для наглядности немного не хватает графиков. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805555">
+	 
+		
+<div class="comment_item" id="comment_4805600">
+	
+	
+		<div class="info  	" rel="4805600">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805600" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/datacompboy/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/6b/b1/17/25291/small_25291.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_25291.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/datacompboy/" class="username">datacompboy</a>
+			<time datetime="2012-05-06T15:27:56+04:00"> 6 мая 2012, 15:27</time>
+			<a href="#comment_4805600" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805555" data-id="4805600" data-parent_id="4805555" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Графики, они нужны для настройки. Для отлова вот этих классических 
+ошибок реализации достаточно банального наблюдения глазами за лампочкой и
+ текущим показанием прибора. Какие там графики, вы о чем :) 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805600">
+	 
+		
+<div class="comment_item" id="comment_4805692">
+	
+	
+		<div class="info  	" rel="4805692">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805692" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark positive ">
+						<span class="score" title="Всего 2: ↑2 и ↓0">+2</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/DEHiCKA/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/46/60/0b/3728/small_3728.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_3728.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/DEHiCKA/" class="username">DEHiCKA</a>
+			<time datetime="2012-05-06T16:50:27+04:00"> 6 мая 2012, 16:50</time>
+			<a href="#comment_4805692" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805600" data-id="4805692" data-parent_id="4805600" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Помоему, обычные графики зависимости температуры от времени нагляднее чем словесное описание поведения лампочки. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805692">
+	
+	</div>
+</div>
+
+	 
+		
+<div class="comment_item" id="comment_4805701">
+	
+	
+		<div class="info  	" rel="4805701">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805701" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/DEHiCKA/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/46/60/0b/3728/small_3728.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_3728.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/DEHiCKA/" class="username">DEHiCKA</a>
+			<time datetime="2012-05-06T16:56:49+04:00"> 6 мая 2012, 16:56</time>
+			<a href="#comment_4805701" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805600" data-id="4805701" data-parent_id="4805600" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Вот, как здесь например предельно доступно рассмотрены основы PID: <a href="http://www.eetimes.com/ContentEETimes/Documents/Embedded.com/2000/f-wescot.pdf">www.eetimes.com/ContentEETimes/Documents/Embedded.com/2000/f-wescot.pdf</a> 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805701">
+	 
+		
+<div class="comment_item" id="comment_4805737">
+	
+	
+		<div class="info  	" rel="4805737">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805737" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark positive ">
+						<span class="score" title="Всего 1: ↑1 и ↓0">+1</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/datacompboy/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/6b/b1/17/25291/small_25291.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_25291.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/datacompboy/" class="username">datacompboy</a>
+			<time datetime="2012-05-06T17:46:21+04:00"> 6 мая 2012, 17:46</time>
+			<a href="#comment_4805737" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805701" data-id="4805737" data-parent_id="4805701" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Вы читали статью? Статья совсем не ПИД регуляторе, и не о его 
+свойствах. А о стандартных ошибках в его реализации, и способе проверки 
+поведения регулятора «на глаз». Статья для тех, кто этот самый ПИД 
+реализовывал, и не может понять чего он дурит.<br>
+Уже предполагается определённое понимание что это такое и как он работает. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805737">
+	 
+		
+<div class="comment_item" id="comment_4807296">
+	
+	
+		<div class="info  	" rel="4807296">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4807296" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/DEHiCKA/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/46/60/0b/3728/small_3728.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_3728.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/DEHiCKA/" class="username">DEHiCKA</a>
+			<time datetime="2012-05-07T19:29:19+04:00"> 7 мая 2012, 19:29</time>
+			<a href="#comment_4807296" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805737" data-id="4807296" data-parent_id="4805737" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Конечно. Как бы иначе я узнал про лампочку? :)<br>
+Я же не призываю вас описывать работу ПИД с нуля, а просто выразил своё мнение насчет нагляднсти.<br>
+Ваши ошибки из статьи были бы также прекрасно видны на графиках, как и настройки ПИДа.<br>
+ 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4807296">
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+   
+    
+<div class="comment_item" id="comment_4805569">
+	
+	
+		<div class="info  	" rel="4805569">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805569" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  negative">
+						<span class="score" title="Всего 1: ↑0 и ↓1">–1</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/Tairesh/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/5c/cd/d3/29496/small_29496.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_29496.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/Tairesh/" class="username">Tairesh</a>
+			<time datetime="2012-05-06T14:45:22+04:00"> 6 мая 2012, 14:45</time>
+			<a href="#comment_4805569" class="link_to_comment">#</a>
+			
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format bad bad1">
+			<i> &gt;&gt; Простоту математической записи</i><br>
+и вот эта формула с интегралом и производной. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805569">
+	 
+		
+<div class="comment_item" id="comment_4805616">
+	
+	
+		<div class="info  	" rel="4805616">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805616" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/datacompboy/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/6b/b1/17/25291/small_25291.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_25291.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/datacompboy/" class="username">datacompboy</a>
+			<time datetime="2012-05-06T15:43:24+04:00"> 6 мая 2012, 15:43</time>
+			<a href="#comment_4805616" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805569" data-id="4805616" data-parent_id="4805569" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			сравните с <a href="http://habrahabr.ru/post/140274/"> фильтром калмана</a>:<br>
+<img alt="[Image]" ilo-full-src="http://habrastorage.org/storage2/ca3/838/e4a/ca3838e4a6c4b0ebbbb77ec9300994ca.png" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/ca3838e4a6c4b0ebbbb77ec9300994ca.png"> 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805616">
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+   
+    
+<div class="comment_item" id="comment_4805586">
+	
+	
+		<div class="info  	" rel="4805586">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805586" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark positive ">
+						<span class="score" title="Всего 4: ↑4 и ↓0">+4</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/creat0r/" class="avatar"><img ilo-full-src="http://habrahabr.ru/i/avatars/stub-user-small.gif" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+			<a href="http://habrahabr.ru/users/creat0r/" class="username">creat0r</a>
+			<time datetime="2012-05-06T15:09:47+04:00"> 6 мая 2012, 15:09</time>
+			<a href="#comment_4805586" class="link_to_comment">#</a>
+			
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Привет, Антон :)<br>
+<br>
+Прикол №5, когда мы пытаемся классический хорошо допиленный 
+ПИД-регулятор применить к ОЧЕНЬ инерционному объекту. Скажем, бочка 20 
+тонн с жижкой, которая экзотермична (сама себя подогревает, причём 
+нелинейно). Для охлаждения жижку циркулируем через теплообменник с 
+холодной водой. Датчик температуры стоит где-то в бочке. Регулируем 
+проток жижки через теплообменник задвижкой с позиционером, 
+циркуляционный насос фигачит прямым пуском… Время реакции системы на 
+воздействие что-то вроде 7-10 минут.<br>
+<br>
+Так вот, подобрать «отзывчивость» регулятора очень сложно. Слишком 
+медленный регулятор очень часто не успевает за ростом температуры жижки.
+ Вроде и задвижка уже 100%, а всё, процесс раскочегарился и сварил сам 
+себя. Слишком быстрый регулярно переохлаждает жижку, а если нет, то 
+колебания температуры всё равно слишком велики.<br>
+<br>
+Решение — модифицировать регулятор, добавив «адаптацию», а именно — в 
+момент прекращения роста (или падения) температуры замораживать выход 
+регулятора, несмотря на то, что рассогласование всё ещё положительно 
+(отрицательно). Размораживать, соответственно, при переходе через 
+уставку (т.е. через нулевое рассогласование) или при возобновлении роста
+ (падения). Шесть таких регуляторов реализованы на контроллере Simatic 
+S7-300.<br>
+<br>
+Результат — регулировка температуры 20 тонн жижки с точностью до 0.2 
+градусов. Классический ПИД при этом едва в 1.5 укладывался с регулярным 
+подкручиваним коэффициентов.<br>
+<br>
+Вывод №5 — не бояться отходить от канонов :) 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805586">
+	 
+		
+<div class="comment_item" id="comment_4805608">
+	
+	
+		<div class="info  	" rel="4805608">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805608" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark positive ">
+						<span class="score" title="Всего 1: ↑1 и ↓0">+1</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/datacompboy/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/6b/b1/17/25291/small_25291.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_25291.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/datacompboy/" class="username">datacompboy</a>
+			<time datetime="2012-05-06T15:38:16+04:00"> 6 мая 2012, 15:38</time>
+			<a href="#comment_4805608" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805586" data-id="4805608" data-parent_id="4805586" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Да, ПИД регулятор не является ни идеальным регулятором, ни лучшим 
+даже в тех случаях, где его применение допустимо. У него только один 
+плюс — простота физического смысла — есть пропорциональная составляющая,
+ когда мы просто греем на разность температур. Это съедает основную 
+ошибку, но не может бороться с постоянными потерями — поэтому просто 
+пропорциональный регулятор и держит всегда чуть ниже чем задали. Для 
+избавления от вот этого «чуть ниже» вводится интегральная составляющая —
+ которая аккумулирует ошибку, и даёт добавку к мощности, компенсирующую 
+утечки. Собственно, в случае линейного самоподогрева — интегральная 
+составляющая _может_ компенсировать ошибку. Если, конечно, реализация 
+правильная — интеграл считается знаково :) — но этот тип ошибок я 
+оставил за скобками, и так вон какая портянка. И диф. составляющая, 
+повышающая «отзывчивость» на изменение уставки. <br>
+Хороший регулятор должен предсказывать поведение объекта, и рассчитывать управляющее воздействие именно с учетом предсказания.<br>
+Если же объект во-1х нелинейный, во-2х известный — ни интегральная ни 
+диффеениальная составляющие не являются оптимальными, да еще и вредны в 
+общем-то. Поэтому добавление к регулятору дополнительной «адаптации» под
+ объект — и есть самое правильное поведение.<br>
+Еще частая адаптация — это использование нелинейных коэффициентов ПИД 
+регулятора: когда на разные рабочие участки свой набор коэффициентов + 
+свой набор коэффициентов для положительного и для отрицательного случая 
+рассогласования (нагрев и охлаждение почти всегда различаются).<br>
+А вообще, регуляторы на базе фильтра калмана, или вообще синтезированные под конкретный объект — самые оптимальные регулятры. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805608">
+	
+	</div>
+</div>
+
+	 
+		
+<div class="comment_item" id="comment_4805614">
+	
+	
+		<div class="info  	" rel="4805614">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4805614" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark positive ">
+						<span class="score" title="Всего 1: ↑1 и ↓0">+1</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/datacompboy/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/6b/b1/17/25291/small_25291.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_25291.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/datacompboy/" class="username">datacompboy</a>
+			<time datetime="2012-05-06T15:39:59+04:00"> 6 мая 2012, 15:39</time>
+			<a href="#comment_4805614" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805586" data-id="4805614" data-parent_id="4805586" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Кстати, если кому интересно будет — неплохо <a href="http://www.bookasutp.ru/Chapter5_3_4.aspx">www.bookasutp.ru/Chapter5_3_4.aspx</a> вот тут рассматриваются 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4805614">
+	
+	</div>
+</div>
+
+	 
+		
+<div class="comment_item" id="comment_4806079">
+	
+	
+		<div class="info  	" rel="4806079">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4806079" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark positive ">
+						<span class="score" title="Всего 1: ↑1 и ↓0">+1</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/mayorovp/" class="avatar"><img ilo-full-src="http://habrahabr.ru/i/avatars/stub-user-small.gif" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+			<a href="http://habrahabr.ru/users/mayorovp/" class="username">mayorovp</a>
+			<time datetime="2012-05-06T22:35:32+04:00"> 6 мая 2012, 22:35</time>
+			<a href="#comment_4806079" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4805586" data-id="4806079" data-parent_id="4805586" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Вывод №5 — в сложных случаях надо, наоборот, вспоминать каноны (ТАУ) и не надеяться на ПИД-регуляторы.<br>
+<br>
+Конкретно в данном случае в необычной повелении системы «виновата» не 
+инерционность (которая, вообще-то, благо), а задержка: охлажденная 
+жидкость из теплообменника должна успеть вернуться в бочку и 
+перемешаться там, а пока этого не произошло, температура и не начнет 
+уменьшаться. Иными словами, в системе имеется звено e^(-ts), такое звено
+ дает 2-3 «лишние» степени системе.<br>
+ 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4806079">
+	 
+		
+<div class="comment_item" id="comment_4806097">
+	
+	
+		<div class="info  	" rel="4806097">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4806097" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/creat0r/" class="avatar"><img ilo-full-src="http://habrahabr.ru/i/avatars/stub-user-small.gif" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+			<a href="http://habrahabr.ru/users/creat0r/" class="username">creat0r</a>
+			<time datetime="2012-05-06T22:45:59+04:00"> 6 мая 2012, 22:45</time>
+			<a href="#comment_4806097" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4806079" data-id="4806097" data-parent_id="4806079" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Ну как раз каноны ТАУ в данном случае не помогут. Система слишком 
+сложна для построения каких-то моделей и передаточных функций. Какие уж 
+там звенья n-го порядка…<br>
+<br>
+Тут вплоть до того, что между выходом регулятора и позиционером 
+небольшая функция написана, пытающаяся переменной длины импульсами 
+«вверх» и «вниз» подогнать положение задвижки под выход регулятора на 
+основе показаний не особо точного датчика положения этой самой задвижки.
+ Помимо этого, функция ещё и реализована с учётом сохранения 
+механического ресурса позиционера (минимизация движений).<br>
+<br>
+Я уж молчу про то, что в бочку постоянно поступает, так сказать, исходное сырьё неизвестной температуры и консистенции :) 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4806097">
+	 
+		
+<div class="comment_item" id="comment_4806815">
+	
+	
+		<div class="info  	" rel="4806815">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4806815" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/HomoLuden/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/9d/d8/8c/24120/small_24120.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_24120.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/HomoLuden/" class="username">HomoLuden</a>
+			<time datetime="2012-05-07T13:23:08+04:00"> 7 мая 2012, 13:23</time>
+			<a href="#comment_4806815" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4806097" data-id="4806815" data-parent_id="4806097" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			&gt; Ну как раз каноны ТАУ в данном случае не помогут.<br>
+Ну как раз каноны НЕЛИНЕЙНОЙ ТАУ здесь как нельзя кстати. Существуют 
+отлаженные методы построения передаточной функции обратной связи с целью
+ получения "<a href="http://ait.cs.nstu.ru/tau/book/Sod645.htm">Желаемой АЧХ</a>".
+ Все упирается в идентификацию объекта (в построение его АЧХ или 
+передаточной функции). Если есть возможность экспериментально снять 
+переходный процесс для импульсного или ступенчатого воздействия, то это 
+уже позволит построить хоть какую-то приближенную модель. Дальше — дело 
+техники. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4806815">
+	 
+		
+<div class="comment_item" id="comment_4806835">
+	
+	
+		<div class="info  	" rel="4806835">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4806835" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/creat0r/" class="avatar"><img ilo-full-src="http://habrahabr.ru/i/avatars/stub-user-small.gif" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+			<a href="http://habrahabr.ru/users/creat0r/" class="username">creat0r</a>
+			<time datetime="2012-05-07T13:47:55+04:00"> 7 мая 2012, 13:47</time>
+			<a href="#comment_4806835" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4806815" data-id="4806835" data-parent_id="4806815" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			В том-то и дело, что, во-первых, реакция на «единичное воздействие» у
+ системы всегда разная и зависит от доброго десятка непредсказуемых и 
+неизмеряемых факторов. Во-вторых, никто не разрешит выдавать на этот 
+объект всякие там воздействия. Стоимость жижки в бочке эдак примерно под
+ 100К евро :)<br>
+<br>
+Поэтому в данном случае — только адаптивный регулятор, реализованный на 
+основе существующего в библиотеке функций симатика ПИД-регулятора с 
+минимальными изменениями (дабы не заниматься потом тестированием с 
+ночёвкой на объекте :).<br>
+<br>
+Да и вообще, к ожидаемому недовольству апологетов классической ТАУ, могу
+ сказать, что при всём моём немаленьком опыте автоматизации 
+разнообразных производств, мне ни разу не приходилось видеть, чтобы 
+регулятор считали по всем правилам, с вычислением передаточных функций, с
+ единичными ступенчатыми воздействиями и прочими изучаемыми в универе 
+штуками. Всё строго на глаз, с потолка, научным тыком. И главное — 
+работает :)<br>
+Один раз я только слышал о расчёте регулятора для какой-то сложной и 
+быстрой колонны синтеза, где подбирать коэффициенты никак бы не 
+получилось, система очень быстро уходила вразнос. Правда, расчётный 
+регулятор в результате заработал едва ли не хуже настроенного по 
+интуиции. Как решили проблему — не знаю. Скорее всего подобрали таки 
+подходящий режим, утилизировав сотню-другую тонн исходного сырья :) 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4806835">
+	 
+		
+<div class="comment_item" id="comment_4807111">
+	
+	
+		<div class="info  	" rel="4807111">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4807111" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/HomoLuden/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/9d/d8/8c/24120/small_24120.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_24120.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/HomoLuden/" class="username">HomoLuden</a>
+			<time datetime="2012-05-07T17:34:25+04:00"> 7 мая 2012, 17:34</time>
+			<a href="#comment_4807111" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4806835" data-id="4807111" data-parent_id="4806835" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			&gt; реакция на «единичное воздействие» у системы всегда разная… 
+никто не разрешит выдавать на этот объект всякие там воздействия.<br>
+Тогда понятно.<br>
+А четкое следование пособиям ТАУ и не требуется. Достаточно 
+синтезировать в общем виде передаточную функцию (это достаточно просто),
+ а потом подвинчивать коэффициенты.<br>
+<br>
+Я вот тоже как-то ПИД настраивал с нуля в мелком автомате по нанесению 
+покрытия (никелевого или еще какого-то — не помню). Так у меня очень 
+много времени ушло на «метод тыка». Поэтому, кажется, нужен компромисс. А
+ синтезировать регулятор в виде модели пространства состояний для меня 
+проще и понятнее, а следовательно результативнее и предсказуемее. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4807111">
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+   
+    
+<div class="comment_item" id="comment_4815500">
+	
+	
+		<div class="info  	" rel="4815500">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4815500" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/Ariman/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/cb/b3/38/24350/small_24350.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_24350.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/Ariman/" class="username">Ariman</a>
+			<time datetime="2012-05-11T13:14:22+04:00">11 мая 2012, 13:14</time>
+			<a href="#comment_4815500" class="link_to_comment">#</a>
+			
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Полезная статья, спасибо.<br>
+Интересно было бы узнать, насколько реализации, предлагаемые в 
+DSP-библиотеках (от тех же ST Microelectronics для своих STM32Fxx) 
+избавлены от указанных ошибок. Хочется верить что полностью — все же 
+библиотека эта в своем роде стандарт, притом оптимизирована, и 
+предпочтительнее использовать ее, нежели писать свой велосипед… 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4815500">
+	 
+		
+<div class="comment_item" id="comment_4817048">
+	
+	
+		<div class="info  	" rel="4817048">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4817048" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/datacompboy/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/6b/b1/17/25291/small_25291.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_25291.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/datacompboy/" class="username">datacompboy</a>
+			<time datetime="2012-05-11T21:09:17+04:00">11 мая 2012, 21:09</time>
+			<a href="#comment_4817048" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4815500" data-id="4817048" data-parent_id="4815500" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			подозреваю, что хорошие DSP используют всё-таки прямую схему, а не разностную. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4817048">
+	 
+		
+<div class="comment_item" id="comment_4817065">
+	
+	
+		<div class="info  	" rel="4817065">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4817065" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/Ariman/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/cb/b3/38/24350/small_24350.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_24350.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/Ariman/" class="username">Ariman</a>
+			<time datetime="2012-05-11T21:16:59+04:00">11 мая 2012, 21:16</time>
+			<a href="#comment_4817065" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4817048" data-id="4817065" data-parent_id="4817048" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			<pre><code class="cpp">uint16_t DoFullPID(uint16_t In, uint16_t Ref, uint16_t *Coeff)
+{
+  uint16_t Kp, Ki, Kd, Output, Error;
+
+  Error = Ref - In;
+  Kp = Coeff[<span class="number">0</span>];
+  Ki = Coeff[<span class="number">1</span>];
+  Kd = Coeff[<span class="number">2</span>];
+
+  IntTerm_C += Ki*Error;
+  Output = Kp * Error;
+  Output += IntTerm_C;
+  Output += Kd * (Error - PrevError_C);
+
+  PrevError_C = Error;
+
+  <span class="keyword">return</span> (Output);
+}
+</code></pre><br>
+<br>
+Совсем в лоб. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4817065">
+	 
+		
+<div class="comment_item" id="comment_4817803">
+	
+	
+		<div class="info  	" rel="4817803">
+			<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+			
+			<div id="voting_4817803" class="voting   ">
+										
+				
+					<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+					<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+				
+				<div class="mark  ">
+						<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+				</div>	 
+			</div>
+			
+			<a href="http://habrahabr.ru/users/datacompboy/" class="avatar"><img ilo-full-src="http://media.habrahabr.ru/images/thumbs/avatars/6b/b1/17/25291/small_25291.jpg" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_25291.jpg" alt=""></a>
+			<a href="http://habrahabr.ru/users/datacompboy/" class="username">datacompboy</a>
+			<time datetime="2012-05-12T08:03:14+04:00">12 мая 2012, 08:03</time>
+			<a href="#comment_4817803" class="link_to_comment">#</a>
+			
+			
+				<a href="#comment_4817065" data-id="4817803" data-parent_id="4817065" class="to_parent">↑</a>
+			
+			<span class="to_chidren"></span>
+			<div class="clear"></div>
+		</div>
+		<div class="message html_format ">
+			Оххохо… Можно влететь в шар с волосами из-за округлений при 
+рассчетах. Я во второй статье описываю приколюхи реализации прямой 
+схемы. 
+		</div>
+		<div class="reply">
+			
+		</div>
+	
+	<div class="reply_comments" id="reply_comments_4817803">
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+  
+</div>
+
+		
+	
+		
+			<p class="for_users_only_msg">Только зарегистрированные пользователи могут оставлять комментарии. <a href="http://habrahabr.ru/login/">Войдите</a>, пожалуйста.</p>
+		
+		
+	
+
+
+
+		<div id="edit_tags_form" class="hidden">
+<form action="#" method="post">
+  <input name="action" value="add" type="hidden">
+  <input name="ti" value="0" type="hidden">
+  <input name="tt" value="0" type="hidden">
+  <label>Пометьте топик понятными вам метками, если хотите</label>
+  <input style="" autocomplete="off" name="tags_string" class="tags_string" type="text">
+  <div class="description">Метки лучше разделять запятой. Например: <i>общение, социальные сети, myspace.com, подростки, мердок</i></div>
+  <input value="Сохранить" class="submit" type="submit"> или <a href="#" class="close" onclick="return close_edit_tags()">закрыть</a>
+</form>
+</div>
+	
+	
+
+  </div>
+  <div class="sidebar_right">
+	
+		
+
+
+
+
+	<div class="banner_240x400">
+
+		<script type="text/javascript">
+			(function(){
+				var custom = [];
+			/* custom params */
+			
+				custom[1]	= 'controllers';
+			
+				custom[2]	= 'algorithm';
+			
+				
+
+			/* end of custom params */
+				custom.getStd = function(){for(var i=0,j,s=[];i<this.length;i++){if(this[i])s.push((!j?(j=1,i+'='):'')+escape(this[i]));else j=0}return s.length?'&custom='+s.join(';'):''};
+
+				var RndNum4NoCash = Math.round(Math.random() * 1000000000),
+					ar_Tail = escape(document.referrer || 'unknown');
+				document.write('<iframe src="http://ad.adriver.ru/cgi-bin/erle.cgi?'
+					+ 'sid=176776&target=top&bt=22&pz=0&rnd=' + RndNum4NoCash + '&tail256=' + ar_Tail + custom.getStd()
+					+ '" frameborder=0 vspace=0 hspace=0 width=240 height=400 marginwidth=0'
+					+ ' marginheight=0 scrolling=no></iframe>');
+			})();
+		</script><iframe class=" wyclnnncnjqdfeltosbc" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/erle_002.htm" vspace="0" hspace="0" marginwidth="0" marginheight="0" frameborder="0" height="400" scrolling="no" width="240"></iframe>
+
+	</div>
+
+
+
+
+
+
+		
+
+<div class="block daily_best_posts">
+  <div class="title">Лучшее <sup>за 24 часа</sup> ↓ </div>
+  <div class="posts_list">
+    
+      <div class="post_item">
+        
+				
+				
+				
+				
+				<!--<a href="http://habrahabr.ru/company/toster/blog/131694/#toster_tickets">--><img ilo-full-src="http://habrahabr.ru/images/sidebar/toster.gif" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/toster.gif" alt="Toster" style="vertical-align: top; float: left; display: block; margin-right: 10px; margin-top: 4px;" class="help-tip"><!--</a>-->
+
+        <a href="http://habrahabr.ru/post/143981/" class="post_name">Графический «велосипед» по мотивам Turbo Vision (дела давно минувших дней)</a>
+      </div>
+    
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/143974/" class="post_name">Судья Алсуп умеет программировать и поучает адвоката Oracle</a>
+      </div>
+    
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/143718/" class="post_name">Ещё раз о невероятной лояльности службы&nbsp;поддержки Logitech</a>
+      </div>
+    
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/144003/" class="post_name">Самые простые техники адаптивной верстки</a>
+      </div>
+    
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/143967/" class="post_name">Cascadeur — зачем аниматорам физика?</a>
+      </div>
+    
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/143975/" class="post_name">Вычисление CRC32 строк в compile-time</a>
+      </div>
+    
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/143810/" class="post_name">Занимательная десятигигабитность</a>
+      </div>
+    
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/143985/" class="post_name">Javascript BMP Parser</a>
+      </div>
+    
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/143990/" class="post_name">Вникаем в метаклассы Ruby</a>
+      </div>
+    
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/143995/" class="post_name">Google Knowledge Graph</a>
+      </div>
+    
+  </div>
+  <div class="all">« <a href="http://habrahabr.ru/top/">все лучшие</a></div>
+</div>
+
+		
+
+
+<div class="block similar_posts">
+
+	<div class="title">Похожие посты ↓ </div>
+  <div class="posts_list">
+  	
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/143388/">Корректная реализация разностной схемы ПИД регулятора</a>
+    				<span class="when">06.05.2012</span>
+      </div>
+  	
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/125356/">Алгоритм определения попадания точки в контур на основе комплексного анализа</a>
+    				<span class="when">01.08.2011</span>
+      </div>
+  	
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/143543/">Проектирование алгоритма ротатора по рейтингу</a>
+    				<span class="when">10.05.2012</span>
+      </div>
+  	
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/143151/">Плотностный алгоритм кластеризации пространственных данных с присутствием шума — DBSCAN</a>
+    				<span class="when">02.05.2012</span>
+      </div>
+  	
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/111336/">Помехоустойчивое кодирование с иcпользованием различных кодов</a>
+    				<span class="when">27.03.2012</span>
+      </div>
+  	
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/140611/">Код Хэмминга. Пример работы алгоритма</a>
+    				<span class="when">26.03.2012</span>
+      </div>
+  	
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/139970/">Быстрое сжатие изображений по алгоритму JPEG на CUDA</a>
+    				<span class="when">14.03.2012</span>
+      </div>
+  	
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/139646/">Упаковка в контейнеры (bin packing) при помощи генетического алгоритма</a>
+    				<span class="when">09.03.2012</span>
+      </div>
+  	
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/139428/">Реализация RGB-алгоритма изменения контраста изображения</a>
+    				<span class="when">05.03.2012</span>
+      </div>
+  	
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/139097/">Интернет-Математика: Итоги</a>
+    				<span class="when">29.02.2012</span>
+      </div>
+  	
+  </div>			
+</div>
+
+
+
+
+		
+
+
+<div class="block live_broadcast_activity">
+  <div class="title">Прямой эфир ↓ </div>
+  <div class="posts_list">
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/Fastto/" class="user_name">Fastto</a> →
+      <a href="http://habrahabr.ru/post/144032/#comment_4831364" class="post_name">Опрос к статье на Хабре «Сколько нужно правообладателю?»</a>&nbsp;<span class="count">6</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/deniszh/" class="user_name">deniszh</a> →
+      <a href="http://habrahabr.ru/post/143997/#comment_4831363" class="post_name">Устаревшие иконки, которые потеряли смысл</a>&nbsp;<span class="count">280</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/ppravdin/" class="user_name">ppravdin</a> →
+      <a href="http://habrahabr.ru/post/144028/#comment_4831359" class="post_name">«42» — конференция и выставка стартапов, разыгрываем билеты</a>&nbsp;<span class="count">7</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/catharsis/" class="user_name">catharsis</a> →
+      <a href="http://habrahabr.ru/post/143810/#comment_4831358" class="post_name">Занимательная десятигигабитность</a>&nbsp;<span class="count">34</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/DemetrNieA/" class="user_name">DemetrNieA</a> →
+      <a href="http://habrahabr.ru/post/144005/#comment_4831357" class="post_name">Новый «подарок» в законодательстве по ПДн</a>&nbsp;<span class="count">11</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/YuriFriendly/" class="user_name">YuriFriendly</a> →
+      <a href="http://habrahabr.ru/post/143795/#comment_4831356" class="post_name">Пасхальные яйца на сайте zoichland.ru</a>&nbsp;<span class="count">15</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/lair/" class="user_name">lair</a> →
+      <a href="http://habrahabr.ru/post/143925/#comment_4831355" class="post_name">Зачем нужны делегаты в C#?</a>&nbsp;<span class="count">149</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/retran/" class="user_name">retran</a> →
+      <a href="http://habrahabr.ru/post/144027/#comment_4831352" class="post_name">Слухи о бесперспективности ReactOS оказались сильно преувеличены</a>&nbsp;<span class="count">14</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/stalker_by/" class="user_name">stalker_by</a> →
+      <a href="http://habrahabr.ru/post/143909/#comment_4831351" class="post_name">Азбука NoSQL-инъекций</a>&nbsp;<span class="count">38</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/jrip/" class="user_name">jrip</a> →
+      <a href="http://habrahabr.ru/post/143957/#comment_4831350" class="post_name">Карринг и Частичное применение функции в PHP</a>&nbsp;<span class="count">32</span>
+    </div>
+
+  </div>
+  
+</div>
+
+
+
+  
+		
+	<!--  AdRiver code START. Type:AjaxJS Site: habrahabr PZ: 0 BN: 2 -->
+	
+	<div id="adriver_banner_1052193412"></div>
+	
+	<script type="text/javascript">
+	new adriver("adriver_banner_1052193412", {sid:176776, bt:52, bn:2});
+	</script>
+	
+	<!--  AdRiver code END  -->
+
+
+
+
+
+   
+		
+
+<div class="block best_company">
+
+		<div class="title">Компания дня <img ilo-full-src="http://habrahabr.ru/i/bg_cicle_help.png" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/bg_cicle_help.png" class="help-tip"></div>
+
+		<div class="company_info">
+			<div class="name">
+			 <img ilo-full-src="http://habrahabr.ru/media/company/favicon/15/favicon_1503.ico" class="favicon" src="%D0%9A%D0%BE%D1%80%D1%80%D0%B5%D0%BA%D1%82%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B7%D0%BD%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B9%20%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%9F%D0%98%D0%94%20%D1%80%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/favicon_1503.ico" alt="GTV — видеоканал про технику" height="16" width="16">
+			 <div class="company_name"><a href="http://habrahabr.ru/company/gtv/" class="title">GTV — видеоканал про технику</a></div>
+			</div>
+
+			<p>Последний пост:
+				<a href="http://habrahabr.ru/company/gtv/blog/143735/">MacBook Air 11" A1370 — разбор</a>
+			</p>
+
+			<div class="buttons">
+  			<div id="fans_count">792 подписчика</div>
+  			
+			</div>
+		</div>
+
+	</div>
+
+
+		
+
+<div class="block qa_activity">
+  <div class="title">Q&amp;A ↓ </div>
+  <div class="posts_list">
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/guessss_who/" class="user_name">guessss_who</a> →
+      <a href="http://habrahabr.ru/qa/19467/#answer_79473" class="post_name">Веб-инсталяторы без интернет :(</a>&nbsp;<span class="count">2</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/dze/" class="user_name">dze</a> →
+      <a href="http://habrahabr.ru/qa/19466/#answer_79472" class="post_name">Есть ли сервис планирования и ведения поездок?</a>&nbsp;<span class="count">4</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/guessss_who/" class="user_name">guessss_who</a> →
+      <a href="http://habrahabr.ru/qa/19468/#answer_79470" class="post_name">Нужна лёгкая PHP CMS с простецким админским интерфейсом</a>&nbsp;<span class="count">1</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/leshka/" class="user_name">leshka</a> →
+      <a href="http://habrahabr.ru/qa/19450/#answer_79469" class="post_name">Где хранить IP пользователей?</a>&nbsp;<span class="count">8</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/Swetaketo/" class="user_name">Swetaketo</a> →
+      <a href="http://habrahabr.ru/qa/16208/#comment_93237" class="post_name">Автоматизация курьерской службы</a>&nbsp;<span class="count">3</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/mFoxRU/" class="user_name">mFoxRU</a> →
+      <a href="http://habrahabr.ru/qa/16409/#answer_79468" class="post_name">Западный mobile dev блог?</a>&nbsp;<span class="count">1</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/cepera_ang/" class="user_name">cepera_ang</a> →
+      <a href="http://habrahabr.ru/qa/19464/#answer_79467" class="post_name">Что происходит с линией между Россией и США?</a>&nbsp;<span class="count">2</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/evilduck/" class="user_name">evilduck</a> →
+      <a href="http://habrahabr.ru/qa/19458/#answer_79466" class="post_name">Существует ли возможность обратной связи при бесплатном распростанении приложения в Google Store?</a>&nbsp;<span class="count">1</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/Hoorsh/" class="user_name">Hoorsh</a> →
+      <a href="http://habrahabr.ru/qa/19430/#comment_93235" class="post_name">Как получить информацию с машины, находящейся за серым ip адресом?</a>&nbsp;<span class="count">6</span>
+    </div>
+
+    <div class="post_item">
+      <a href="http://habrahabr.ru/users/ertaquo/" class="user_name">ertaquo</a> →
+      <a href="http://habrahabr.ru/qa/19465/#comment_93230" class="post_name">Какую выбрать видеокамеру для съемки slow motion?</a>&nbsp;<span class="count">5</span>
+    </div>
+
+  </div>
+  <div class="all">« <a href="http://habrahabr.ru/qa/">все вопросы</a></div>
+  
+</div>
+
+		
+
+<div class="block new_vacanies">
+  <div class="title">О, работа! ↓ </div>
+  <div class="vacancies">
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8935-tehnicheskiy-pisatel">Технический писатель</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8934-android-razrabotchik-vozmozhno-junior">Android-разработчик (возможно Junior)</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8933-badoo-veduschiy-js-programmist">Badoo: Ведущий JS программист</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8931-badoo-developer-s-relations-manager">Badoo: Developer's relations manager</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8930-menedzher-prodazh-voip-oborudovaniya">Менеджер продаж Voip оборудования</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8929-programmist-1s-bitriks">Программист 1С-Битрикс</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/7383-badoo-rukovoditel-it-otdela-php-mysql">Badoo: Руководитель IT-отдела (PHP/MySQL)</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/7382-badoo-sr-qa-automation">Badoo: Sr. QA (automation)</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/7069-badoo-rukovoditel-otdela-c-c">Badoo: Руководитель отдела C/C++</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/7068-badoo-veduschiy-php-mysql-razrabotchik">Badoo: Ведущий PHP / MySQL разработчик</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8907-javascript-razrabotchik">Javascript разработчик</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8850-veb-dizayner">Веб-дизайнер</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8823-php-programmist">PHP программист</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8822-javascript-razrabotchik">Javascript разработчик</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8821-razrabotchik-ruby-on-rails">Разработчик Ruby on Rails</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8820-tehnicheskiy-pisatel">Технический писатель</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8819-android-wp7-ios-razrabotchiki">Android/WP7/iOS разработчики</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8818-spetsialist-po-nagruzochnomu-testirovaniyu">Специалист по нагрузочному тестированию</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8817-ruby-razrabotchik-v-otdel-testirovaniya">Ruby-разработчик в отдел тестирования</a>
+		</div>
+		
+		<div class="job_item">
+			<a href="http://hantim.ru/jobs/8815-administrator-video-platformy-linux">Администратор видео - платформы (Linux)</a>
+		</div>
+		
+  </div>
+  <div class="all">« <a href="http://hantim.ru/">все вакансии</a></div>
+
+	</div>
+
+		
+
+		
+
+
+<div class="block similar_events">
+  <div class="title">Ближайшие события</div>
+  <div class="events">
+    
+    <div class="event">
+			
+			<div class="date">
+				<div class="dayname dayname_5"></div>
+				<div class="day">18</div>
+				<div class="month">май</div>				
+			</div>
+			
+			<div class="title">
+			 <a href="http://habrahabr.ru/events/627/">Международная конференция мобильных разработчиков MobileOptimized 2012</a>			 
+			</div>
+		</div>
+		
+    <div class="event">
+			
+			<div class="date">
+				<div class="dayname dayname_5"></div>
+				<div class="day">18</div>
+				<div class="month">май</div>				
+			</div>
+			
+			<div class="title">
+			 <a href="http://habrahabr.ru/events/710/">Семинар "7 критериев выбора СХД под виртуализацию"</a>			 
+			</div>
+		</div>
+		
+    <div class="event">
+			
+			<div class="date">
+				<div class="dayname dayname_5"></div>
+				<div class="day">18</div>
+				<div class="month">май</div>				
+			</div>
+			
+			<div class="title">
+			 <a href="http://habrahabr.ru/events/688/">18 МАЯ - Чебоксары: "Перспективы развития ИТ-отрасли и построение карьеры в сфере информационных технологий"</a>			 
+			</div>
+		</div>
+		
+    <div class="event">
+			
+			<div class="date">
+				<div class="dayname dayname_5"></div>
+				<div class="day">18</div>
+				<div class="month">май</div>				
+			</div>
+			
+			<div class="title">
+			 <a href="http://habrahabr.ru/events/716/">Workle Friday: QA</a>			 
+			</div>
+		</div>
+		
+    <div class="event">
+			
+			<div class="date">
+				<div class="dayname dayname_5"></div>
+				<div class="day">18</div>
+				<div class="month">май</div>				
+			</div>
+			
+			<div class="title">
+			 <a href="http://habrahabr.ru/events/732/">18-ая встреча Kiev ALT.NET</a>			 
+			</div>
+		</div>
+		
+  </div>
+  <div class="all">« <a href="http://habrahabr.ru/events/">все события</a></div>
+</div>
+
+
+	
+  </div>
+  <div class="clear"></div>
+
+		  <div id="footer">
+      
+			
+			<dl>
+				<dd><a href="http://habrahabr.ru/login/">Войти</a></dd>
+				<dd><a href="http://habrahabr.ru/register/">Регистрация</a></dd>
+			</dl>
+			
+			<dl>
+				<dt>Разделы</dt>
+
+				<dd><a href="http://habrahabr.ru/qa/">Q&amp;A</a></dd>
+				<dd><a href="http://habrahabr.ru/hubs/">Хабы</a></dd>
+				<dd><a href="http://habrahabr.ru/events/">События</a></dd>
+				<dd><a href="http://habrahabr.ru/companies/">Компании</a></dd>
+				<dd><a href="http://habrahabr.ru/job/">Работа</a></dd>
+				<dd><a href="http://habrahabr.ru/people/">Люди</a></dd>
+			</dl>
+			<dl>
+				<dt>Посты</dt>
+				
+				<dd><a href="http://habrahabr.ru/posts/top/">Лучшие</a></dd>
+				<dd><a href="http://habrahabr.ru/posts/collective/">Тематические</a></dd>
+				<dd><a href="http://habrahabr.ru/posts/corporative/">Корпоративные</a></dd>
+				<dd><a href="http://habrahabr.ru/sandbox/">Песочница</a></dd>
+			</dl>
+			<dl>
+				<dt>Инфо</dt>
+				<dd><a href="http://habrahabr.ru/info/about/">О сайте</a></dd>
+				<dd><a href="http://habrahabr.ru/info/help/rules/">Правила</a></dd>
+				<dd><a href="http://habrahabr.ru/info/help/">Помощь</a></dd>
+				<dd><a href="http://habrahabr.ru/info/agreement/">Соглашение</a></dd>
+				<dd><a href="http://habrahabr.ru/info/stats/">Статистика</a></dd>
+			</dl>
+			<dl>
+				<dt>Услуги</dt>
+				<dd><a href="http://habrahabr.ru/info/advertising/">Реклама</a></dd>
+				<dd><a href="http://habrahabr.ru/info/advertising/corporate/">Корпоративные пакеты</a></dd>
+				<dd><a href="http://habrahabr.ru/info/advertising/workshops/">Семинары</a></dd>
+			</dl>
+      <div class="copyright">
+    		<a class="footer_logo" href="http://thematicmedia.ru/">Тематические Медиа</a>
+    		<div class="about">
+    			© 2006–2012<br>
+    			«<a href="http://www.thematicmedia.ru/">Тематические Медиа</a>»
+    		  <br><br>
+  				Служба поддержки:<br>
+  				<a href="mailto:support@habrahabr.ru" title="адрес службы поддержки пользователей">support@habrahabr.ru</a><br><br><br>
+  				<a href="http://m.habrahabr.ru/">Мобильная версия</a>
+
+			  </div>
+      </div>
+
+</div>
+		</div>
+	 	
+		
+    
+		
+    <script type="text/javascript">
+      $(document).ready(function(){
+        // test gggg
+        // настройки всплывающих уведомлений
+        $.jGrowl.defaults.closerTemplate = '<div>Закрыть все уведомления</div>';         
+        
+        // настройки тултипов
+        $(".help-tip").tipTip({maxWidth: "auto", edgeOffset: 10});  
+        
+      });
+      // global vars
+      var g_base_url = 'habrahabr.ru';
+      var g_show_xpanel = false;
+      var g_base_fullurl = 'http://habrahabr.ru/';
+      var g_is_guest = false;
+       
+    </script>
+    
+		
+    
+<script type="text/javascript">
+	/*<![CDATA[*/
+	var ga = document.createElement('script');
+		ga.setAttribute('async', 'true');
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	/* ]]>*/
+</script>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(
+	    ['_setAccount', 'UA-726094-1'],
+	    ['_setDomainName', '.habrahabr.ru'],
+	    ["_addOrganic", "mail.ru", "q"],
+	    ["_addOrganic","rambler.ru", "words"],
+	    ["_addOrganic","nigma.ru", "s"],
+	    ["_addOrganic","blogs.yandex.ru", "text"],
+	    ["_addOrganic","webalta.ru", "q"],
+	    ["_addOrganic","aport.ru", "r"],
+	    ["_addOrganic","akavita.by", "z"],
+	    ["_addOrganic","meta.ua", "q"],
+	    ["_addOrganic","bigmir.net", "q"],
+	    ["_addOrganic","tut.by", "query"],
+	    ["_addOrganic","all.by", "query"],
+	    ["_addOrganic","i.ua", "q"],
+	    ["_addOrganic","online.ua", "q"],
+	    ["_addOrganic","a.ua", "s"],
+	    ["_addOrganic","ukr.net", "search_query"],
+	    ["_addOrganic","search.com.ua", "q"],
+	    ["_addOrganic","search.ua", "query"],
+	    ["_addOrganic","poisk.ru", "text"],
+	    ["_addOrganic","km.ru", "sq"],
+	    ["_addOrganic","liveinternet.ru", "ask"],
+	    ["_addOrganic","gogo.ru", "q"],
+	    ["_addOrganic","gde.ru", "keywords"],
+	    ["_addOrganic","quintura.ru", "request"],
+	    ['_trackPageview']
+	);
+	document.documentElement.firstChild.appendChild(ga);
+</script>	
+		
+		
+	
+
+<div id="AutocompleteContainter_a0037" style="position: absolute; z-index: 9999; top: 51px; left: 1279px;"><div class="autocomplete-w1"><div class="autocomplete" id="Autocomplete_a0037" style="display: none; width: 300px; max-height: 400px;"></div></div></div><div id="AutocompleteContainter_d527e" style="position: absolute; z-index: 9999; top: 0px; left: 0px;"><div class="autocomplete-w1"><div class="autocomplete" id="Autocomplete_d527e" style="display: none; width: 300px; max-height: 400px;"></div></div></div><div id="tiptip_holder" style=""><div id="tiptip_arrow"><div id="tiptip_arrow_inner"></div></div><div id="tiptip_content"></div></div></body></html>

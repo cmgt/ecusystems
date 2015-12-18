@@ -1,0 +1,393 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" class="client-js" xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head>
+<title>Интерполяция и аппроксимация функций — Викиучебник</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="generator" content="MediaWiki 1.20wmf3">
+<link rel="alternate" type="application/x-wiki" title="Править" href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit">
+<link rel="edit" title="Править" href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit">
+<link ilo-full-src="http://ru.wikibooks.org/favicon.ico" rel="shortcut icon" href="http://ru.wikibooks.org/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="http://ru.wikibooks.org/w/opensearch_desc.php" title="Викиучебник (ru)">
+<link rel="EditURI" type="application/rsd+xml" href="http://ru.wikibooks.org/w/api.php?action=rsd">
+<link rel="copyright" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<link rel="alternate" type="application/atom+xml" title="Викиучебник&nbsp;— Atom-лента" href="http://ru.wikibooks.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:RecentChanges&amp;feed=atom">
+<link rel="stylesheet" href="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/load_002.css" type="text/css" media="all">
+<style type="text/css">.js-messagebox{margin:1em 5%;padding:0.5em 2.5%;border:1px solid #ccc;background-color:#fcfcfc;font-size:0.8em}.js-messagebox .js-messagebox-group{margin:1px;padding:0.5em 2.5%;border-bottom:1px solid #ddd}.js-messagebox .js-messagebox-group:last-child{border-bottom:thin none transparent}
+
+/* cache key: ruwikibooks:resourceloader:filter:minify-css:7:8b08bdc91c52a9ffba396dccfb5b473c */
+</style><style type="text/css">.mw-collapsible-toggle{float:right} li .mw-collapsible-toggle{float:none} .mw-collapsible-toggle-li{list-style:none}
+
+/* cache key: ruwikibooks:resourceloader:filter:minify-css:7:4250852ed2349a0d4d0fc6509a3e7d4c */
+</style><style type="text/css">.suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:none;z-index:1099;padding:0;margin:-1px -1px 0 0} html > body .suggestions{margin:-1px 0 0 0}.suggestions-special{position:relative;background-color:white;font-size:0.8em;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0;margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.suggestions-results{background-color:white;font-size:0.8em;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0}.suggestions-result{color:black;margin:0;line-height:1.5em;padding:0.01em 0.25em;text-align:left}.suggestions-result-current{background-color:#4C59A6;color:white}.suggestions-special .special-label{font-size:0.8em;color:gray;text-align:left}.suggestions-special .special-query{color:black;font-style:italic;text-align:left}.suggestions-special .special-hover{background-color:silver}.suggestions-result-current .special-label,.suggestions-result-current .special-query{color:white}.autoellipsis-matched,.highlight{font-weight:bold}
+
+/* cache key: ruwikibooks:resourceloader:filter:minify-css:7:d3d0fccf9f8cf3b31866dd3fd3326a6a */
+</style><style type="text/css">#mw-panel.collapsible-nav .portal{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAAABCAMAAAA7MLYKAAAAS1BMVEXb29vy8vLv7+/c3NzZ2dni4uLr6+vt7e3s7Ozw8PDn5+fj4+Ph4eHd3d3f39/o6Ojl5eXp6enx8fHa2trg4ODq6urk5OTz8/PY2NjolWftAAAAO0lEQVR4XrXAhwGAMAgEQB5I71X3n9QpPHqAGZidt2e02G8yedciQkv1/YPqIpFSdzbp9tjGsd4xhwl8yuMKHhkJhm8AAAAASUVORK5CYII=) left top no-repeat;background:url(//bits.wikimedia.org/static-1.20wmf6/extensions/Vector/modules/images/portal-break.png?2012-06-25T15:45:00Z) left top no-repeat!ie;padding:0.25em 0 !important;margin:-11px 9px 10px 11px}#mw-panel.collapsible-nav .portal h5{color:#4D4D4D;font-weight:normal;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAD1BMVEX////d3d2ampqxsbF5eXmCtCYvAAAAAXRSTlMAQObYZgAAADBJREFUeF6dzNEJACAMA1HdINQJCp1Ebv+ZlLYLaD4f4cbnDNi6MAO8KCHJ+7X02j3mzgMQe93HcQAAAABJRU5ErkJggg==) left center no-repeat;background:url(//bits.wikimedia.org/static-1.20wmf6/extensions/Vector/modules/images/open.png?2012-06-25T15:45:00Z) left center no-repeat!ie;padding:4px 0 3px 1.5em;margin-bottom:0}#mw-panel.collapsible-nav .portal h5:hover{cursor:pointer;text-decoration:none}#mw-panel.collapsible-nav .portal h5 a{color:#4D4D4D;text-decoration:none}#mw-panel.collapsible-nav .portal .body{background:none !important;padding-top:0;display:none}#mw-panel.collapsible-nav .portal .body ul li{padding:0.25em 0} #mw-panel.collapsible-nav .portal.first h5{display:none}#mw-panel.collapsible-nav .portal.first{background-image:none;margin-top:0} #mw-panel.collapsible-nav .portal.persistent .body{display:block}#mw-panel.collapsible-nav .portal.persistent h5{background:none !important;padding-left:0.7em;cursor:default}#mw-panel.collapsible-nav .portal.persistent .body{margin-left:0.5em} #mw-panel.collapsible-nav .portal.collapsed h5{color:#0645AD;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAgMAAABinRfyAAAADFBMVEX///95eXnd3d2dnZ3aAo3QAAAAAXRSTlMAQObYZgAAADFJREFUeF5dyzEKACAMA0CXolNe2Id09Kl5igZahWY4AiGjZwmIuS9GEcJfY63Ix88Bol4EYP1O7JMAAAAASUVORK5CYII=) left center no-repeat;background:url(//bits.wikimedia.org/static-1.20wmf6/extensions/Vector/modules/images/closed-ltr.png?2012-06-25T15:45:00Z) left center no-repeat!ie;margin-bottom:0}#mw-panel.collapsible-nav .portal.collapsed h5 a{color:#0645AD}#mw-panel.collapsible-nav .portal.collapsed h5:hover{text-decoration:underline}
+
+/* cache key: ruwikibooks:resourceloader:filter:minify-css:7:5027760d2433ffbece613b3e2a7a6d04 */
+</style><meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/load.css" type="text/css" media="all">
+<style type="text/css" media="all">a:lang(ar),a:lang(ckb),a:lang(fa),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
+
+/* cache key: ruwikibooks:resourceloader:filter:minify-css:7:d5a1bf6cbd05fc6cc2705e47f52062dc */</style>
+
+<script src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/load_006.php" type="text/javascript"></script><script src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/load_004.php" type="text/javascript"></script>
+<script type="text/javascript">if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Интерполяция_и_аппроксимация_функций","wgTitle":"Интерполяция и аппроксимация функций","wgCurRevisionId":69144,"wgArticleId":1957,"wgIsArticle":true,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Вычислительная математика"],"wgBreakFrames":false,"wgPageContentLanguage":"ru","wgSeparatorTransformTable":[",	."," 	,"],"wgDigitTransformTable":["",""],"wgRelevantPageName":"Интерполяция_и_аппроксимация_функций","wgRestrictionEdit":[],"wgRestrictionMove":[],"wgSearchNamespaces":[0],"wgVectorEnabledModules":{"collapsiblenav":true,"collapsibletabs":true,"editwarning":true,"expandablesearch":false,"footercleanup":false,"sectioneditlinks":false,"simplesearch":true,"experiments":true},"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"hidesig":true,"templateEditor":false,"templates":false,"preview":false,"previewDialog":false,"publish":false,"toc":false},"wgCategoryTreePageCategoryOptions":"{\"mode\":0,\"hideprefix\":20,\"showcount\":true,\"namespaces\":false}","Geo":{"city":"","country":""},"wgNoticeProject":"wikibooks"});
+}</script><script type="text/javascript">if(window.mw){
+mw.loader.implement("user.options",function(){mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"disablesuggest":0,"editfont":"default","editondblclick":0,"editsection":1,"editsectiononrightclick":0,"enotifminoredits":0,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":0,"extendwatchlist":0,"externaldiff":0,"externaleditor":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"imagesize":2,"justify":0,"math":0,"minordefault":0,"newpageshidepatrolled":0,"nocache":0,"noconvertlink":0,"norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"quickbar":5,"rcdays":7,"rclimit":50,"rememberpassword":0,"rows":25,"searchlimit":20,"showhiddencats":false,"showjumplinks":1,"shownumberswatching":1,"showtoc":1,"showtoolbar":1,"skin":"vector","stubthreshold":0,"thumbsize":4,"underline":2,"uselivepreview":0,"usenewrc":0,"watchcreations":1,"watchdefault":0,"watchdeletion":0,"watchlistdays":3
+,"watchlisthideanons":0,"watchlisthidebots":0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,"vector-simplesearch":1,"useeditwarning":1,"vector-collapsiblenav":1,"usebetatoolbar":1,"usebetatoolbar-cgd":1,"variant":"ru","language":"ru","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false,"searchNs100":false,"searchNs101":false,"searchNs102":false,"searchNs103":false,"searchNs104":false,"searchNs105":false,"searchNs106":false,"searchNs107":false});;},{},{});mw.loader.implement("user.tokens",function(){mw.user.tokens.set({"editToken":"+\\","watchToken":false});;},{},{});
+
+/* cache key: ruwikibooks:resourceloader:filter:minify-js:7:cc2b0eafd80c27e76fcadaab5e16bbba */
+}</script>
+<script type="text/javascript">if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax"]);
+}</script><script type="text/javascript" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/load_005.php"></script>
+<!--[if lt IE 7]><style type="text/css">body{behavior:url("/w/skins-1.20wmf3/vector/csshover.min.htc")}</style><![endif]--></head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-Интерполяция_и_аппроксимация_функций skin-vector action-view vector-animateLayout">
+		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<!-- content -->
+		<div id="content" class="mw-body">
+			<a id="top"></a>
+			<div class="js-messagebox" id="mw-js-message" style="display:none;"></div>
+						<!-- sitenotice -->
+			<div id="siteNotice"><!-- centralNotice loads here --></div>
+			<!-- /sitenotice -->
+						<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading"><span dir="auto">Интерполяция и аппроксимация функций</span></h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
+								<!-- tagline -->
+				<div id="siteSub">Материал из Викиучебника</div>
+				<!-- /tagline -->
+								<!-- subtitle -->
+				<div id="contentSub"></div>
+				<!-- /subtitle -->
+																<!-- jumpto -->
+				<div id="jump-to-nav" class="mw-jump">
+					Перейти к: <a href="#mw-head">навигация</a>,
+					<a href="#p-search">поиск</a>
+				</div>
+				<!-- /jumpto -->
+								<!-- bodycontent -->
+				<div id="mw-content-text" dir="ltr" class="mw-content-ltr" lang="ru"><div style="border:thin solid #408; background-color:#fffdfa;padding:0.8em;margin:1em;float:right;font:normal 70% sans-serif;">
+<div style="align:center;text-align:center;border-bottom:1px solid #f0edef;font:normal 120% sans-serif;margin:0.1em;"><b>Вычислительная математика:</b></div>
+<p><strong class="selflink">Интерполяция и аппроксимация функций</strong><br>
+<a href="http://ru.wikibooks.org/wiki/%D0%A0%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC_%D1%81%D0%BA%D0%B0%D0%BB%D1%8F%D1%80%D0%BD%D1%8B%D1%85_%D1%83%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B9" title="Решение систем скалярных уравнений">Решение систем скалярных уравнений</a><br>
+<a href="http://ru.wikibooks.org/wiki/%D0%A0%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC_%D0%B4%D0%B8%D1%84%D1%84%D0%B5%D1%80%D0%B5%D0%BD%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85_%D1%83%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B9" title="Решение систем дифференциальных уравнений">Решение систем дифференциальных уравнений</a><br>
+<a href="http://ru.wikibooks.org/w/index.php?title=%D0%A0%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC_%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%BE-%D0%B4%D0%B8%D1%84%D1%84%D0%B5%D1%80%D0%B5%D0%BD%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85_%D1%83%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B9&amp;action=edit&amp;redlink=1" class="new" title="Решение систем интегро-дифференциальных уравнений (страница не существует)">Решение систем интегро-дифференциальных уравнений</a><br></p>
+<a href="http://ru.wikibooks.org/wiki/%D0%A7%D0%B8%D1%81%D0%BB%D0%B5%D0%BD%D0%BD%D1%8B%D0%B5_%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B_%D0%BC%D0%B0%D1%82%D0%B5%D0%BC%D0%B0%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B9_%D1%81%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B8" title="Численные методы математической статистики">Численные методы математической статистики</a></div>
+<table id="toc" class="toc">
+<tbody><tr>
+<td>
+<div id="toctitle">
+<h2>Содержание</h2>
+<span class="toctoggle">&nbsp;[<a href="#" class="internal" id="togglelink">убрать</a>]&nbsp;</span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.90.D0.BB.D0.B3.D0.B5.D0.B1.D1.80.D0.B0.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B0.D1.8F_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Алгебраическая интерполяция</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.87.D0.BD.D0.BE.D0.B5_.D0.B7.D0.B0.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8"><span class="tocnumber">1.1</span> <span class="toctext">Табличное задание функции</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.B5.D0.B9.D1.88.D0.B8.D0.B5_.D1.81.D0.BF.D0.BE.D1.81.D0.BE.D0.B1.D1.8B_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D0.B8"><span class="tocnumber">1.2</span> <span class="toctext">Простейшие способы интерполяции</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.98.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D0.BE.D0.BD.D0.BD.D1.8B.D0.B5_.D0.BF.D0.BE.D0.BB.D0.B8.D0.BD.D0.BE.D0.BC.D1.8B"><span class="tocnumber">1.3</span> <span class="toctext">Интерполяционные полиномы</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.A1.D0.BF.D0.BB.D0.B0.D0.B9.D0.BD-.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D1.8F"><span class="tocnumber">1.4</span> <span class="toctext">Сплайн-интерполяция</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.A2.D1.80.D0.B8.D0.B3.D0.BE.D0.BD.D0.BE.D0.BC.D0.B5.D1.82.D1.80.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B0.D1.8F_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D1.8F"><span class="tocnumber">2</span> <span class="toctext">Тригонометрическая интерполяция</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#.D0.9D.D0.B5.D0.BA.D0.BB.D0.B0.D1.81.D1.81.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B5_.D0.BC.D0.B5.D1.82.D0.BE.D0.B4.D1.8B_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Неклассические методы интерполяции</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#.D0.A0.D0.B5.D0.BA.D0.BE.D0.BD.D1.81.D1.82.D1.80.D1.83.D0.BA.D1.86.D0.B8.D1.8F_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9"><span class="tocnumber">3.1</span> <span class="toctext">Реконструкция функций</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.D0.92.D1.81.D1.8E.D0.B4.D1.83_.D0.B3.D0.BB.D0.B0.D0.B4.D0.BA.D0.B0.D1.8F_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D1.8F"><span class="tocnumber">3.2</span> <span class="toctext">Всюду гладкая интерполяция</span></a></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody></table>
+<h2><span class="editsection">[<a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit&amp;section=1" title="Править секцию «Алгебраическая интерполяция»">править</a>]</span> <span class="mw-headline" id=".D0.90.D0.BB.D0.B3.D0.B5.D0.B1.D1.80.D0.B0.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B0.D1.8F_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D1.8F">Алгебраическая интерполяция</span></h2>
+<h3><span class="editsection">[<a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit&amp;section=2" title="Править секцию «Табличное задание функции»">править</a>]</span> <span class="mw-headline" id=".D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.87.D0.BD.D0.BE.D0.B5_.D0.B7.D0.B0.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8">Табличное задание функции</span></h3>
+<p>При алгебраической интерполяции для представления информации о функции <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/5/0/b/50bbd36e1fd2333108437a2ca378be62.png" class="tex" alt="f(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/50bbd36e1fd2333108437a2ca378be62.png"> используется таблица значений этой функции:</p>
+<table>
+<tbody><tr>
+<td><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/b/2/0b21a666a81629962ade8afd967826ed.png" class="tex" alt="x_0" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/0b21a666a81629962ade8afd967826ed.png"></td>
+<td><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/f/9/a/f9a3b8e9e501458e8face47cae8826de.png" class="tex" alt="x_1" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/f9a3b8e9e501458e8face47cae8826de.png"></td>
+<td><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/8/f/4/8f43fce8dbdf3c4f8d0ac91f0de1d43d.png" class="tex" alt="x_2" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/8f43fce8dbdf3c4f8d0ac91f0de1d43d.png"></td>
+<td><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/5/8/b/58b9e70b65a77700ba66e9c64d6b9f89.png" class="tex" alt=".." src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/58b9e70b65a77700ba66e9c64d6b9f89.png"></td>
+</tr>
+<tr>
+<td><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/b/b/0bbcaf3f1a7e30c9240b9ed39ee7c78d.png" class="tex" alt="f(x_0)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/0bbcaf3f1a7e30c9240b9ed39ee7c78d.png"></td>
+<td><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/3/1/b/31b25a1895b28403a9f1db88852eb652.png" class="tex" alt="f(x_1)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/31b25a1895b28403a9f1db88852eb652.png"></td>
+<td><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/c/5/5/c55a0c62470b62355159cb8a789a42fd.png" class="tex" alt="f(x_2)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/c55a0c62470b62355159cb8a789a42fd.png"></td>
+<td><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/5/8/b/58b9e70b65a77700ba66e9c64d6b9f89.png" class="tex" alt=".." src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/58b9e70b65a77700ba66e9c64d6b9f89.png"></td>
+</tr>
+</tbody></table>
+<p>Собственно, задачей вычислительной математики здесь является задача построения по таблице такой функции <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/e/5/e/e5ef1e38912a886c35e1231b7d6b6225.png" class="tex" alt="\tilde f" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/e5ef1e38912a886c35e1231b7d6b6225.png">, которая бы не сильно отличалась от <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/8/f/a/8fa14cdd754f91cc6554c9e71929cce7.png" class="tex" alt="f" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/8fa14cdd754f91cc6554c9e71929cce7.png"> и выработка ограничений, и разработка критериев, при которых задача имеет решение.</p>
+<h3><span class="editsection">[<a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit&amp;section=3" title="Править секцию «Простейшие способы интерполяции»">править</a>]</span> <span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.B5.D0.B9.D1.88.D0.B8.D0.B5_.D1.81.D0.BF.D0.BE.D1.81.D0.BE.D0.B1.D1.8B_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D0.B8">Простейшие способы интерполяции</span></h3>
+<p>Простейшим способом интерполяции функции <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/8/f/a/8fa14cdd754f91cc6554c9e71929cce7.png" class="tex" alt="f" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/8fa14cdd754f91cc6554c9e71929cce7.png"> по таблице является <a href="http://ru.wikipedia.org/wiki/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%BC_%D0%B1%D0%BB%D0%B8%D0%B6%D0%B0%D0%B9%D1%88%D0%B5%D0%B3%D0%BE_%D1%81%D0%BE%D1%81%D0%B5%D0%B4%D0%B0" class="extiw" title="w:Интерполяция методом ближайшего соседа">интерполяция методом ближайшего соседа</a>. Один из ее вариантов формулируется так:</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/a/d/0ad755981620a9dea3b36e6c11480146.png" class="tex" alt="\tilde f(x) = f(x_i),i:\forall j\ne i, |x-x_j|&gt;|x-x_i|" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/0ad755981620a9dea3b36e6c11480146.png"></p>
+<p>То есть за значение функции <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/e/f/3/ef36e0516d5b68d0c0469d5dfac72b7b.png" class="tex" alt="\tilde f(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/ef36e0516d5b68d0c0469d5dfac72b7b.png"> берется значение функции <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/5/0/b/50bbd36e1fd2333108437a2ca378be62.png" class="tex" alt="f(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/50bbd36e1fd2333108437a2ca378be62.png"> в точке, ближайшей к рассматриваемой.</p>
+<p>Более точным способом интерполяции является кусочно-линейная интерполяция. При таком подходе значение <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/5/0/b/50bbd36e1fd2333108437a2ca378be62.png" class="tex" alt="f(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/50bbd36e1fd2333108437a2ca378be62.png"> интерполируется по двум соседним с точкой <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/9/d/d/9dd4e461268c8034f5c8564e155c67a6.png" class="tex" alt="x" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/9dd4e461268c8034f5c8564e155c67a6.png"> точкам.</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/7/e/6/7e6019e02ca726f7da05b835c6724bc8.png" class="tex" alt="\tilde f(x) = \frac{f(x_i)(x_{i+1}-x)+f(x_{i+1})(x-x_i)}{x_{i+1}-x_i},i:x_i&lt;x&lt;x_{i+1}
+" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/7e6019e02ca726f7da05b835c6724bc8.png"></p>
+<p>(здесь подразумевается монотонное возрастание последовательности <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/5/e/05e42209d67fe1eb15a055e9d3b3770e.png" class="tex" alt="x_i" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/05e42209d67fe1eb15a055e9d3b3770e.png">)</p>
+<p>Интересно понять, с какой точностью интерполяционные формулы аппроксимируют функцию <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/8/f/a/8fa14cdd754f91cc6554c9e71929cce7.png" class="tex" alt="f" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/8fa14cdd754f91cc6554c9e71929cce7.png">.</p>
+<p>Предположим, что производная функции <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/8/f/a/8fa14cdd754f91cc6554c9e71929cce7.png" class="tex" alt="f" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/8fa14cdd754f91cc6554c9e71929cce7.png"> ограничена величиной <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/b/2/f/b2f5ff47436671b6e533d8dc3614845d.png" class="tex" alt="g" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/b2f5ff47436671b6e533d8dc3614845d.png">. Тогда на отрезке <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/3/8/d/38d37ec1a65c2b21ca226c22a611631d.png" class="tex" alt="[x_i,x_{i+1}]" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/38d37ec1a65c2b21ca226c22a611631d.png"> функция <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/8/f/a/8fa14cdd754f91cc6554c9e71929cce7.png" class="tex" alt="f" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/8fa14cdd754f91cc6554c9e71929cce7.png"> не может отклониться от линейной интерполяции более, чем на <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/6/7/4/6741d311c7fae041d35f79970d7cb957.png" class="tex" alt="h\left(g-\left|\frac{f(x_{i+1})-f(x_i)}{x_{i+1}-x_i}\right|\right)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/6741d311c7fae041d35f79970d7cb957.png">. Если, кроме того, вторая производная функции <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/8/f/a/8fa14cdd754f91cc6554c9e71929cce7.png" class="tex" alt="f" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/8fa14cdd754f91cc6554c9e71929cce7.png"> ограничена, можно построить более точную оценку:</p>
+<p>TODO</p>
+<h3><span class="editsection">[<a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit&amp;section=4" title="Править секцию «Интерполяционные полиномы»">править</a>]</span> <span class="mw-headline" id=".D0.98.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D0.BE.D0.BD.D0.BD.D1.8B.D0.B5_.D0.BF.D0.BE.D0.BB.D0.B8.D0.BD.D0.BE.D0.BC.D1.8B">Интерполяционные полиномы</span></h3>
+<p><i>Алгебраическим интерполяционным многочленом</i> <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/7/5/9/759f3d61fdb8b07999fdb4673fa96c52.png" class="tex" alt="P_n(x,f,x_0,...,x_n)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/759f3d61fdb8b07999fdb4673fa96c52.png"> называется многочлен</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/c/e/4/ce4ee0c09613dd0d3bd1c63321170faa.png" class="tex" alt="P_n(x)=c_0+c_1x+c_2x^2+...+c_nx^n" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/ce4ee0c09613dd0d3bd1c63321170faa.png"></p>
+<p>степени не выше <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/7/b/8/7b8b965ad4bca0e41ab51de7b31363a1.png" class="tex" alt="n" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/7b8b965ad4bca0e41ab51de7b31363a1.png">, принимающий в точках <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/4/3/2/432634674c5e1a9a382f4f8c4ed04f2d.png" class="tex" alt="x_0,x_1,...,x_n" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/432634674c5e1a9a382f4f8c4ed04f2d.png"> значения <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/3/4/f/34feaac5d6150c5ff4be199a04148b4e.png" class="tex" alt="f(x_0),f(x_1),...,f(x_n)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/34feaac5d6150c5ff4be199a04148b4e.png"></p>
+<p><b>Теорема.</b> Если заданы попарно различные узлы <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/2/8/5/2859fdd771596002451174013ffa43b4.png" class="tex" alt="x_0,x_1,x_2,...,x_n" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/2859fdd771596002451174013ffa43b4.png"> и значения <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/3/4/f/34feaac5d6150c5ff4be199a04148b4e.png" class="tex" alt="f(x_0), f(x_1), ...,f(x_n)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/34feaac5d6150c5ff4be199a04148b4e.png">, то алгебраический интерполяционный многочлен cуществует и единственен.</p>
+<p><b>Доказательство</b> Сначала докажем, что существует не более чем 
+один интерполяционный многочлен, а затем построим его. Если бы их было 
+два, то их разность - многочлен степени не больше <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/7/b/8/7b8b965ad4bca0e41ab51de7b31363a1.png" class="tex" alt="n" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/7b8b965ad4bca0e41ab51de7b31363a1.png">, обращалась бы в 0 в <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/4/0/b/40b85027598d87611b1c8d5d11e46812.png" class="tex" alt="n+1" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/40b85027598d87611b1c8d5d11e46812.png"> точке - <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/4/3/2/432634674c5e1a9a382f4f8c4ed04f2d.png" class="tex" alt="x_0,x_1,...,x_n" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/432634674c5e1a9a382f4f8c4ed04f2d.png">, что невозможно для ненулевого многочлена.</p>
+<p>В качестве примера интерполяционного многочлена можно привести <a class="external text" href="http://ru.wikipedia.org/wiki/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D1%8B%D0%B9_%D0%BC%D0%BD%D0%BE%D0%B3%D0%BE%D1%87%D0%BB%D0%B5%D0%BD_%D0%9B%D0%B0%D0%B3%D1%80%D0%B0%D0%BD%D0%B6%D0%B0">Интерполяционный многочлен Лагранжа</a> (доказательство существования очевидно из построения, приведенного по ссылке).</p>
+<p><b>Интерполяционный многочлен в форме Ньютона</b></p>
+<p>Введем понятие <i>разностного отношения</i>. Разностным отношением нулевого порядка в точке <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/5/e/05e42209d67fe1eb15a055e9d3b3770e.png" class="tex" alt="x_i" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/05e42209d67fe1eb15a055e9d3b3770e.png"> назовем значение <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/7/e/1/7e18dabda345d4f3a3642ecf7fa61ccf.png" class="tex" alt="f(x_i)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/7e18dabda345d4f3a3642ecf7fa61ccf.png">. Разностное отношение первого порядка определяется как</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/f/9/0/f90311c73d2bdcf75f12dbeb0584fc57.png" class="tex" alt="f(x_i,x_j)=\frac{f(x_j)-f(x_i)}{x_j-x_i}" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/f90311c73d2bdcf75f12dbeb0584fc57.png"></p>
+<p>А n+1-го порядка - рекурсивно через разностное отношение n-го порядка:</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/b/1/4/b14f6bcd8a17f3ade3c74f8d12ff2063.png" class="tex" alt="f(x_0,x_1,...,x_{n+1})=\frac{f(x_1,x_2,...,x_{n+1})-f(x_0,x_1,...,x_n)}{x_{n+1}-x_0}" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/b14f6bcd8a17f3ade3c74f8d12ff2063.png"></p>
+<p>Тогда можно показать, что интерполяционный многочлен может быть записан в следующей форме:</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/a/4/a/a4a3f00e3ce09728cc2e0dff2d7449f9.png" class="tex" alt="P_n(x,f,x_0,...,x_n)=f(x_0)+(x-x_0)f(x_0,x_1)+...+(x-x_0)(x-x_1)...(x-x_{n-1})f(x_0,...,x_n)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/a4a3f00e3ce09728cc2e0dff2d7449f9.png"></p>
+<p>TODO</p>
+<h3><span class="editsection">[<a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit&amp;section=5" title="Править секцию «Сплайн-интерполяция»">править</a>]</span> <span class="mw-headline" id=".D0.A1.D0.BF.D0.BB.D0.B0.D0.B9.D0.BD-.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D1.8F">Сплайн-интерполяция</span></h3>
+<p>Основная идея <a class="external text" href="http://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BB%D0%B0%D0%B9%D0%BD">сплайн</a>-интерполяции функций - построение кусочно-полиномиальной интерполяции, при которой остается непрерывной функция <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/e/f/3/ef36e0516d5b68d0c0469d5dfac72b7b.png" class="tex" alt="\tilde f(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/ef36e0516d5b68d0c0469d5dfac72b7b.png"> и несколько ее первых производных.</p>
+<p>Предположим, мы хотим получить функцию, непрерывную вместе со своей первой производной.</p>
+<p>Тогда для начала построим на заданной таблице кусочно-линейную интерполяцию <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/e/3/e/e3e210417641c7f4afaef4cc85f7ca7e.png" class="tex" alt="\tilde f_1(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/e3e210417641c7f4afaef4cc85f7ca7e.png">. Это непрерывная функция, производная которой в каждом узле <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/5/e/05e42209d67fe1eb15a055e9d3b3770e.png" class="tex" alt="x_i" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/05e42209d67fe1eb15a055e9d3b3770e.png"> имеет скачок</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/c/c/0/cc071316dcc4527359269e49dddad7c8.png" class="tex" alt="\tilde f_1'(x_i+\delta x) - \tilde f_1'(x_i-\delta x) = \frac{f_{i+1}-f_{i}}{x_{i+1}-x_i} - \frac{f_{i}-f_{i-1}}{x_{i}-x_{i-1}}" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/cc071316dcc4527359269e49dddad7c8.png"></p>
+<p>Теперь построим полином 3-ей степени <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/3/b/03b3b2ed38560e37520cd8df309d10f2.png" class="tex" alt="f_{2,i}(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/03b3b2ed38560e37520cd8df309d10f2.png"> такой, что его производная точке <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/5/e/05e42209d67fe1eb15a055e9d3b3770e.png" class="tex" alt="x_i" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/05e42209d67fe1eb15a055e9d3b3770e.png">:</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/1/8/e/18e55b1bf8d68f0ba71b6da44d8ac7f3.png" class="tex" alt="\tilde f_{2,i}'(x_i)=\tilde f_1'(x_i+\delta x) - \tilde f_1'(x_i-\delta x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/18e55b1bf8d68f0ba71b6da44d8ac7f3.png"></p>
+<p>А значения в точках <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/5/e/05e42209d67fe1eb15a055e9d3b3770e.png" class="tex" alt="x_i" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/05e42209d67fe1eb15a055e9d3b3770e.png"> и <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/e/7/5/e757d474da7734102369cf647ff91a61.png" class="tex" alt="x_{i+1}" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/e757d474da7734102369cf647ff91a61.png"> равны 0.</p>
+<p>Если теперь на отрезке <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/3/8/d/38d37ec1a65c2b21ca226c22a611631d.png" class="tex" alt="[x_i,x_{i+1}]" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/38d37ec1a65c2b21ca226c22a611631d.png"> к функции <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/6/0/5/60507052e091e070c859d8d571d8b766.png" class="tex" alt="f_1(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/60507052e091e070c859d8d571d8b766.png"> прибавить <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/3/b/03b3b2ed38560e37520cd8df309d10f2.png" class="tex" alt="f_{2,i}(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/03b3b2ed38560e37520cd8df309d10f2.png">, получившаяся функция будет непрерывна в <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/0/5/e/05e42209d67fe1eb15a055e9d3b3770e.png" class="tex" alt="x_i" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/05e42209d67fe1eb15a055e9d3b3770e.png"> вместе со своей первой производной.</p>
+<p>Осталось провести аналогичную операцию на всех остальных отрезках <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/3/8/d/38d37ec1a65c2b21ca226c22a611631d.png" class="tex" alt="[x_i,x_{i+1}]" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/38d37ec1a65c2b21ca226c22a611631d.png">, учитывая на каждом следующем отрезке производную уже построенной функции на предыдущем отрезке.</p>
+<h2><span class="editsection">[<a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit&amp;section=6" title="Править секцию «Тригонометрическая интерполяция»">править</a>]</span> <span class="mw-headline" id=".D0.A2.D1.80.D0.B8.D0.B3.D0.BE.D0.BD.D0.BE.D0.BC.D0.B5.D1.82.D1.80.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B0.D1.8F_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D1.8F">Тригонометрическая интерполяция</span></h2>
+<p>Другим важным видом интерполяции является интерполяция функции f 
+тригонометрическим полиномом, называемой еще интерполяцией полиномом 
+Фурье:</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/a/6/1/a6189b12f3d9ffc57fb5f1b9d93b0512.png" class="tex" alt="\tilde f(x)=\sum_{k=0}^K \left( a_k \sin\left(\frac{2\pi x}{L}\right) + b_k \cos\left(\frac{2\pi x}{L}\right) \right) " src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/a6189b12f3d9ffc57fb5f1b9d93b0512.png"></p>
+<p>Интерполирующая функция представляет собой сумму конечного числа гармоник ряда Фурье.</p>
+<p>Этот вид интерполяции особенно осмысленен для периодических функций. Пусть есть функция <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/5/0/b/50bbd36e1fd2333108437a2ca378be62.png" class="tex" alt="f(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/50bbd36e1fd2333108437a2ca378be62.png"> с периодом <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/d/2/0/d20caec3b48a1eef164cb4ca81ba2587.png" class="tex" alt="L" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/d20caec3b48a1eef164cb4ca81ba2587.png">, т.е. для любого <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/9/d/d/9dd4e461268c8034f5c8564e155c67a6.png" class="tex" alt="x" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/9dd4e461268c8034f5c8564e155c67a6.png">:</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/7/c/7/7c7d9f256764d93caa0d3a3c05448e92.png" class="tex" alt="f(x+L)=f(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/7c7d9f256764d93caa0d3a3c05448e92.png"></p>
+<p>Пусть эта функция задана таблицей на периодической сетке:</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/1/7/d/17d052654bde2e592ebbfdc06e76385e.png" class="tex" alt="
+x_n=\frac{L}{N}n+x_0, n=0,1,...,N-1
+" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/17d052654bde2e592ebbfdc06e76385e.png"></p>
+<p>своими значениями</p>
+<p><img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/a/1/5/a1541fec61b6b39114f7372621720430.png" class="tex" alt="
+f_n=f(x_n)
+" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/a1541fec61b6b39114f7372621720430.png"></p>
+<p>Оказывается, при правильном выборе <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/f/8/d/f8dc7225e13d691e2fb37d53da54fb34.png" class="tex" alt="N,K,x_0" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/f8dc7225e13d691e2fb37d53da54fb34.png">, существует только один полином <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/e/f/3/ef36e0516d5b68d0c0469d5dfac72b7b.png" class="tex" alt="\tilde f(x)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/ef36e0516d5b68d0c0469d5dfac72b7b.png">.</p>
+<h2><span class="editsection">[<a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit&amp;section=7" title="Править секцию «Неклассические методы интерполяции»">править</a>]</span> <span class="mw-headline" id=".D0.9D.D0.B5.D0.BA.D0.BB.D0.B0.D1.81.D1.81.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B5_.D0.BC.D0.B5.D1.82.D0.BE.D0.B4.D1.8B_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D0.B8">Неклассические методы интерполяции</span></h2>
+<p>В различных приложениях используются различные методы интерполяции, не сводящиеся к классическим. Рассмотрим некоторые из них.</p>
+<h3><span class="editsection">[<a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit&amp;section=8" title="Править секцию «Реконструкция функций»">править</a>]</span> <span class="mw-headline" id=".D0.A0.D0.B5.D0.BA.D0.BE.D0.BD.D1.81.D1.82.D1.80.D1.83.D0.BA.D1.86.D0.B8.D1.8F_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9">Реконструкция функций</span></h3>
+<p>Для реконструкции разрывных функций часто применяют так называемую minmod-реконструкцию. Суть ее в следующем:</p>
+<p>Распределение функции на отрезке <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/c/0/0/c00f9dab34d259f6ea357f34da332d97.png" class="tex" alt="\left[-\frac{x_{m-1}+x_m}{2}, \frac{x_m+x_{m+1}}{2}\right]" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/c00f9dab34d259f6ea357f34da332d97.png"> полагается линейным, а коэффициент наклона выбирается как <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/2/9/e/29e14b38fecb71e324b126e24b1e9eb0.png" class="tex" alt="q=\operatorname{minmod}\left(\frac{f_{m+1}-f_{m}}{x_{m+1}-x_m},\frac{f_{m}-f_{m-1}}{x_{m}-x_{m-1}}\right)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/29e14b38fecb71e324b126e24b1e9eb0.png">, где <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/5/0/e/50efdfbd9b709addb123d8495dab3114.png" class="tex" alt="\operatorname{minmod}(a,b)=\frac{\operatorname{sign}(a)+\operatorname{sign}(b)}{2}\min(|a|,|b|)" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/50efdfbd9b709addb123d8495dab3114.png"></p>
+<h3><span class="editsection">[<a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit&amp;section=9" title="Править секцию «Всюду гладкая интерполяция»">править</a>]</span> <span class="mw-headline" id=".D0.92.D1.81.D1.8E.D0.B4.D1.83_.D0.B3.D0.BB.D0.B0.D0.B4.D0.BA.D0.B0.D1.8F_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D0.BF.D0.BE.D0.BB.D1.8F.D1.86.D0.B8.D1.8F">Всюду гладкая интерполяция</span></h3>
+<p>Есть еще такая всюду гладкая интерполяция: <img ilo-full-src="http://upload.wikimedia.org/wikibooks/ru/math/5/8/8/588ce495fbe500ad367fe127188d1fcf.png" class="tex" alt="f(x)=\frac{\sum \frac{f_i}{(x-x_i)^2}}{\sum \frac{1}{(x-x_i)^2}}" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/588ce495fbe500ad367fe127188d1fcf.png"></p>
+
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 650/1000000
+Post-expand include size: 750/2048000 bytes
+Template argument size: 0/2048000 bytes
+Expensive parser function count: 0/500
+-->
+
+<!-- Saved in parser cache with key ruwikibooks:pcache:idhash:1957-0!0!0!!ru!*!* and timestamp 20120229022027 -->
+</div>				<!-- /bodycontent -->
+								<!-- printfooter -->
+				<div class="printfooter">
+				Источник — «<a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;oldid=69144">http://ru.wikibooks.org/w/index.php?title=Интерполяция_и_аппроксимация_функций&amp;oldid=69144</a>»				</div>
+				<!-- /printfooter -->
+												<!-- catlinks -->
+				<div id="catlinks" class="catlinks"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="http://ru.wikibooks.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:Categories" title="Служебная:Categories">Категория</a>: <ul><li><a href="http://ru.wikibooks.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F:%D0%92%D1%8B%D1%87%D0%B8%D1%81%D0%BB%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D0%BC%D0%B0%D1%82%D0%B5%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0" title="Категория:Вычислительная математика">Вычислительная математика</a></li></ul></div></div>				<!-- /catlinks -->
+												<div class="visualClear"></div>
+				<!-- debughtml -->
+								<!-- /debughtml -->
+			</div>
+			<!-- /bodyContent -->
+		</div>
+		<!-- /content -->
+		<!-- header -->
+		<div id="mw-head" class="noprint">
+			
+<!-- 0 -->
+<div id="p-personal" class="">
+	<h5>Личные инструменты</h5>
+	<ul>
+		<li id="pt-login"><a href="http://ru.wikibooks.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:UserLogin&amp;returnto=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F+%D0%B8+%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F+%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9" title="Здесь можно зарегистрироваться в системе, но это необязательно. [alt-shift-o]" accesskey="o">Представиться / зарегистрироваться</a></li>
+	</ul>
+</div>
+
+<!-- /0 -->
+			<div id="left-navigation">
+				
+<!-- 0 -->
+<div id="p-namespaces" class="vectorTabs">
+	<h5>Пространства имён</h5>
+	<ul>
+					<li id="ca-nstab-main" class="selected"><span><a href="http://ru.wikibooks.org/wiki/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9" title="Содержание статьи [alt-shift-c]" accesskey="c">Учебник</a></span></li>
+					<li id="ca-talk"><span><a href="http://ru.wikibooks.org/wiki/%D0%9E%D0%B1%D1%81%D1%83%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5:%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9" title="Обсуждение страницы [alt-shift-t]" accesskey="t">Обсуждение</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-variants" class="vectorMenu emptyPortlet">
+	<h4>
+		</h4>
+	<h5><span>Варианты</span><a href="#"></a></h5>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+			</div>
+			<div id="right-navigation">
+				
+<!-- 0 -->
+<div id="p-views" class="vectorTabs">
+	<h5>Просмотры</h5>
+	<ul>
+					<li id="ca-view" class="selected"><span><a href="http://ru.wikibooks.org/wiki/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9">Чтение</a></span></li>
+					<li id="ca-edit"><span><a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=edit" title="Эту страницу можно изменять. Используйте, пожалуйста, предварительный просмотр перед сохранением [alt-shift-e]" accesskey="e">Правка</a></span></li>
+					<li id="ca-history" class="collapsible"><span><a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;action=history" title="Журнал изменений страницы [alt-shift-h]" accesskey="h">История</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-cactions" class="vectorMenu emptyPortlet">
+	<h5><span>Действия</span><a href="#"></a></h5>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+
+<!-- 2 -->
+<div id="p-search">
+	<h5><label for="searchInput">Поиск</label></h5>
+	<form action="/w/index.php" id="searchform">
+				<div id="simpleSearch">
+						<input autocomplete="off" placeholder="Поиск" tabindex="1" name="search" title="Искать это слово [alt-shift-f]" accesskey="f" id="searchInput" type="text">						<button type="submit" name="button" title="Найти страницы, содержащие указанный текст" id="searchButton" width="12" height="13"><img ilo-full-src="http://bits.wikimedia.org/static-1.20wmf3/skins/vector/images/search-ltr.png?303-4" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/search-ltr.png" alt="Найти"></button>								<input name="title" value="Служебная:Search" type="hidden">
+		</div>
+	</form>
+</div>
+
+<!-- /2 -->
+			</div>
+		</div>
+		<!-- /header -->
+		<!-- panel -->
+			<div id="mw-panel" class="noprint collapsible-nav">
+				<!-- logo -->
+					<div id="p-logo"><a style="background-image: url(&quot;//upload.wikimedia.org/wikibooks/ru/b/bc/Wiki.png&quot;);" href="http://ru.wikibooks.org/wiki/%D0%97%D0%B0%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0" title="Заглавная страница"></a></div>
+				<!-- /logo -->
+				
+<!-- navigation -->
+<div class="portal first persistent" id="p-navigation">
+	<h5>Навигация</h5>
+	<div class="body">
+		<ul>
+			<li id="n-mainpage"><a href="http://ru.wikibooks.org/wiki/%D0%97%D0%B0%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0" title="Перейти на заглавную страницу [alt-shift-z]" accesskey="z">Заглавная страница</a></li>
+			<li id="n-catalog"><a href="http://ru.wikibooks.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F:%D0%92%D1%81%D1%91">Каталог</a></li>
+			<li id="n-randompage"><a href="http://ru.wikibooks.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:Random" title="Посмотреть случайную страницу [alt-shift-x]" accesskey="x">Случайная статья</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /navigation -->
+
+<!-- participation -->
+<div class="portal expanded" id="p-participation">
+	<h5 tabindex="2"><a href="#">Участие</a></h5>
+	<div style="display: block;" class="body">
+		<ul>
+			<li id="n-help"><a href="http://ru.wikibooks.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D1%83%D1%87%D0%B5%D0%B1%D0%BD%D0%B8%D0%BA:%D0%A1%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B0" title="Справочник по проекту «Викиучебник»">Справка</a></li>
+			<li id="n-forum"><a href="http://ru.wikibooks.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D1%83%D1%87%D0%B5%D0%B1%D0%BD%D0%B8%D0%BA:%D0%9E%D0%B1%D1%89%D0%B8%D0%B9_%D1%84%D0%BE%D1%80%D1%83%D0%BC">Форум</a></li>
+			<li id="n-recentchanges"><a href="http://ru.wikibooks.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:RecentChanges" title="Список последних изменений [alt-shift-r]" accesskey="r">Свежие правки</a></li>
+			<li id="n-newpages"><a href="http://ru.wikibooks.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:NewPages">Новые страницы</a></li>
+			<li id="n-sitesupport"><a href="http://donate.wikimedia.org/wiki/Special:FundraiserRedirector?utm_source=donate&amp;utm_medium=sidebar&amp;utm_campaign=20120521SB001&amp;uselang=ru" title="Поддержите нас">Пожертвования</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /participation -->
+
+<!-- SEARCH -->
+
+<!-- /SEARCH -->
+
+<!-- TOOLBOX -->
+<div class="portal collapsed" id="p-tb">
+	<h5 tabindex="3"><a href="#">Инструменты</a></h5>
+	<div class="body">
+		<ul>
+			<li id="t-whatlinkshere"><a href="http://ru.wikibooks.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:WhatLinksHere/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9" title="Список всех страниц, которые ссылаются на эту страницу [alt-shift-j]" accesskey="j">Ссылки сюда</a></li>
+			<li id="t-recentchangeslinked"><a href="http://ru.wikibooks.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:RecentChangesLinked/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9" title="Последние изменения в страницах, на которые ссылается эта страница [alt-shift-k]" accesskey="k">Связанные правки</a></li>
+			<li id="t-specialpages"><a href="http://ru.wikibooks.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:SpecialPages" title="Список служебных страниц [alt-shift-q]" accesskey="q">Спецстраницы</a></li>
+			<li id="t-permalink"><a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;oldid=69144" title="Постоянная ссылка на эту версию страницы">Постоянная ссылка</a></li>
+<li id="t-cite"><a href="http://ru.wikibooks.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:Cite&amp;page=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;id=69144" title="Информация о том, как цитировать эту страницу">Цитировать страницу</a></li>		</ul>
+	</div>
+</div>
+
+<!-- /TOOLBOX -->
+
+<!-- coll-print_export -->
+<div class="portal collapsed" id="p-coll-print_export">
+	<h5 tabindex="4"><a href="#">Печать/экспорт</a></h5>
+	<div class="body">
+		<ul id="collectionPortletList"><li id="coll-create_a_book"><a href="http://ru.wikibooks.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:Book&amp;bookcmd=book_creator&amp;referer=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F+%D0%B8+%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F+%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9" title="Создать книгу или коллекцию статей" rel="nofollow">Создать книгу</a></li><li id="coll-download-as-rl"><a href="http://ru.wikibooks.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:Book&amp;bookcmd=render_article&amp;arttitle=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F+%D0%B8+%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F+%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;oldid=69144&amp;writer=rl" title="Скачать PDF-версию этой вики-страницы" rel="nofollow">Скачать как PDF</a></li><li id="t-print"><a href="http://ru.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;printable=yes" title="Версия этой страницы для печати [alt-shift-p]" accesskey="p">Версия для печати</a></li></ul>	</div>
+</div>
+
+<!-- /coll-print_export -->
+
+<!-- LANGUAGES -->
+
+<!-- /LANGUAGES -->
+			</div>
+		<!-- /panel -->
+		<!-- footer -->
+		<div id="footer">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> Последнее изменение этой страницы: 07:54, 22 декабря 2011.</li>
+											<li id="footer-info-copyright">Текст доступен по <a href="http://creativecommons.org/licenses/by-sa/3.0/deed.ru">лицензии Creative Commons Attribution/Share-Alike</a>, в отдельных случаях могут действовать дополнительные условия. Подробнее см. <a href="http://wikimediafoundation.org/wiki/Terms_of_Use/ru">Условия использования</a>.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="http://ru.wikibooks.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D1%83%D1%87%D0%B5%D0%B1%D0%BD%D0%B8%D0%BA:%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B8%D0%BA%D0%B0_%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B4%D0%B5%D0%BD%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D0%B8" title="Викиучебник:Политика конфиденциальности">Политика конфиденциальности</a></li>
+											<li id="footer-places-about"><a href="http://ru.wikibooks.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D1%83%D1%87%D0%B5%D0%B1%D0%BD%D0%B8%D0%BA:%D0%92%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5" title="Викиучебник:Введение">Введение</a></li>
+											<li id="footer-places-disclaimer"><a href="http://ru.wikibooks.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D1%83%D1%87%D0%B5%D0%B1%D0%BD%D0%B8%D0%BA:%D0%9E%D1%82%D0%BA%D0%B0%D0%B7_%D0%BE%D1%82_%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D0%B8" title="Викиучебник:Отказ от ответственности">Отказ от ответственности</a></li>
+											<li id="footer-places-mobileview"><a href="http://ru.m.wikibooks.org/w/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9&amp;mobileaction=toggle_view_mobile" class="noprint">Мобильная версия</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+					<li id="footer-copyrightico">
+						<a href="http://wikimediafoundation.org/"><img ilo-full-src="http://bits.wikimedia.org/images/wikimedia-button.png" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/wikimedia-button.png" alt="Wikimedia Foundation" height="31" width="88"></a>
+					</li>
+					<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img ilo-full-src="http://bits.wikimedia.org/static-1.20wmf3/skins/common/images/poweredby_mediawiki_88x31.png" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" height="31" width="88"></a>
+					</li>
+				</ul>
+						<div style="clear:both"></div>
+		</div>
+		<!-- /footer -->
+		<script type="text/javascript">if(window.mw){
+mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
+}</script>
+<script src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/load.php" type="text/javascript"></script>
+<script type="text/javascript">if(window.mw){
+mw.loader.load(["mediawiki.user","mediawiki.page.ready","mediawiki.legacy.mwsuggest","ext.vector.collapsibleNav","ext.vector.collapsibleTabs","ext.vector.editWarning","ext.vector.simpleSearch"], null, true);
+}</script><script type="text/javascript" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/load_007.php"></script><script type="text/javascript" src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/load_003.php"></script>
+<script src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/index.php" type="text/javascript"></script>
+<script src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/load_002.php" type="text/javascript"></script>
+<script src="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%B8_%D0%B0%D0%BF%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B9_files/a" type="text/javascript"></script><!-- Served by mw25 in 0.153 secs. -->
+	
+
+<div class="suggestions" style="top: 71px; width: 204px; display: none; left: auto; right: 37px;"><div class="suggestions-results"></div><div class="suggestions-special"></div></div></body></html>
