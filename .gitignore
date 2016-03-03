@@ -279,6 +279,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
 # Mercurial repo
 .hg/
 .hgignore
