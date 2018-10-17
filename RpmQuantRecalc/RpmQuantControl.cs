@@ -80,12 +80,12 @@ namespace RpmQuantRecalc
 
             for (int i = 0; i < 32; i++)
             {                
-                quant16Grid.Rows[0].Cells[i].Value = rpmRt16[i].ToString();
+                quant32Grid.Rows[0].Cells[i].Value = rpmRt32[i].ToString();
             }
 
             for (int i = 0; i < 16; i++)
             {
-                quant32Grid.Rows[0].Cells[i].Value = rpmRt32[i].ToString();
+                quant16Grid.Rows[0].Cells[i].Value = rpmRt16[i].ToString();
             }
         }
     }

@@ -20,8 +20,8 @@ namespace CtpMaps
         {            
             var isFastRpm = DataHelper.IndexOf(buffer, new byte[] {0x90, 0x61, 0x3C, 0xE5, 0x55}) != -1;
             rpmSampling = new byte[256];
-            rpmRt32 = new int[16];
-            rpmRt16 = new int[32];
+            rpmRt32 = new int[32];
+            rpmRt16 = new int[16];
 
             Buffer.BlockCopy(buffer, RmpSamplingAddr, rpmSampling, 0, rpmSampling.Length);
 
@@ -34,12 +34,12 @@ namespace CtpMaps
                 if (index == 0)
                 {
                     if (delta <= 0) continue;
-                    rpmRt32[index] = Math.Max(i - 1, 0) * (isFastRpm ? 40 : 30);
+                    rpmRt16[index] = Math.Max(i - 1, 0) * (isFastRpm ? 40 : 30);
                 }
                 else
                 {
                     if (delta < 0) continue;
-                    rpmRt32[index] = i * (isFastRpm ? 40 : 30);
+                    rpmRt16[index] = i * (isFastRpm ? 40 : 30);
                 }
 
                 if (index < 15) index++;
@@ -55,12 +55,12 @@ namespace CtpMaps
                 if (index == 0)
                 {
                     if (delta <= 0) continue;
-                    rpmRt16[index] = Math.Max(i - 1, 0) * (isFastRpm ? 40 : 30);
+                    rpmRt32[index] = Math.Max(i - 1, 0) * (isFastRpm ? 40 : 30);
                 }
                 else
                 {
                     if (delta < 0) continue;
-                    rpmRt16[index] = i * (isFastRpm ? 40 : 30);
+                    rpmRt32[index] = i * (isFastRpm ? 40 : 30);
                 }
 
                 if (index < 31) index++;

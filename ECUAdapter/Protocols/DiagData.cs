@@ -19,7 +19,7 @@ namespace EcuCommunication.Protocols
         
         public void Load(string data)
         {
-            throw new NotSupportedException();
+            //throw new NotSupportedException();
 
             var dataItems = data.Split(',');
             if (dataItems.Length != 45) return;

@@ -38,6 +38,9 @@ namespace OpenOLT
             this.linkStatuslable = new System.Windows.Forms.ToolStripStatusLabel();
             this.warnTwatStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.warnTairStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.warnFuseStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.warnUbatStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.warnPressStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.ecuConnectionStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.onlineStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.lambdaStatus = new System.Windows.Forms.ToolStripStatusLabel();
@@ -102,9 +105,6 @@ namespace OpenOLT
             this.diagChartPanel = new OpenOLT.GUI.DiagChartPanel();
             this.firmwareEditorPanel = new OpenOLT.GUI.FirmwareEditPanel();
             this.diagGaugePanel = new OpenOLT.GUI.DiagGaugePanel();
-            this.warnFuseStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.warnUbatStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.warnPressStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainStatusStrip.SuspendLayout();
             this.mainToolStrip.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
@@ -114,7 +114,7 @@ namespace OpenOLT
             // 
             // mainStatusStrip
             // 
-            this.mainStatusStrip.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.mainStatusStrip.Font = new System.Drawing.Font("Segoe UI", 0.15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Inch, ((byte)(204)));
             this.mainStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.versionStatusLabel,
             this.linkStatuslable,
@@ -130,17 +130,17 @@ namespace OpenOLT
             this.errorStatus,
             this.firmwareStatusLabel,
             this.dadModeStatusLabel});
-            this.mainStatusStrip.Location = new System.Drawing.Point(0, 649);
+            this.mainStatusStrip.Location = new System.Drawing.Point(0, 642);
             this.mainStatusStrip.Name = "mainStatusStrip";
             this.mainStatusStrip.ShowItemToolTips = true;
-            this.mainStatusStrip.Size = new System.Drawing.Size(1093, 22);
+            this.mainStatusStrip.Size = new System.Drawing.Size(1093, 29);
             this.mainStatusStrip.TabIndex = 0;
             this.mainStatusStrip.Text = "statusStrip1";
             // 
             // versionStatusLabel
             // 
             this.versionStatusLabel.Name = "versionStatusLabel";
-            this.versionStatusLabel.Size = new System.Drawing.Size(69, 17);
+            this.versionStatusLabel.Size = new System.Drawing.Size(88, 24);
             this.versionStatusLabel.Text = "version next";
             // 
             // linkStatuslable
@@ -148,7 +148,7 @@ namespace OpenOLT
             this.linkStatuslable.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.linkStatuslable.IsLink = true;
             this.linkStatuslable.Name = "linkStatuslable";
-            this.linkStatuslable.Size = new System.Drawing.Size(82, 17);
+            this.linkStatuslable.Size = new System.Drawing.Size(103, 24);
             this.linkStatuslable.Text = "ecusystems.ru";
             this.linkStatuslable.Click += new System.EventHandler(this.linkStatuslable_Click);
             // 
@@ -157,7 +157,7 @@ namespace OpenOLT
             this.warnTwatStatus.BackColor = System.Drawing.Color.Tomato;
             this.warnTwatStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.warnTwatStatus.Name = "warnTwatStatus";
-            this.warnTwatStatus.Size = new System.Drawing.Size(36, 17);
+            this.warnTwatStatus.Size = new System.Drawing.Size(45, 24);
             this.warnTwatStatus.Text = "ТОЖ";
             this.warnTwatStatus.ToolTipText = "Аварийная температура ОЖ";
             this.warnTwatStatus.Visible = false;
@@ -167,17 +167,47 @@ namespace OpenOLT
             this.warnTairStatus.BackColor = System.Drawing.Color.Tomato;
             this.warnTairStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.warnTairStatus.Name = "warnTairStatus";
-            this.warnTairStatus.Size = new System.Drawing.Size(40, 17);
+            this.warnTairStatus.Size = new System.Drawing.Size(53, 24);
             this.warnTairStatus.Text = "Твозд";
             this.warnTairStatus.ToolTipText = "Аварийная температура воздуха на впуске";
             this.warnTairStatus.Visible = false;
+            // 
+            // warnFuseStatus
+            // 
+            this.warnFuseStatus.BackColor = System.Drawing.Color.Tomato;
+            this.warnFuseStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.warnFuseStatus.Name = "warnFuseStatus";
+            this.warnFuseStatus.Size = new System.Drawing.Size(49, 24);
+            this.warnFuseStatus.Text = "Форс";
+            this.warnFuseStatus.ToolTipText = "Аварийно высокая загрузка форсунок";
+            this.warnFuseStatus.Visible = false;
+            // 
+            // warnUbatStatus
+            // 
+            this.warnUbatStatus.BackColor = System.Drawing.Color.Tomato;
+            this.warnUbatStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.warnUbatStatus.Name = "warnUbatStatus";
+            this.warnUbatStatus.Size = new System.Drawing.Size(45, 24);
+            this.warnUbatStatus.Text = "Ubat";
+            this.warnUbatStatus.ToolTipText = "Аварийное напряжение бортсети";
+            this.warnUbatStatus.Visible = false;
+            // 
+            // warnPressStatus
+            // 
+            this.warnPressStatus.BackColor = System.Drawing.Color.Tomato;
+            this.warnPressStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.warnPressStatus.Name = "warnPressStatus";
+            this.warnPressStatus.Size = new System.Drawing.Size(46, 24);
+            this.warnPressStatus.Text = "Press";
+            this.warnPressStatus.ToolTipText = "Аварийное давление";
+            this.warnPressStatus.Visible = false;
             // 
             // ecuConnectionStatus
             // 
             this.ecuConnectionStatus.BackColor = System.Drawing.Color.Gold;
             this.ecuConnectionStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.ecuConnectionStatus.Name = "ecuConnectionStatus";
-            this.ecuConnectionStatus.Size = new System.Drawing.Size(104, 17);
+            this.ecuConnectionStatus.Size = new System.Drawing.Size(132, 24);
             this.ecuConnectionStatus.Text = "ECU disconnected";
             this.ecuConnectionStatus.ToolTipText = "Статус соединения с ЭБУ";
             // 
@@ -186,7 +216,7 @@ namespace OpenOLT
             this.onlineStatusLabel.BackColor = System.Drawing.Color.Gold;
             this.onlineStatusLabel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.onlineStatusLabel.Name = "onlineStatusLabel";
-            this.onlineStatusLabel.Size = new System.Drawing.Size(118, 17);
+            this.onlineStatusLabel.Size = new System.Drawing.Size(147, 24);
             this.onlineStatusLabel.Text = "online no supported";
             this.onlineStatusLabel.ToolTipText = "Поддержка ЭБУ online протокола";
             // 
@@ -195,7 +225,7 @@ namespace OpenOLT
             this.lambdaStatus.BackColor = System.Drawing.Color.Gold;
             this.lambdaStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.lambdaStatus.Name = "lambdaStatus";
-            this.lambdaStatus.Size = new System.Drawing.Size(123, 17);
+            this.lambdaStatus.Size = new System.Drawing.Size(159, 24);
             this.lambdaStatus.Text = "Lambda disconnected";
             this.lambdaStatus.ToolTipText = "Статус соединения с ШДК";
             // 
@@ -203,7 +233,7 @@ namespace OpenOLT
             // 
             this.lambdaValue.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.lambdaValue.Name = "lambdaValue";
-            this.lambdaValue.Size = new System.Drawing.Size(89, 17);
+            this.lambdaValue.Size = new System.Drawing.Size(120, 24);
             this.lambdaValue.Text = "[Lambda], [AFR]";
             this.lambdaValue.ToolTipText = "[Lambda], [AF], [AFR]";
             // 
@@ -211,7 +241,7 @@ namespace OpenOLT
             // 
             this.errorStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.errorStatus.Name = "errorStatus";
-            this.errorStatus.Size = new System.Drawing.Size(92, 17);
+            this.errorStatus.Size = new System.Drawing.Size(114, 24);
             this.errorStatus.Text = "Error not found";
             this.errorStatus.ToolTipText = "Статус ошибок ЭБУ";
             // 
@@ -219,7 +249,7 @@ namespace OpenOLT
             // 
             this.firmwareStatusLabel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.firmwareStatusLabel.Name = "firmwareStatusLabel";
-            this.firmwareStatusLabel.Size = new System.Drawing.Size(103, 17);
+            this.firmwareStatusLabel.Size = new System.Drawing.Size(132, 24);
             this.firmwareStatusLabel.Text = "firmware not load";
             this.firmwareStatusLabel.ToolTipText = "Открытая прошивка";
             // 
@@ -228,7 +258,7 @@ namespace OpenOLT
             this.dadModeStatusLabel.BackColor = System.Drawing.Color.Gold;
             this.dadModeStatusLabel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.dadModeStatusLabel.Name = "dadModeStatusLabel";
-            this.dadModeStatusLabel.Size = new System.Drawing.Size(34, 17);
+            this.dadModeStatusLabel.Size = new System.Drawing.Size(43, 24);
             this.dadModeStatusLabel.Text = "ДАД";
             this.dadModeStatusLabel.ToolTipText = "Расчет наполнения по ДАД";
             this.dadModeStatusLabel.Visible = false;
@@ -236,6 +266,8 @@ namespace OpenOLT
             // mainToolStrip
             // 
             this.mainToolStrip.ClickThrough = true;
+            this.mainToolStrip.Font = new System.Drawing.Font("Segoe UI", 0.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Inch);
+            this.mainToolStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.mainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectToolButton,
             this.disconnectToolButton,
@@ -254,9 +286,10 @@ namespace OpenOLT
             this.pluginSeparator,
             this.exitSeparator,
             this.exitButton});
-            this.mainToolStrip.Location = new System.Drawing.Point(0, 24);
+            this.mainToolStrip.Location = new System.Drawing.Point(0, 36);
             this.mainToolStrip.Name = "mainToolStrip";
-            this.mainToolStrip.Size = new System.Drawing.Size(1093, 25);
+            this.mainToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.mainToolStrip.Size = new System.Drawing.Size(1093, 39);
             this.mainToolStrip.TabIndex = 0;
             // 
             // connectToolButton
@@ -266,7 +299,7 @@ namespace OpenOLT
             this.connectToolButton.Image = global::OpenOLT.Properties.Resources.connect;
             this.connectToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.connectToolButton.Name = "connectToolButton";
-            this.connectToolButton.Size = new System.Drawing.Size(23, 22);
+            this.connectToolButton.Size = new System.Drawing.Size(36, 36);
             this.connectToolButton.Text = "Соединиться";
             // 
             // disconnectToolButton
@@ -276,7 +309,7 @@ namespace OpenOLT
             this.disconnectToolButton.Image = global::OpenOLT.Properties.Resources.disconnect;
             this.disconnectToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.disconnectToolButton.Name = "disconnectToolButton";
-            this.disconnectToolButton.Size = new System.Drawing.Size(23, 22);
+            this.disconnectToolButton.Size = new System.Drawing.Size(36, 36);
             this.disconnectToolButton.Text = "Разъединиться";
             // 
             // settingDialogToolButton
@@ -286,7 +319,7 @@ namespace OpenOLT
             this.settingDialogToolButton.Image = global::OpenOLT.Properties.Resources.tools;
             this.settingDialogToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.settingDialogToolButton.Name = "settingDialogToolButton";
-            this.settingDialogToolButton.Size = new System.Drawing.Size(23, 22);
+            this.settingDialogToolButton.Size = new System.Drawing.Size(36, 36);
             this.settingDialogToolButton.Text = "Диалог настройки";
             // 
             // toolStripButton1
@@ -296,7 +329,7 @@ namespace OpenOLT
             this.toolStripButton1.Image = global::OpenOLT.Properties.Resources.check_engine_ru;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Size = new System.Drawing.Size(36, 36);
             this.toolStripButton1.Text = "Список ошибок";
             // 
             // enabledOnlineCorrectionButton
@@ -306,13 +339,13 @@ namespace OpenOLT
             this.enabledOnlineCorrectionButton.Image = global::OpenOLT.Properties.Resources.action_go;
             this.enabledOnlineCorrectionButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.enabledOnlineCorrectionButton.Name = "enabledOnlineCorrectionButton";
-            this.enabledOnlineCorrectionButton.Size = new System.Drawing.Size(23, 22);
+            this.enabledOnlineCorrectionButton.Size = new System.Drawing.Size(36, 36);
             this.enabledOnlineCorrectionButton.ToolTipText = "Начать обучение";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
             // 
             // gaugeShowStripButton
             // 
@@ -321,7 +354,7 @@ namespace OpenOLT
             this.gaugeShowStripButton.Image = global::OpenOLT.Properties.Resources.gauge2;
             this.gaugeShowStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.gaugeShowStripButton.Name = "gaugeShowStripButton";
-            this.gaugeShowStripButton.Size = new System.Drawing.Size(23, 22);
+            this.gaugeShowStripButton.Size = new System.Drawing.Size(36, 36);
             this.gaugeShowStripButton.Text = "Показать/скрыть панель приборов";
             this.gaugeShowStripButton.ToolTipText = "Показать/скрыть панель приборов";
             // 
@@ -332,13 +365,13 @@ namespace OpenOLT
             this.showIndicPanelButton.Image = global::OpenOLT.Properties.Resources.layout;
             this.showIndicPanelButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.showIndicPanelButton.Name = "showIndicPanelButton";
-            this.showIndicPanelButton.Size = new System.Drawing.Size(23, 22);
+            this.showIndicPanelButton.Size = new System.Drawing.Size(36, 36);
             this.showIndicPanelButton.Text = "Показать/скрыть панель индикаторов";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
             // 
             // showRtGridStripButton
             // 
@@ -347,7 +380,7 @@ namespace OpenOLT
             this.showRtGridStripButton.Image = global::OpenOLT.Properties.Resources.table;
             this.showRtGridStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.showRtGridStripButton.Name = "showRtGridStripButton";
-            this.showRtGridStripButton.Size = new System.Drawing.Size(23, 22);
+            this.showRtGridStripButton.Size = new System.Drawing.Size(36, 36);
             this.showRtGridStripButton.Text = "Сетка РТ";
             // 
             // showChartStripButton
@@ -357,7 +390,7 @@ namespace OpenOLT
             this.showChartStripButton.Image = global::OpenOLT.Properties.Resources.chart_line;
             this.showChartStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.showChartStripButton.Name = "showChartStripButton";
-            this.showChartStripButton.Size = new System.Drawing.Size(23, 22);
+            this.showChartStripButton.Size = new System.Drawing.Size(36, 36);
             this.showChartStripButton.Text = "Панель диагностики";
             // 
             // showFEStripButton
@@ -367,7 +400,7 @@ namespace OpenOLT
             this.showFEStripButton.Image = global::OpenOLT.Properties.Resources.icon_extension;
             this.showFEStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.showFEStripButton.Name = "showFEStripButton";
-            this.showFEStripButton.Size = new System.Drawing.Size(23, 22);
+            this.showFEStripButton.Size = new System.Drawing.Size(36, 36);
             this.showFEStripButton.Text = "Редактор прошивки";
             // 
             // openFirmwareMapButton
@@ -377,7 +410,7 @@ namespace OpenOLT
             this.openFirmwareMapButton.Image = global::OpenOLT.Properties.Resources.open_map;
             this.openFirmwareMapButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openFirmwareMapButton.Name = "openFirmwareMapButton";
-            this.openFirmwareMapButton.Size = new System.Drawing.Size(23, 22);
+            this.openFirmwareMapButton.Size = new System.Drawing.Size(36, 36);
             this.openFirmwareMapButton.Text = "Открыть карту прошивки";
             // 
             // openFirmwareStripButton
@@ -387,18 +420,18 @@ namespace OpenOLT
             this.openFirmwareStripButton.Image = global::OpenOLT.Properties.Resources.open_bin;
             this.openFirmwareStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openFirmwareStripButton.Name = "openFirmwareStripButton";
-            this.openFirmwareStripButton.Size = new System.Drawing.Size(23, 22);
+            this.openFirmwareStripButton.Size = new System.Drawing.Size(36, 36);
             this.openFirmwareStripButton.Text = "Открыть прошивку";
             // 
             // pluginSeparator
             // 
             this.pluginSeparator.Name = "pluginSeparator";
-            this.pluginSeparator.Size = new System.Drawing.Size(6, 25);
+            this.pluginSeparator.Size = new System.Drawing.Size(6, 39);
             // 
             // exitSeparator
             // 
             this.exitSeparator.Name = "exitSeparator";
-            this.exitSeparator.Size = new System.Drawing.Size(6, 25);
+            this.exitSeparator.Size = new System.Drawing.Size(6, 39);
             // 
             // exitButton
             // 
@@ -407,12 +440,12 @@ namespace OpenOLT
             this.exitButton.Image = global::OpenOLT.Properties.Resources.exit;
             this.exitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.exitButton.Name = "exitButton";
-            this.exitButton.Size = new System.Drawing.Size(23, 22);
+            this.exitButton.Size = new System.Drawing.Size(36, 36);
             this.exitButton.Text = "Выход";
             // 
             // mainMenuStrip
             // 
-            this.mainMenuStrip.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.mainMenuStrip.Font = new System.Drawing.Font("Segoe UI", 0.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Inch, ((byte)(204)));
             this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileMenu,
             this.connectionMenu,
@@ -420,7 +453,7 @@ namespace OpenOLT
             this.settingsMenu});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
-            this.mainMenuStrip.Size = new System.Drawing.Size(1093, 24);
+            this.mainMenuStrip.Size = new System.Drawing.Size(1093, 36);
             this.mainMenuStrip.TabIndex = 1;
             this.mainMenuStrip.Text = "menuStrip1";
             // 
@@ -430,7 +463,7 @@ namespace OpenOLT
             this.toolStripMenuItem6,
             this.exitMenuItem});
             this.fileMenu.Name = "fileMenu";
-            this.fileMenu.Size = new System.Drawing.Size(48, 20);
+            this.fileMenu.Size = new System.Drawing.Size(77, 32);
             this.fileMenu.Text = "Файл";
             // 
             // toolStripMenuItem6
@@ -440,7 +473,7 @@ namespace OpenOLT
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
             this.toolStripMenuItem6.ShortcutKeyDisplayString = "Ctrl+O";
             this.toolStripMenuItem6.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(224, 22);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(348, 32);
             this.toolStripMenuItem6.Text = "Открыть прошивку";
             // 
             // exitMenuItem
@@ -448,7 +481,7 @@ namespace OpenOLT
             this.actionList.SetAction(this.exitMenuItem, this.exitAction);
             this.exitMenuItem.Image = global::OpenOLT.Properties.Resources.exit;
             this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.exitMenuItem.Size = new System.Drawing.Size(348, 32);
             this.exitMenuItem.Text = "Выход";
             // 
             // connectionMenu
@@ -457,7 +490,7 @@ namespace OpenOLT
             this.connectMenuItem,
             this.disconnectMenuItem});
             this.connectionMenu.Name = "connectionMenu";
-            this.connectionMenu.Size = new System.Drawing.Size(86, 20);
+            this.connectionMenu.Size = new System.Drawing.Size(143, 32);
             this.connectionMenu.Text = "Соединение";
             // 
             // connectMenuItem
@@ -467,7 +500,7 @@ namespace OpenOLT
             this.connectMenuItem.Name = "connectMenuItem";
             this.connectMenuItem.ShortcutKeyDisplayString = "F9";
             this.connectMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F9;
-            this.connectMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.connectMenuItem.Size = new System.Drawing.Size(277, 32);
             this.connectMenuItem.Text = "Соединиться";
             // 
             // disconnectMenuItem
@@ -477,7 +510,7 @@ namespace OpenOLT
             this.disconnectMenuItem.Name = "disconnectMenuItem";
             this.disconnectMenuItem.ShortcutKeyDisplayString = "F10";
             this.disconnectMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
-            this.disconnectMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.disconnectMenuItem.Size = new System.Drawing.Size(277, 32);
             this.disconnectMenuItem.Text = "Разъединиться";
             // 
             // pagesMenu
@@ -490,7 +523,7 @@ namespace OpenOLT
             this.toolStripMenuItem5,
             this.toolStripSeparator3});
             this.pagesMenu.Name = "pagesMenu";
-            this.pagesMenu.Size = new System.Drawing.Size(70, 20);
+            this.pagesMenu.Size = new System.Drawing.Size(116, 32);
             this.pagesMenu.Text = "Закладки";
             // 
             // toolStripMenuItem2
@@ -499,7 +532,7 @@ namespace OpenOLT
             this.toolStripMenuItem2.Image = global::OpenOLT.Properties.Resources.layout;
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(528, 32);
             this.toolStripMenuItem2.Text = "Показать/скрыть панель индикаторов";
             // 
             // toolStripMenuItem3
@@ -509,7 +542,7 @@ namespace OpenOLT
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.ShortcutKeyDisplayString = "F11";
             this.toolStripMenuItem3.ShortcutKeys = System.Windows.Forms.Keys.F11;
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(528, 32);
             this.toolStripMenuItem3.Text = "Список ошибок";
             // 
             // toolStripMenuItem4
@@ -518,7 +551,7 @@ namespace OpenOLT
             this.toolStripMenuItem4.Image = global::OpenOLT.Properties.Resources.gauge2;
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             this.toolStripMenuItem4.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(528, 32);
             this.toolStripMenuItem4.Text = "Показать/скрыть панель приборов";
             // 
             // toolStripMenuItem1
@@ -528,7 +561,7 @@ namespace OpenOLT
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.ShortcutKeyDisplayString = "F3";
             this.toolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(528, 32);
             this.toolStripMenuItem1.Text = "Панель диагностики";
             // 
             // toolStripMenuItem5
@@ -538,13 +571,13 @@ namespace OpenOLT
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
             this.toolStripMenuItem5.ShortcutKeyDisplayString = "F4";
             this.toolStripMenuItem5.ShortcutKeys = System.Windows.Forms.Keys.F4;
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(528, 32);
             this.toolStripMenuItem5.Text = "Сетка РТ";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(318, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(525, 6);
             // 
             // settingsMenu
             // 
@@ -552,7 +585,7 @@ namespace OpenOLT
             this.settingDialogMenuItem,
             this.fullScreenMenuItem});
             this.settingsMenu.Name = "settingsMenu";
-            this.settingsMenu.Size = new System.Drawing.Size(79, 20);
+            this.settingsMenu.Size = new System.Drawing.Size(130, 32);
             this.settingsMenu.Text = "Настройки";
             // 
             // settingDialogMenuItem
@@ -562,7 +595,7 @@ namespace OpenOLT
             this.settingDialogMenuItem.Name = "settingDialogMenuItem";
             this.settingDialogMenuItem.ShortcutKeyDisplayString = "F2";
             this.settingDialogMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.settingDialogMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.settingDialogMenuItem.Size = new System.Drawing.Size(299, 32);
             this.settingDialogMenuItem.Text = "Диалог настройки";
             // 
             // fullScreenMenuItem
@@ -571,7 +604,7 @@ namespace OpenOLT
             this.fullScreenMenuItem.Name = "fullScreenMenuItem";
             this.fullScreenMenuItem.ShortcutKeyDisplayString = "F12";
             this.fullScreenMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.fullScreenMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.fullScreenMenuItem.Size = new System.Drawing.Size(299, 32);
             this.fullScreenMenuItem.Text = "Во весь экран";
             // 
             // actionList
@@ -722,7 +755,7 @@ namespace OpenOLT
             this.updateThread.WorkerSupportsCancellation = true;
             this.updateThread.DoWork += new System.ComponentModel.DoWorkEventHandler(this.updateThread_DoWork);
             // 
-            // LambdaAdapter
+            // lambdaAdapter
             // 
             this.lambdaAdapter.ReadTimeout = 100;
             this.lambdaAdapter.SmoothingFactor = ((byte)(7));
@@ -737,9 +770,9 @@ namespace OpenOLT
             this.mainPanel.Controls.Add(this.diagChartPanel);
             this.mainPanel.Controls.Add(this.firmwareEditorPanel);
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainPanel.Location = new System.Drawing.Point(193, 49);
+            this.mainPanel.Location = new System.Drawing.Point(193, 75);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(900, 600);
+            this.mainPanel.Size = new System.Drawing.Size(900, 567);
             this.mainPanel.TabIndex = 6;
             // 
             // rtGridPanel
@@ -748,7 +781,7 @@ namespace OpenOLT
             this.rtGridPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtGridPanel.Location = new System.Drawing.Point(0, 0);
             this.rtGridPanel.Name = "rtGridPanel";
-            this.rtGridPanel.Size = new System.Drawing.Size(900, 600);
+            this.rtGridPanel.Size = new System.Drawing.Size(900, 567);
             this.rtGridPanel.TabIndex = 5;
             // 
             // diagChartPanel
@@ -760,7 +793,7 @@ namespace OpenOLT
             this.diagChartPanel.Location = new System.Drawing.Point(0, 0);
             this.diagChartPanel.MinChartHeight = 150;
             this.diagChartPanel.Name = "diagChartPanel";
-            this.diagChartPanel.Size = new System.Drawing.Size(900, 600);
+            this.diagChartPanel.Size = new System.Drawing.Size(900, 567);
             this.diagChartPanel.TabIndex = 3;
             this.diagChartPanel.Visible = false;
             // 
@@ -769,7 +802,7 @@ namespace OpenOLT
             this.firmwareEditorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.firmwareEditorPanel.Location = new System.Drawing.Point(0, 0);
             this.firmwareEditorPanel.Name = "firmwareEditorPanel";
-            this.firmwareEditorPanel.Size = new System.Drawing.Size(900, 600);
+            this.firmwareEditorPanel.Size = new System.Drawing.Size(900, 567);
             this.firmwareEditorPanel.TabIndex = 4;
             this.firmwareEditorPanel.Visible = false;
             // 
@@ -777,40 +810,10 @@ namespace OpenOLT
             // 
             this.diagGaugePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.diagGaugePanel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.diagGaugePanel.Location = new System.Drawing.Point(0, 49);
+            this.diagGaugePanel.Location = new System.Drawing.Point(0, 75);
             this.diagGaugePanel.Name = "diagGaugePanel";
-            this.diagGaugePanel.Size = new System.Drawing.Size(193, 600);
+            this.diagGaugePanel.Size = new System.Drawing.Size(193, 567);
             this.diagGaugePanel.TabIndex = 2;
-            // 
-            // warnFuseStatus
-            // 
-            this.warnFuseStatus.BackColor = System.Drawing.Color.Tomato;
-            this.warnFuseStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.warnFuseStatus.Name = "warnFuseStatus";
-            this.warnFuseStatus.Size = new System.Drawing.Size(37, 17);
-            this.warnFuseStatus.Text = "Форс";
-            this.warnFuseStatus.ToolTipText = "Аварийно высокая загрузка форсунок";
-            this.warnFuseStatus.Visible = false;
-            // 
-            // warnUbatStatus
-            // 
-            this.warnUbatStatus.BackColor = System.Drawing.Color.Tomato;
-            this.warnUbatStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.warnUbatStatus.Name = "warnUbatStatus";
-            this.warnUbatStatus.Size = new System.Drawing.Size(36, 17);
-            this.warnUbatStatus.Text = "Ubat";
-            this.warnUbatStatus.ToolTipText = "Аварийное напряжение бортсети";
-            this.warnUbatStatus.Visible = false;
-            // 
-            // warnPressStatus
-            // 
-            this.warnPressStatus.BackColor = System.Drawing.Color.Tomato;
-            this.warnPressStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.warnPressStatus.Name = "warnPressStatus";
-            this.warnPressStatus.Size = new System.Drawing.Size(37, 17);
-            this.warnPressStatus.Text = "Press";
-            this.warnPressStatus.ToolTipText = "Аварийное давление";
-            this.warnPressStatus.Visible = false;
             // 
             // MainForm
             // 

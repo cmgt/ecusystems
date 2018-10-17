@@ -146,10 +146,12 @@
             // ramTablesBS
             // 
             this.ramTablesBS.DataSource = typeof(CtpMaps.DataTypes.MapEntry);
+            this.ramTablesBS.CurrentChanged += new System.EventHandler(this.ramTablesBS_CurrentChanged);
             // 
             // rtGrid
             // 
-            this.rtGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.rtGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtGrid.CurrentCol = 0;
             this.rtGrid.CurrentRow = 0;
@@ -157,13 +159,12 @@
             this.rtGrid.FollowTableRt = true;
             this.rtGrid.HandleValueChanged = true;
             this.rtGrid.HeaderWidth = 60;
-            this.rtGrid.Location = new System.Drawing.Point(6, 60);
+            this.rtGrid.Location = new System.Drawing.Point(0, 54);
             this.rtGrid.MinimumSize = new System.Drawing.Size(750, 380);
             this.rtGrid.Name = "rtGrid";
             this.rtGrid.ReadOnly = true;
-            this.rtGrid.Size = new System.Drawing.Size(890, 425);
-            this.rtGrid.TabIndex = 2;
-            this.rtGrid.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(this.rtGrid_PropertyChanged);
+            this.rtGrid.Size = new System.Drawing.Size(899, 433);
+            this.rtGrid.TabIndex = 4;
             // 
             // RamTableControl
             // 
@@ -192,8 +193,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnReturn;
         private System.Windows.Forms.BindingSource ramTablesBS;
-        private CalibrGui.TableControl rtGrid;
         private System.Windows.Forms.Button btnRestore;
         private System.Windows.Forms.Label label3;
+        private CalibrGui.TableControl rtGrid;
     }
 }

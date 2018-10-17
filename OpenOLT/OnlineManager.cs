@@ -106,6 +106,8 @@ namespace OpenOLT
                 progress.Message = "Загрузка калибровок";                
                 OltProtocol.WriteRam(firmwareManager.Kgbc.Address, firmwareManager.Kgbc.GetRawBuffer());
                 progress.IterationComplete(this, 50, 100);
+                OltProtocol.WriteRam(firmwareManager.Kgbc_press.Address, firmwareManager.Kgbc_press.GetRawBuffer());
+                progress.IterationComplete(this, 50, 100);
                 OltProtocol.WriteRam(firmwareManager.Gbc.Address, firmwareManager.Gbc.GetRawBuffer());
                 progress.IterationComplete(this, 100, 100);
                 progress.Close();

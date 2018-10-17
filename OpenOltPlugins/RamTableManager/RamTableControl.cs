@@ -49,6 +49,10 @@ namespace RamTablePlugin
             else
             {
                 currentRam.Text = captureManager.CapturedTable.Name;
+                rtGrid.XLabel = captureManager.table.xUnits;
+                rtGrid.YLabel = captureManager.table.Units;
+                rtGrid.Max = captureManager.table.Max;
+                rtGrid.Min = captureManager.table.Min;
                 currentRam.BackColor = Color.Lime;
             }
         }
@@ -91,6 +95,11 @@ namespace RamTablePlugin
             if (e.PropertyName != "FollowTableRt" || !rtGrid.FollowTableRt) return;            
             captureManager.SetCurrentIndex();
             rtGrid.CalcAndSetCurrentCell();
+        }
+
+        private void ramTablesBS_CurrentChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using EcuCommunication.Protocols.Requests;
 using Helper;
 using Helper.ProgressDialog;
+using SerialPortEx;
 
 namespace EcuCommunication.Protocols
 {
@@ -119,7 +120,7 @@ namespace EcuCommunication.Protocols
 
         private readonly IoControlRequest ioControlRequest = new IoControlRequest();
 
-        private readonly SerialPort serialPort;
+        private readonly SafeSerialPort serialPort;
         private readonly BackgroundWorker readThread;
 
         private bool connected;
@@ -155,6 +156,7 @@ namespace EcuCommunication.Protocols
         public OltProtocolVersion Version { get; set; }
 
         private bool isOnline;
+        private static long lastUpdateTime;
         private byte[] ecuSn;
         private byte[] ecuSnHashBuffer = new byte[240];
 
@@ -217,7 +219,7 @@ namespace EcuCommunication.Protocols
             Requests = new Queue<Request>();
             readThread = new BackgroundWorker {WorkerSupportsCancellation = true};
             readThread.DoWork += readThread_DoWork;
-            serialPort = new SerialPort("COM1", 10400, Parity.None, 8, StopBits.One)
+            serialPort = new SafeSerialPort("COM1", 10400, Parity.None, 8, StopBits.One)
             {
                 WriteTimeout = 100,
                 ReadTimeout = 100
@@ -254,6 +256,13 @@ namespace EcuCommunication.Protocols
             AddOperationLog(String.Format("Change ECU serial port baud rate: {0}", serialPort.BaudRate));
         }
 
+        private static void DataReceivedHandler(
+                        object sender,
+                        SerialDataReceivedEventArgs e)
+        {
+            lastUpdateTime = DateTime.Now.AddSeconds(10).Ticks;
+            //Console.WriteLine("data received:"+ DateTime.Now );
+        }
         /// <summary>
         /// Запуск опроса ЭБУ
         /// </summary>
@@ -261,7 +270,7 @@ namespace EcuCommunication.Protocols
         public bool Start()
         {
             IsBusy = true;
-
+            lastUpdateTime = DateTime.Now.AddSeconds(5).Ticks;
             try
             {
                 serialPort.PortName = PortName;
@@ -269,6 +278,7 @@ namespace EcuCommunication.Protocols
                 serialPort.Open();
                 serialPort.DiscardInBuffer();
                 serialPort.DiscardOutBuffer();
+                serialPort.DataReceived += DataReceivedHandler;
                 AddOperationLog(String.Format("Open ECU serial port: {0}", PortName));
 
                 AddOperationLog("Send start communication...");
@@ -340,6 +350,7 @@ namespace EcuCommunication.Protocols
 
                 return true;
             }
+           
             finally
             {
                 IsBusy = false;
@@ -361,7 +372,7 @@ namespace EcuCommunication.Protocols
             try
             {
                 IdleRequest = TesterPresent;
-                readThread.CancelAsync();                
+                readThread.CancelAsync();
                 BackgroundWorkerHelper.Wait(readThread);
                 IdleRequest = null;
                 serialPort.DiscardInBuffer();
@@ -371,9 +382,11 @@ namespace EcuCommunication.Protocols
                 if (baundRate != enBaundRate.Low)
                     serialPort.BaudRate = 10400;
                 AddOperationLog("Send stop communication...");
-                ExecuteRequest(StopCommunication);                  
+                ExecuteRequest(StopCommunication);
             }
-            finally 
+
+
+            finally
             {
                 serialPort.DiscardInBuffer();
                 serialPort.DiscardOutBuffer();
@@ -642,6 +655,12 @@ namespace EcuCommunication.Protocols
                 catch{}
                 finally
                 {
+                    if (lastUpdateTime < DateTime.Now.Ticks) {
+                        //Connected = false;
+                        //IsBusy = false;
+                        //Stop();
+
+                    }
                     if (TraceEnabled)
                     {
                         var source = String.Format("{0}\t\t->\t{1}", DataHelper.ByteArrayToStr(buffer),

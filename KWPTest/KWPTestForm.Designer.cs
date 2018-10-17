@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.timeBar = new System.Windows.Forms.TrackBar();
             this.button4 = new System.Windows.Forms.Button();
             this.btnOpenLCTrace = new System.Windows.Forms.Button();
             this.useTraceCheckBox = new System.Windows.Forms.CheckBox();
@@ -72,6 +73,7 @@
             this.logFileStatusLable = new System.Windows.Forms.ToolStripStatusLabel();
             this.readThread = new System.ComponentModel.BackgroundWorker();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.timeBar)).BeginInit();
             this.panel2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -82,6 +84,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.timeBar);
             this.panel1.Controls.Add(this.button4);
             this.panel1.Controls.Add(this.btnOpenLCTrace);
             this.panel1.Controls.Add(this.useTraceCheckBox);
@@ -110,8 +113,16 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(579, 85);
+            this.panel1.Size = new System.Drawing.Size(596, 129);
             this.panel1.TabIndex = 0;
+            // 
+            // timeBar
+            // 
+            this.timeBar.Location = new System.Drawing.Point(0, 84);
+            this.timeBar.Name = "timeBar";
+            this.timeBar.Size = new System.Drawing.Size(596, 45);
+            this.timeBar.TabIndex = 27;
+            this.timeBar.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // button4
             // 
@@ -369,7 +380,7 @@
             this.panel2.Controls.Add(this.btnSet);
             this.panel2.Controls.Add(this.byteValue);
             this.panel2.Controls.Add(this.byteNumber);
-            this.panel2.Location = new System.Drawing.Point(383, 91);
+            this.panel2.Location = new System.Drawing.Point(400, 175);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(176, 24);
             this.panel2.TabIndex = 5;
@@ -406,11 +417,11 @@
             // 
             this.protocolTrace.Dock = System.Windows.Forms.DockStyle.Fill;
             this.protocolTrace.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.protocolTrace.Location = new System.Drawing.Point(0, 85);
+            this.protocolTrace.Location = new System.Drawing.Point(0, 129);
             this.protocolTrace.Multiline = true;
             this.protocolTrace.Name = "protocolTrace";
             this.protocolTrace.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.protocolTrace.Size = new System.Drawing.Size(579, 72);
+            this.protocolTrace.Size = new System.Drawing.Size(596, 112);
             this.protocolTrace.TabIndex = 1;
             // 
             // openFirmware
@@ -427,10 +438,10 @@
             this.firmwareStatusLabel,
             this.keyHashLabel,
             this.logFileStatusLable});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 157);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 241);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.ShowItemToolTips = true;
-            this.statusStrip1.Size = new System.Drawing.Size(579, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(596, 24);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -491,7 +502,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(579, 181);
+            this.ClientSize = new System.Drawing.Size(596, 265);
             this.Controls.Add(this.protocolTrace);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.panel2);
@@ -501,6 +512,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.timeBar)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -554,6 +566,7 @@
         private System.Windows.Forms.CheckBox useTraceCheckBox;
         private System.Windows.Forms.Button btnOpenLCTrace;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TrackBar timeBar;
     }
 }
 

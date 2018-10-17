@@ -81,6 +81,7 @@
             this.btnOpen.TabIndex = 2;
             this.btnOpen.Text = "Открыть";
             this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
             // delSet
             // 

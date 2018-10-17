@@ -34,21 +34,27 @@ namespace OpenOltTypes
         uint SWDigest { get; }
         TableValues<byte, short> Gbc { get; }
         TableValues<byte, float> Kgbc { get; }
+        TableValues<byte, float> Kgbc_press { get; }
         int[] RpmRt32 { get; }
         int[] RpmRt16 { get; }
         int[] TwatRt { get; }
         int[] GbcRt { get; }
         int[] ThrRt { get; }
         int[] PressRt { get; }
+        int[] PressRt32 { get; }
         float[] Rpm16_16RtPoints { get; }
         float[] Rpm32_16RtPoints { get; }
+        float[] Rpm32_32RtPoints { get; }
         float[] GbcRtPoints { get; }
         float[] ThrRtPoints { get; }
+        float[] PressRtPoints { get; }
+        float[] PressRt32Points { get; }
         float[] GetAxis(Entry2D entry2D);
         float[] GetAxisX(Entry3D entry3D);
         float[] GetAxisY(Entry3D entry3D);
         float[] GetAxis(string name, double start, double end, int count);
         bool OpenDialog(IWin32Window owner);
+        bool IsVolumetricEfficiency { get; set; }
         void WriteKGBCValue(int index);
         void WriteGBCValue(int index);
     }

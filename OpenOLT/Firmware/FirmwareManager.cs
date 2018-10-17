@@ -30,16 +30,22 @@ namespace OpenOLT.Firmware
         public string FilePath { get; private set; }
         public bool IsOpened { get; private set; }
         public bool IsFastRpm { get; private set; }
-        private int[] rpmRt32 = new int[16];
-        private int[] rpmRt16 = new int[32];
+        public bool IsVolumetricEfficiency { get; set; }
+        private int[] rpmRt32 = new int[32];
+        private int[] rpmRt16 = new int[16];
         private readonly int[] twatRt = new int[39];
         private readonly float[] rpm16_16RtPoints = new float[16 * 16];
         private readonly float[] rpm32_16RtPoints = new float[32 * 16];
+        private readonly float[] rpm32_32RtPoints = new float[32 * 32];
+
         private readonly int[] gbcRt = new int[16];
         private readonly float[] gbcRtPoints = new float[256];
         private readonly int[] thrRt = new int[16];
         private readonly float[] thrRtPoints = new float[256];
         private readonly int[] pressRt = new int[16];
+        private readonly int[] pressRt32 = new int[32];
+        private readonly float[] pressRtPoints = new float[256];
+        private readonly float[] pressRt32Points = new float[32*32];
 
         private TableValues<byte, short> gbc;
         private TableValues<byte, float> kgbc;        
@@ -57,6 +63,9 @@ namespace OpenOLT.Firmware
         private int rpm32ThrRtIndex;
         private int twatRtIndex;
         private int rpmPressRtIndex;
+        private int rpm32PressRtIndex;
+
+        private bool isVE;
         private readonly OnlineManager onlineManager;
         private int stabylityCount;
         private int oldRpmThrRtIndex;
@@ -168,6 +177,16 @@ namespace OpenOLT.Firmware
             }
         }
 
+        public int Rpm32PressRtIndex
+        {
+            get { return rpm32PressRtIndex; }
+            private set
+            {
+                if (rpm32PressRtIndex == value) return;
+                rpm32PressRtIndex = value;
+                OnPropertyChanged("Rpm32PressRtIndex");
+            }
+        }
         public TableValues<byte, short> Gbc
         {
             get { return gbc; }
@@ -178,6 +197,10 @@ namespace OpenOLT.Firmware
             get { return kgbc; }
         }
 
+        public TableValues<byte, float> Kgbc_press
+        {
+            get { return kgbc_press; }
+        }
         public int[] RpmRt32
         {
             get { return rpmRt32; }
@@ -208,6 +231,11 @@ namespace OpenOLT.Firmware
             get { return pressRt; }
         }
 
+        public int[] PressRt32
+        {
+            get { return pressRt32; }
+        }
+
         public float[] Rpm16_16RtPoints
         {
             get { return rpm16_16RtPoints; }
@@ -216,6 +244,11 @@ namespace OpenOLT.Firmware
         public float[] Rpm32_16RtPoints
         {
             get { return rpm32_16RtPoints; }
+        }
+
+        public float[] Rpm32_32RtPoints
+        {
+            get { return rpm32_32RtPoints; }
         }
 
         public float[] GbcRtPoints
@@ -228,6 +261,15 @@ namespace OpenOLT.Firmware
             get { return thrRtPoints; }
         }
 
+        public float[] PressRtPoints
+        {
+            get { return pressRtPoints; }
+        }
+
+        public float[] PressRt32Points
+        {
+            get { return pressRt32Points; }
+        }
         #endregion
 
         public event EventHandler<EventArgs> OnOpenFirmware;
@@ -249,6 +291,7 @@ namespace OpenOLT.Firmware
         {
             J7esFlags = new J7esFlags();
             this.onlineManager = onlineManager;
+            isVE = false;
             Name = String.Empty;
             //var path = Application.StartupPath + @"\firmwares";
             openFileDialog = new OpenFileDialog
@@ -270,8 +313,8 @@ namespace OpenOLT.Firmware
         private void KGBOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != "Table") return;
-            var address = kgbc.Address;
-            var tablebuffer = kgbc.GetRawBuffer();
+            var address = (isVE ? kgbc_press : kgbc).Address;
+            var tablebuffer = (isVE ? kgbc_press : kgbc).GetRawBuffer();
             WriteRam(address, address, tablebuffer);
         }        
 
@@ -348,7 +391,7 @@ namespace OpenOLT.Firmware
             IsFastRpm = DataHelper.IndexOf(buffer, new byte[] {0x90, 0x61, 0x3C, 0xE5, 0x55}) != -1;
 
             J7esFlags.Prepare(buffer);
-
+            FillKGbc();
             if (J7esFlags.IsDadMode && !J7esFlags.IsCommonKGBCTable)
                 kgbc.Address = FirmwareHelper.KGbcJ7esDadAddr;
 
@@ -368,13 +411,19 @@ namespace OpenOLT.Firmware
         private void FillPressRT()
         {
             var minPress = (buffer[FirmwareHelper.MinPressAddr] | (buffer[FirmwareHelper.MinPressAddr + 1] << 8))/6.0;
-            var rangePress = 82485.0 / (buffer[FirmwareHelper.RangePressAddr] == 0 ? 1 : buffer[FirmwareHelper.RangePressAddr]);
-            var stepPress = rangePress / (pressRt.Length - 1);
+            var rangePress = Math.Round(82485.0 / (buffer[FirmwareHelper.RangePressAddr] == 0 ? 1 : buffer[FirmwareHelper.RangePressAddr]), 2, MidpointRounding.AwayFromZero);
+            var stepPress = rangePress / (pressRt.Length - 2);
 
             for (var i = 0; i < pressRt.Length; i++)
             {
                 pressRt[i] = (int)Math.Round(minPress + stepPress * i, MidpointRounding.AwayFromZero);
-            }  
+            }
+
+            stepPress = Math.Round(rangePress / (pressRt32.Length - 2),1,MidpointRounding.AwayFromZero);
+            for (var i = 0; i < pressRt32.Length; i++)
+            {
+                pressRt32[i] = (int)Math.Round(minPress + stepPress * i, MidpointRounding.AwayFromZero);
+            }
         }
 
         private void FillTWatRT()
@@ -401,7 +450,8 @@ namespace OpenOLT.Firmware
                 {
                     rpm16_16RtPoints[index] = j;// rpmRt32[j];
                     thrRtPoints[index] = i;// thrRt[i];
-                    gbcRtPoints[index++] = i;// gbcRt[i];
+                    gbcRtPoints[index] = i;// gbcRt[i];
+                    pressRtPoints[index++]= i;
                 }
             }
 
@@ -411,6 +461,16 @@ namespace OpenOLT.Firmware
                 for (int j = 0; j < 32; j++)
                 {
                     rpm32_16RtPoints[index++] = j;// rpmRt32[j];
+                }
+            }
+
+            index = 0;
+            for (int i = 0; i < 32; i++)
+            {
+                for (int j = 0; j < 32; j++)
+                {
+                    pressRt32Points[index] = i;// press32Rt32[i];
+                    rpm32_32RtPoints[index++] = j;// rpm32Rt32[j];
                 }
             }
         }
@@ -435,7 +495,7 @@ namespace OpenOLT.Firmware
         private void FillKGbcPress()
         {
             var colCount = J7esFlags.IsKgbcPress32_32 ? 32 : 16;
-            var rowCount = colCount;
+            var rowCount = J7esFlags.IsKgbcPress32_32 ? 32 : 16 ;
 
             kgbc_press = new TableValues<byte, float>(FirmwareHelper.KGbcPressAddr, colCount, rowCount,
                                                                             source =>
@@ -542,13 +602,15 @@ namespace OpenOLT.Firmware
             {
                 ThrRtIndex = DataHelper.Swap((byte)(thrSampling[Math.Min(diagData.TRT, thrSampling.Length - 1)] + 8)) & 0xF;
                 GbcRtIndex = DataHelper.NearCell(gbcRt, (int)Math.Round(diagData.GBC, MidpointRounding.AwayFromZero));
-                RpmRtIndex = DataHelper.NearCell(rpmRt32, diagData.RPM);
-                RpmRt32Index = DataHelper.NearCell(rpmRt16, diagData.RPM);
+                RpmRtIndex = DataHelper.NearCell(rpmRt16, diagData.RPM);
+                RpmRt32Index = DataHelper.NearCell(rpmRt32, diagData.RPM);
                 TwatRtIndex = DataHelper.NearCell(twatRt, diagData.TWAT);
                 RpmThrRtIndex = 16 * ThrRtIndex + RpmRtIndex;
+                Rpm32PressRtIndex = (((byte)(j7esDiag.PRESS_RT + 8)) & 0xF0) + RpmRt32Index;
             }
 
             Rpm32ThrRtIndex = 32 * ThrRtIndex + RpmRt32Index;
+            
             RpmGbcRtIndex = onlineManager.OltProtocol.Version == OltProtocolVersion.OltDiagV1
                                 ? diagData.RPM_GBC_RT
                                 : 16*GbcRtIndex + RpmRtIndex;
@@ -580,7 +642,7 @@ namespace OpenOLT.Firmware
             if (!TestStability(diagData)) return;
 
             var cellIndex = J7esFlags.IsKgbc32_16 ? Rpm32ThrRtIndex : RpmThrRtIndex;
-            var cell = kgbc.Cell(cellIndex);
+            var cell = (isVE ? kgbc_press : kgbc).Cell(cellIndex);
             if (!cell.StopStudy)
             {
                 FuelCorrection(cellIndex, diagData);
@@ -635,7 +697,7 @@ namespace OpenOLT.Firmware
 
         private void KGBCCorrection(int cellIndex, DiagData diagData)
         {
-            var cell = kgbc.Cell(cellIndex);
+            var cell = (isVE ? kgbc_press: kgbc).Cell(cellIndex);
             //var k1 = kgbc.GetValue(cellIndex);
             var k1 = cell.StudyValue;
             var alf1 = diagData.ALF;
@@ -667,8 +729,10 @@ namespace OpenOLT.Firmware
             cell.StudyValue = k_new;
 
             var k_new_lim = Math.Max(kmin, Math.Min(kmax, k_new));
-            kgbc.SetValue(cellIndex, k_new_lim);
+            
+            (isVE? kgbc_press: kgbc).SetValue(cellIndex, k_new_lim);            
             WriteKGBCValue(cellIndex);
+
             onlineManager.OltProtocol.OperationLog.AppendLine(String.Format("kgbc: {0} {1} {2} {3} {4} {5}|{6}|{7}",
                                                                         cellIndex, k1.ToString("0.##"),
                                                                         k2.ToString("0.##"), e.ToString("0.##"),
@@ -678,12 +742,13 @@ namespace OpenOLT.Firmware
 
         public void WriteKGBCValue(int index)
         {            
-            var source = kgbc[index];
-            var e = new AutoCorrectionEventArgs(kgbc.Address, index, source);
+            
+            var source = isVE ? kgbc_press[index] : kgbc[index];
+            var e = new AutoCorrectionEventArgs((isVE ? kgbc_press:kgbc).Address, index, source);
             OnAutoCorrection(e);
             if (e.Cancel) return;
 
-            var address = kgbc.CalcAddress(index);
+            var address = (isVE ? kgbc_press: kgbc).CalcAddress(index);
             WriteRam(address, address, source);
         }
 
@@ -774,7 +839,7 @@ namespace OpenOLT.Firmware
             switch (name)
             {
                 case "!001-613C-40":
-                    return (from item in rpmRt16 select (float)item).ToArray();
+                    return (from item in rpmRt32 select (float)item).ToArray();
 
                 case "!002-613C-40":
                     return (from item in rpmRt32 select (float)item).ToArray();
