@@ -32,7 +32,7 @@
             this.components = new System.ComponentModel.Container();
             this.rtGrid = new System.Windows.Forms.DataGridView();
             this.rtGridTypeGroupBox = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.currentRTLabel = new System.Windows.Forms.Label();
             this.cbCorrectionParams = new System.Windows.Forms.CheckBox();
             this.thrRtPersent = new System.Windows.Forms.Label();
             this.rpmThrRtIndex = new System.Windows.Forms.Label();
@@ -45,6 +45,7 @@
             this.cbxFollowRT = new System.Windows.Forms.CheckBox();
             this.disableFuelCutoff = new System.Windows.Forms.CheckBox();
             this.rtValueType = new System.Windows.Forms.GroupBox();
+            this.veValue = new System.Windows.Forms.CheckBox();
             this.gbcValue = new System.Windows.Forms.RadioButton();
             this.pcnValue = new System.Windows.Forms.RadioButton();
             this.rtToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -69,12 +70,12 @@
             this.rtGrid.Location = new System.Drawing.Point(3, 73);
             this.rtGrid.Name = "rtGrid";
             this.rtGrid.ReadOnly = true;
-            this.rtGrid.RowHeadersWidth = 55;
+            this.rtGrid.RowHeadersWidth = 60;
             this.rtGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.rtGrid.ShowCellErrors = false;
             this.rtGrid.ShowEditingIcon = false;
             this.rtGrid.ShowRowErrors = false;
-            this.rtGrid.Size = new System.Drawing.Size(894, 394);
+            this.rtGrid.Size = new System.Drawing.Size(900, 394);
             this.rtGrid.TabIndex = 0;
             this.rtGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.rtGrid_CellDoubleClick);
             this.rtGrid.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.rtGrid_CellPainting);
@@ -82,7 +83,7 @@
             // 
             // rtGridTypeGroupBox
             // 
-            this.rtGridTypeGroupBox.Controls.Add(this.label1);
+            this.rtGridTypeGroupBox.Controls.Add(this.currentRTLabel);
             this.rtGridTypeGroupBox.Controls.Add(this.cbCorrectionParams);
             this.rtGridTypeGroupBox.Controls.Add(this.thrRtPersent);
             this.rtGridTypeGroupBox.Controls.Add(this.rpmThrRtIndex);
@@ -94,14 +95,14 @@
             this.rtGridTypeGroupBox.TabStop = false;
             this.rtGridTypeGroupBox.Text = " Сетка РТ: ";
             // 
-            // label1
+            // currentRTLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 42);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(48, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "[rpm][thr]";
+            this.currentRTLabel.AutoSize = true;
+            this.currentRTLabel.Location = new System.Drawing.Point(6, 42);
+            this.currentRTLabel.Name = "currentRTLabel";
+            this.currentRTLabel.Size = new System.Drawing.Size(48, 13);
+            this.currentRTLabel.TabIndex = 7;
+            this.currentRTLabel.Text = "[rpm][thr]";
             // 
             // cbCorrectionParams
             // 
@@ -147,7 +148,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(3);
-            this.panel1.Size = new System.Drawing.Size(900, 71);
+            this.panel1.Size = new System.Drawing.Size(905, 71);
             this.panel1.TabIndex = 2;
             // 
             // label2
@@ -225,6 +226,7 @@
             // 
             // rtValueType
             // 
+            this.rtValueType.Controls.Add(this.veValue);
             this.rtValueType.Controls.Add(this.gbcValue);
             this.rtValueType.Controls.Add(this.pcnValue);
             this.rtValueType.Dock = System.Windows.Forms.DockStyle.Left;
@@ -234,6 +236,19 @@
             this.rtValueType.TabIndex = 2;
             this.rtValueType.TabStop = false;
             this.rtValueType.Text = " Значения в сетке: ";
+            // 
+            // veValue
+            // 
+            this.veValue.AutoSize = true;
+            this.veValue.Checked = true;
+            this.veValue.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.veValue.Location = new System.Drawing.Point(73, 18);
+            this.veValue.Name = "veValue";
+            this.veValue.Size = new System.Drawing.Size(40, 17);
+            this.veValue.TabIndex = 5;
+            this.veValue.Text = "VE";
+            this.veValue.UseVisualStyleBackColor = true;
+            this.veValue.CheckStateChanged += new System.EventHandler(this.veValue_CheckStateChanged);
             // 
             // gbcValue
             // 
@@ -263,7 +278,7 @@
             // 
             this.rtGridFillProgressBar.Location = new System.Drawing.Point(3, 473);
             this.rtGridFillProgressBar.Name = "rtGridFillProgressBar";
-            this.rtGridFillProgressBar.Size = new System.Drawing.Size(894, 23);
+            this.rtGridFillProgressBar.Size = new System.Drawing.Size(902, 23);
             this.rtGridFillProgressBar.TabIndex = 3;
             // 
             // rtChart
@@ -294,7 +309,7 @@
             this.Controls.Add(this.rtGrid);
             this.Controls.Add(this.rtChart);
             this.Name = "RTGridPanel";
-            this.Size = new System.Drawing.Size(900, 502);
+            this.Size = new System.Drawing.Size(905, 510);
             ((System.ComponentModel.ISupportInitialize)(this.rtGrid)).EndInit();
             this.rtGridTypeGroupBox.ResumeLayout(false);
             this.rtGridTypeGroupBox.PerformLayout();
@@ -328,9 +343,10 @@
         private System.Windows.Forms.Button btnSmoothing;
         private System.Windows.Forms.TextBox smoothingFactor;
         private System.Windows.Forms.CheckBox cbCorrectionParams;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label currentRTLabel;
         private System.Windows.Forms.CheckBox cbxFollowRT;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label hotSpotValue;
+        private System.Windows.Forms.CheckBox veValue;
     }
 }

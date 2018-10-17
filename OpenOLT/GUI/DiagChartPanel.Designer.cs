@@ -64,7 +64,7 @@
             this.diagChart.Location = new System.Drawing.Point(0, 0);
             this.diagChart.Name = "diagChart";
             this.diagChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
-            this.diagChart.Size = new System.Drawing.Size(835, 673);
+            this.diagChart.Size = new System.Drawing.Size(827, 673);
             this.diagChart.TabIndex = 0;
             this.diagChart.CursorPositionChanging += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.CursorEventArgs>(this.diagChart_CursorPositionChanging);
             this.diagChart.Resize += new System.EventHandler(this.diagChart_Resize);
@@ -82,7 +82,7 @@
             this.nextFrameStripButton});
             this.chartToolStrip.Location = new System.Drawing.Point(0, 0);
             this.chartToolStrip.Name = "chartToolStrip";
-            this.chartToolStrip.Size = new System.Drawing.Size(24, 673);
+            this.chartToolStrip.Size = new System.Drawing.Size(32, 673);
             this.chartToolStrip.TabIndex = 1;
             this.chartToolStrip.Text = "toolStrip1";
             // 
@@ -93,7 +93,7 @@
             this.openLogStripButton.Image = global::OpenOLT.Properties.Resources.open_log;
             this.openLogStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openLogStripButton.Name = "openLogStripButton";
-            this.openLogStripButton.Size = new System.Drawing.Size(21, 20);
+            this.openLogStripButton.Size = new System.Drawing.Size(29, 20);
             this.openLogStripButton.Text = "Открыть лог файл";
             // 
             // chartsSetPanelStripButton
@@ -103,7 +103,7 @@
             this.chartsSetPanelStripButton.Image = global::OpenOLT.Properties.Resources.chart_curve_go;
             this.chartsSetPanelStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.chartsSetPanelStripButton.Name = "chartsSetPanelStripButton";
-            this.chartsSetPanelStripButton.Size = new System.Drawing.Size(21, 20);
+            this.chartsSetPanelStripButton.Size = new System.Drawing.Size(29, 20);
             this.chartsSetPanelStripButton.Text = "Показать/скрыть список параметров";
             // 
             // toolStripButton1
@@ -113,7 +113,7 @@
             this.toolStripButton1.Image = global::OpenOLT.Properties.Resources.chart_line_edit;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(21, 20);
+            this.toolStripButton1.Size = new System.Drawing.Size(29, 20);
             this.toolStripButton1.Text = "Открыть набор графиков";
             // 
             // incScaleStripButton
@@ -123,7 +123,7 @@
             this.incScaleStripButton.Image = global::OpenOLT.Properties.Resources.incScale;
             this.incScaleStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.incScaleStripButton.Name = "incScaleStripButton";
-            this.incScaleStripButton.Size = new System.Drawing.Size(21, 20);
+            this.incScaleStripButton.Size = new System.Drawing.Size(29, 20);
             this.incScaleStripButton.Text = "Уже";
             // 
             // decScaleStripButton
@@ -133,7 +133,7 @@
             this.decScaleStripButton.Image = global::OpenOLT.Properties.Resources.decScale;
             this.decScaleStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.decScaleStripButton.Name = "decScaleStripButton";
-            this.decScaleStripButton.Size = new System.Drawing.Size(21, 20);
+            this.decScaleStripButton.Size = new System.Drawing.Size(29, 20);
             this.decScaleStripButton.Text = "Шире";
             // 
             // priorFrameStripButton
@@ -143,7 +143,7 @@
             this.priorFrameStripButton.Image = global::OpenOLT.Properties.Resources.page_left;
             this.priorFrameStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.priorFrameStripButton.Name = "priorFrameStripButton";
-            this.priorFrameStripButton.Size = new System.Drawing.Size(21, 20);
+            this.priorFrameStripButton.Size = new System.Drawing.Size(29, 20);
             this.priorFrameStripButton.Text = "Предыдущий кадр";
             // 
             // nextFrameStripButton
@@ -153,7 +153,7 @@
             this.nextFrameStripButton.Image = global::OpenOLT.Properties.Resources.page_right;
             this.nextFrameStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.nextFrameStripButton.Name = "nextFrameStripButton";
-            this.nextFrameStripButton.Size = new System.Drawing.Size(21, 20);
+            this.nextFrameStripButton.Size = new System.Drawing.Size(29, 20);
             this.nextFrameStripButton.Text = "Следующий кадр";
             // 
             // openLogToolButton
@@ -182,6 +182,7 @@
             // openLogAction
             // 
             this.openLogAction.Image = global::OpenOLT.Properties.Resources.open_log;
+            this.openLogAction.Tag = null;
             this.openLogAction.Text = "Открыть лог файл";
             this.openLogAction.ToolTipText = "Открыть лог файл";
             this.openLogAction.Execute += new System.EventHandler(this.openLogAction_Execute);
@@ -190,6 +191,7 @@
             // chartsSetPanelAction
             // 
             this.chartsSetPanelAction.Image = global::OpenOLT.Properties.Resources.chart_curve_go;
+            this.chartsSetPanelAction.Tag = null;
             this.chartsSetPanelAction.Text = "Показать/скрыть список параметров";
             this.chartsSetPanelAction.ToolTipText = "Показать/скрыть список параметров";
             this.chartsSetPanelAction.Execute += new System.EventHandler(this.chartsSetPanelAction_Execute);
@@ -198,6 +200,7 @@
             // openChartsAction
             // 
             this.openChartsAction.Image = global::OpenOLT.Properties.Resources.chart_line_edit;
+            this.openChartsAction.Tag = null;
             this.openChartsAction.Text = "Открыть набор графиков";
             this.openChartsAction.ToolTipText = "Открыть набор графиков";
             this.openChartsAction.Execute += new System.EventHandler(this.openChartsAction_Execute);
@@ -205,6 +208,7 @@
             // incScaleAction
             // 
             this.incScaleAction.Image = global::OpenOLT.Properties.Resources.incScale;
+            this.incScaleAction.Tag = null;
             this.incScaleAction.Text = "Уже";
             this.incScaleAction.ToolTipText = "Уже";
             this.incScaleAction.Execute += new System.EventHandler(this.incScaleAction_Execute);
@@ -212,6 +216,7 @@
             // decScaleAction
             // 
             this.decScaleAction.Image = global::OpenOLT.Properties.Resources.decScale;
+            this.decScaleAction.Tag = null;
             this.decScaleAction.Text = "Шире";
             this.decScaleAction.ToolTipText = "Шире";
             this.decScaleAction.Execute += new System.EventHandler(this.decScaleAction_Execute);
@@ -219,6 +224,7 @@
             // priorFrameAction
             // 
             this.priorFrameAction.Image = global::OpenOLT.Properties.Resources.page_left;
+            this.priorFrameAction.Tag = null;
             this.priorFrameAction.Text = "Предыдущий кадр";
             this.priorFrameAction.ToolTipText = "Предыдущий кадр";
             this.priorFrameAction.Execute += new System.EventHandler(this.priorFrameAction_Execute);
@@ -227,6 +233,7 @@
             // nextFrameAction
             // 
             this.nextFrameAction.Image = global::OpenOLT.Properties.Resources.page_right;
+            this.nextFrameAction.Tag = null;
             this.nextFrameAction.Text = "Следующий кадр";
             this.nextFrameAction.ToolTipText = "Следующий кадр";
             this.nextFrameAction.Execute += new System.EventHandler(this.nextFrameAction_Execute);
@@ -234,11 +241,13 @@
             // 
             // firstFrameAction
             // 
+            this.firstFrameAction.Tag = null;
             this.firstFrameAction.Text = "Первый кадр";
             this.firstFrameAction.ToolTipText = "Первый кадр";
             // 
             // lastFrameAction
             // 
+            this.lastFrameAction.Tag = null;
             this.lastFrameAction.Text = "Последний кадр";
             this.lastFrameAction.ToolTipText = "Последний кадр";
             // 
@@ -251,9 +260,9 @@
             this.chartPanel.AutoScroll = true;
             this.chartPanel.Controls.Add(this.diagChart);
             this.chartPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chartPanel.Location = new System.Drawing.Point(176, 0);
+            this.chartPanel.Location = new System.Drawing.Point(184, 0);
             this.chartPanel.Name = "chartPanel";
-            this.chartPanel.Size = new System.Drawing.Size(835, 673);
+            this.chartPanel.Size = new System.Drawing.Size(827, 673);
             this.chartPanel.TabIndex = 2;
             // 
             // chartsSet
@@ -263,7 +272,7 @@
             this.chartsSet.Dock = System.Windows.Forms.DockStyle.Left;
             this.chartsSet.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.chartsSet.FormattingEnabled = true;
-            this.chartsSet.Location = new System.Drawing.Point(24, 0);
+            this.chartsSet.Location = new System.Drawing.Point(32, 0);
             this.chartsSet.MultiColumn = true;
             this.chartsSet.Name = "chartsSet";
             this.chartsSet.Size = new System.Drawing.Size(152, 673);

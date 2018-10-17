@@ -1056,6 +1056,7 @@ namespace KWPTest
         {
             diagDataLog = DiagLogOpenForm.LoadDiagLog(this);
             logFileStatusLable.Text = "Log row count: " + diagDataLog.Length;
+            timeBar.Maximum = diagDataLog.Length;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -1104,6 +1105,16 @@ namespace KWPTest
         private void button4_Click(object sender, EventArgs e)
         {
             ReverseProtocolForm.ShowForm(this);
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            if (diagDataLog.Length > 0) {
+                oltDiagParams.bytes[0] = (byte)( diagDataLog[timeBar.Value].ErrorStatus << 8);
+                oltDiagParams.bytes[8] = (byte)(diagDataLog[timeBar.Value].TWAT +40);
+
+            }
+            
         }
     }
 

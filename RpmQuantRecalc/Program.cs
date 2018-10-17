@@ -15,7 +15,9 @@ namespace RpmQuantRecalc
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+#pragma warning disable CS0436 // Type conflicts with imported type
             Application.Run(new MainForm());
+#pragma warning restore CS0436 // Type conflicts with imported type
         }
     }
 }

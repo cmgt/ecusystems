@@ -39,6 +39,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SafeSerialPort.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SerialPortEx.cs">
       <SubType>Component</SubType>
     </Compile>

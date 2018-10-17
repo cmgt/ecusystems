@@ -19,8 +19,8 @@ namespace CtpMapEditor
             openFileDialog.InitialDirectory = Application.StartupPath;
 
 #if DEBUG
-            //LoadMap(Application.StartupPath + "\\j7es.j7");
-            LoadMap(Application.StartupPath + "\\M74_typeG3.m74");
+            LoadMap(Application.StartupPath + "\\j7es.j7");
+            //LoadMap(Application.StartupPath + "\\M74_typeG3.m74");
             //LoadMap(Application.StartupPath + "\\J5trs_243i.J5", true);
 #endif
         }

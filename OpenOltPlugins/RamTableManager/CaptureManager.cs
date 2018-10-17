@@ -88,6 +88,7 @@ namespace RamTablePlugin
                     if (exInfo.RtType != RtType.RpmPress) return;
                     table.CurrentIndex = onlineManager.FirmwareManager.RpmPressRtIndex;
                     break;
+                
             }
         }
 
@@ -171,10 +172,18 @@ namespace RamTablePlugin
                     table.AxisY = null;
                     var converter = Source2Value(entry2D);
                     FillMinMax(table, entry2D.Const_type);
+
+                    table.Units = entry2D.Units;
+                    table.xStart = entry2D.xStart;
+                    table.xPoints = entry2D.xPoints;
+                    table.xEnd = entry2D.xEnd;
+                    table.xUnits = entry2D.xUnits;
+
                     table.Init(entry2D.xPoints, 1, converter,
                                Value2Source(entry2D.Convert, table.RawMin, table.RawMax), FirmwareManager.Buffer);                    
                     table.FirstInit();                    
                     table.FillValues();
+                    
                     OpenOltHelper.FillMinMax(table, entry2D);
                     break;
 

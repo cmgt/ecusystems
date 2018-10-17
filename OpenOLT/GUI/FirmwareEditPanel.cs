@@ -31,5 +31,10 @@ namespace OpenOLT.GUI
                 tableNode.Tag = table;
             }
         }
+
+        private void firmwareMapOpen_Click(object sender, EventArgs e)
+        {
+            Open();
+        }
     }
 }

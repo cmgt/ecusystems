@@ -298,5 +298,11 @@ namespace CalibrTable
             if (PropertyChanged != null)
                 PropertyChanged(this, e);
         }
+
+        public string xUnits { get; set; }
+        public string Units { get; set; }
+        public double xStart { get; set; }
+        public double xEnd { get; set; }
+        public ushort xPoints { get; set; }
     }
 }

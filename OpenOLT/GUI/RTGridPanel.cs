@@ -17,7 +17,7 @@ namespace OpenOLT.GUI
         private readonly PaletteFast kgbcPalette;
         private readonly PaletteFast kgbcStudyPalette;
         private readonly PaletteFast gbcStudyPalette;
-        private readonly int backColor;        
+        private readonly int backColor;
         private bool followRT;
         private ITableValues table;
 
@@ -28,12 +28,12 @@ namespace OpenOLT.GUI
             kgbcPalette = new PaletteFast(new Palette(), 100);
             kgbcStudyPalette = new PaletteFast(new Palette(), 100);
             gbcStudyPalette = new PaletteFast(new Palette(), 10);
-          
+
             PrepareChart(16);
             SetStyle(ControlStyles.ResizeRedraw, true);
 
             backColor = SystemColors.Window.ToArgb();
-            
+
             kgbcPalette.Palette.AddElementsRange(PaletteHelper.GetSymmetric(0f, 2f));
             kgbcPalette.FillColors();
 
@@ -52,14 +52,14 @@ namespace OpenOLT.GUI
         }
 
         private void KeyboardHookOnKeyDown(object sender, KeyboardHookEventArgs e)
-        {            
+        {
             if (!Visible || Form.ActiveForm != FindForm()) return;
             if (!followRT)
             {
                 var colCount = rtGrid.ColumnCount;
                 var rowCount = rtGrid.RowCount;
-                var cellCount = colCount*rowCount;
- 
+                var cellCount = colCount * rowCount;
+
                 var tableIndex = rtGrid.CurrentCellAddress.Y * colCount + rtGrid.CurrentCellAddress.X;
                 switch (e.Key)
                 {
@@ -82,20 +82,21 @@ namespace OpenOLT.GUI
                         tableIndex = (tableIndex + colCount) % cellCount;
                         SetCurrentCell(tableIndex);
                         break;
+
                 }
             }
 
             if (!onlineManager.FirmwareManager.IsOpened) return;
             switch (e.Key)
             {
-                    //case (Keys)(189):
-                    //case Keys.Subtract:
+                //case (Keys)(189):
+                //case Keys.Subtract:
                 case Keys.K:
                     ChangeTableValue((ModifierKeys & Keys.Shift) == Keys.Shift ? -10 : -1);
                     break;
 
-                    //case (Keys)(187):
-                    //case Keys.Add:
+                //case (Keys)(187):
+                //case Keys.Add:
                 case Keys.L:
                     ChangeTableValue((ModifierKeys & Keys.Shift) == Keys.Shift ? 10 : 1);
                     break;
@@ -112,10 +113,18 @@ namespace OpenOLT.GUI
             if (gbcValue.Checked)
             {
                 int value = onlineManager.FirmwareManager.Gbc[currentCol, currentRow];
-                value += (int)Math.Round((255*i)/100.0, MidpointRounding.AwayFromZero);
+                value += (int)Math.Round((255 * i) / 100.0, MidpointRounding.AwayFromZero);
                 value = Math.Min(Math.Max(0, value), 255);
-                onlineManager.FirmwareManager.Gbc.SetSource(index, (byte)value);                
+                onlineManager.FirmwareManager.Gbc.SetSource(index, (byte)value);
                 onlineManager.FirmwareManager.WriteGBCValue(index);
+            }
+            else if (veValue.Checked)
+            {
+                int value = onlineManager.FirmwareManager.Kgbc_press[currentCol, currentRow];
+                value += i;
+                value = Math.Min(Math.Max(0, value), 255);
+                onlineManager.FirmwareManager.Kgbc_press.SetSource(index, (byte)value);
+                onlineManager.FirmwareManager.WriteKGBCValue(index);
             }
             else
             {
@@ -135,13 +144,13 @@ namespace OpenOLT.GUI
             tableRow = Math.DivRem(index, colCount, out tableCol);
             rtGrid.CurrentCell = rtGrid.Rows[tableRow].Cells[tableCol];
             rtGrid.Refresh();
-        }        
-        
+        }
+
         public void Prepare(OnlineManager onlineManager)
         {
             this.onlineManager = onlineManager;
             onlineManager.settings.PropertyChanged += settings_PropertyChanged;
-            disableFuelCutoff.Checked = onlineManager.settings.DisabledTHRZeroFuelCutoff;                                                                       
+            disableFuelCutoff.Checked = onlineManager.settings.DisabledTHRZeroFuelCutoff;
         }
 
         private void TableValueChanged(object sender, ValueChangeArgs e)
@@ -161,27 +170,44 @@ namespace OpenOLT.GUI
 
         private void InitGrid()
         {
-            var cols = !gbcValue.Checked && onlineManager.FirmwareManager.J7esFlags.IsKgbc32_16
-                ? onlineManager.FirmwareManager.RpmRt16
-                : onlineManager.FirmwareManager.RpmRt32;
+            int[] cols;
+            if (gbcValue.Checked)
+            {
+                cols = onlineManager.FirmwareManager.RpmRt16;
+            }
+            else
+            {
+                if (onlineManager.FirmwareManager.J7esFlags.IsKgbc32_16)
+                    cols = onlineManager.FirmwareManager.RpmRt32;
+                else if (veValue.Checked)
+                    if (onlineManager.FirmwareManager.J7esFlags.IsKgbcPress32_32)
+                        cols = onlineManager.FirmwareManager.RpmRt32;
+                    else
+                        cols = onlineManager.FirmwareManager.RpmRt16;
+                else
+                    cols = onlineManager.FirmwareManager.RpmRt16;
+            }
 
             rtGrid.ColumnCount = cols.Length;
 
-            int[] rows = onlineManager.FirmwareManager.ThrRt;
+            int[] rows = veValue.Checked && !gbcValue.Checked ?
+                onlineManager.FirmwareManager.J7esFlags.IsKgbcPress32_32 ? onlineManager.FirmwareManager.PressRt32 : onlineManager.FirmwareManager.PressRt
+                : onlineManager.FirmwareManager.ThrRt;
 
-            rtGrid.RowCount = rows.Length;            
 
+            rtGrid.RowCount = rows.Length;
             if (!onlineManager.FirmwareManager.IsOpened) return;
-            
+
             for (var i = 0; i < rtGrid.RowCount; i++)
             {
-                rtGrid.Rows[i].HeaderCell.Value = rows[i].ToString();   
+                rtGrid.Rows[i].HeaderCell.Value = rows[i].ToString();
+                rtGrid.Rows[i].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
             }
 
             for (var i = 0; i < rtGrid.ColumnCount; i++)
             {
                 rtGrid.Columns[i].Width = 50;
-                rtGrid.Columns[i].HeaderCell.Value = cols[i].ToString();                                 
+                rtGrid.Columns[i].HeaderCell.Value = cols[i].ToString();
             }
 
             rtGrid.CurrentCell = rtGrid.Rows[0].Cells[0];
@@ -196,25 +222,31 @@ namespace OpenOLT.GUI
         {
             if (!onlineManager.FirmwareManager.IsOpened || !onlineManager.OltProtocol.Connected) return;
 
-            var currentRow = onlineManager.FirmwareManager.ThrRtIndex;
+            var currentRow = veValue.Checked ? onlineManager.FirmwareManager.RpmPressRtIndex : onlineManager.FirmwareManager.ThrRtIndex;
             var currentCol = onlineManager.FirmwareManager.RpmRtIndex;
 
-            rpmThrRtIndex.Text = String.Format("[{0}]", onlineManager.FirmwareManager.RpmThrRtIndex.ToString("X2"));
+            rpmThrRtIndex.Text = String.Format("[{0}]", veValue.Checked ? onlineManager.FirmwareManager.RpmPressRtIndex.ToString("X2") : onlineManager.FirmwareManager.RpmThrRtIndex.ToString("X2"));
 
-            var persent = gbcValue.Checked
-                              ? onlineManager.FirmwareManager.Gbc.CalcFillPersent()
-                              : onlineManager.FirmwareManager.Kgbc.CalcFillPersent();
+            int persent;
+            if (gbcValue.Checked)
+                persent = onlineManager.FirmwareManager.Gbc.CalcFillPersent();
+            else if (veValue.Checked)
+                persent = onlineManager.FirmwareManager.Kgbc.CalcFillPersent();
+            else
+                persent = onlineManager.FirmwareManager.Kgbc_press.CalcFillPersent();
 
             rtGridFillProgressBar.Value = persent;
             thrRtPersent.Text = String.Format("{0}%", persent);
 
             if (!followRT) return;
+            //select work dot 
+            //@TODO: make separate selection and indicate
             rtGrid.InvalidateCell(currentCol, currentRow);
             rtGrid.CurrentCell = rtGrid.Rows[currentRow].Cells[currentCol];
         }
 
         public void UpdateValues(int index)
-        {                       
+        {
             float value;
             int valueCol, valueRow;
 
@@ -228,10 +260,27 @@ namespace OpenOLT.GUI
                     var gbcCell = onlineManager.FirmwareManager.Gbc.Cell(valueCol, valueRow);
                     var valueStr = GetGbcCorrectionParams(gbcCell);
                     rtGrid.Rows[valueRow].Cells[valueCol].Value = valueStr;
-                    rtGrid.Rows[valueRow].Cells[valueCol].ToolTipText = gbcCell.StopStudy ? "Точка обучена" : "Кол-во циклов обучения | Текущая ошибка | '+' - точка обучена"; 
+                    rtGrid.Rows[valueRow].Cells[valueCol].ToolTipText = gbcCell.StopStudy ? "Точка обучена" : "Кол-во циклов обучения | Текущая ошибка | '+' - точка обучена";
                 }
                 else
-                {                    
+                {
+                    rtGrid.Rows[valueRow].Cells[valueCol].Value = value;
+                }
+            }
+            else if (veValue.Checked)
+            {
+                valueRow = Math.DivRem(index, onlineManager.FirmwareManager.Gbc.ColCount, out valueCol);
+                value = onlineManager.FirmwareManager.Kgbc_press.GetValue(valueCol, valueRow);
+
+                if (cbCorrectionParams.Checked)
+                {
+                    var kgbcPressCell = onlineManager.FirmwareManager.Kgbc_press.Cell(valueCol, valueRow);
+                    var valueStr = GetKGbcCorrectionParams(kgbcPressCell);
+                    rtGrid.Rows[valueRow].Cells[valueCol].Value = valueStr;
+                    rtGrid.Rows[valueRow].Cells[valueCol].ToolTipText = kgbcPressCell.StopStudy ? "Точка обучена" : "Кол-во циклов обучения | Текущая ошибка | '+' - точка обучена";
+                }
+                else
+                {
                     rtGrid.Rows[valueRow].Cells[valueCol].Value = value;
                 }
             }
@@ -241,25 +290,24 @@ namespace OpenOLT.GUI
                 value = onlineManager.FirmwareManager.Kgbc.GetValue(valueCol, valueRow);
 
                 if (cbCorrectionParams.Checked)
-                {                    
+                {
                     var kgbcCell = onlineManager.FirmwareManager.Kgbc.Cell(valueCol, valueRow);
                     var valueStr = GetKGbcCorrectionParams(kgbcCell);
                     rtGrid.Rows[valueRow].Cells[valueCol].Value = valueStr;
                     rtGrid.Rows[valueRow].Cells[valueCol].ToolTipText = kgbcCell.StopStudy ? "Точка обучена" : "Кол-во циклов обучения | Текущая ошибка | '+' - точка обучена";
                 }
                 else
-                {                    
-                    rtGrid.Rows[valueRow].Cells[valueCol].Value = value;                    
+                {
+                    rtGrid.Rows[valueRow].Cells[valueCol].Value = value;
                 }
-            }            
-                                      
+            }
             rtGrid.InvalidateCell(valueCol, valueRow);
 
             rtChart.PeData.Y[valueRow, valueCol] = value;
             Gigasoft.ProEssentials.Api.PEreconstruct3dpolygons(rtChart.PeSpecial.HObject);
             rtChart.PeFunction.ResetImage(0, 0);
             rtChart.Refresh();
-        }              
+        }
 
         private void pcnValue_CheckedChanged(object sender, EventArgs e)
         {
@@ -277,6 +325,7 @@ namespace OpenOLT.GUI
 
             onlineManager.FirmwareManager.Gbc.ValueChanged += TableValueChanged;
             onlineManager.FirmwareManager.Kgbc.ValueChanged += TableValueChanged;
+            onlineManager.FirmwareManager.Kgbc_press.ValueChanged += TableValueChanged;
         }
 
         public void LoadData()
@@ -293,19 +342,50 @@ namespace OpenOLT.GUI
 
         private ITableValues GetTargetTable()
         {
+            if (veValue.Checked)
+            {
+                return gbcValue.Checked
+                ? (ITableValues)onlineManager.FirmwareManager.Gbc
+                : onlineManager.FirmwareManager.Kgbc_press;
+            }
             return gbcValue.Checked
-                ? (ITableValues) onlineManager.FirmwareManager.Gbc
+                ? (ITableValues)onlineManager.FirmwareManager.Gbc
                 : onlineManager.FirmwareManager.Kgbc;
         }
 
         private void LoadChart()
-        {            
+        {
             var Y = table.GetFloatValues();
-            var X = !gbcValue.Checked && onlineManager.FirmwareManager.J7esFlags.IsKgbc32_16 ? onlineManager.FirmwareManager.Rpm32_16RtPoints : onlineManager.FirmwareManager.Rpm16_16RtPoints;
-            var Z = onlineManager.FirmwareManager.ThrRtPoints;
+            float[] X;
+            float[] Z;
+            var tableXsize = 16;
+            var tableZsize = 16;
+            if (veValue.Checked && !gbcValue.Checked || onlineManager.FirmwareManager.J7esFlags.IsKgbc32_16 )
+            {
+                X = onlineManager.FirmwareManager.Rpm32_16RtPoints;
+                tableXsize = 32;
 
-            PrepareChart(X.Length / 16);
-                   
+                if (onlineManager.FirmwareManager.J7esFlags.IsKgbcPress32_32 || !gbcValue.Checked) {
+                    X = onlineManager.FirmwareManager.Rpm32_32RtPoints;
+                    Z = onlineManager.FirmwareManager.PressRt32Points;
+                    tableXsize = 32;
+                    tableZsize = 32;
+                }
+                else {
+                    Z = onlineManager.FirmwareManager.ThrRtPoints;
+                    
+                }
+            }
+            else
+            {
+
+                X = onlineManager.FirmwareManager.Rpm16_16RtPoints;
+                Z = onlineManager.FirmwareManager.ThrRtPoints;                
+            }
+
+
+            PrepareChart(X.Length / tableXsize);
+
             Gigasoft.ProEssentials.Api.PEvsetW(rtChart.PeSpecial.HObject, Gigasoft.ProEssentials.DllProperties.XData,
                                                X, X.Length);
 
@@ -323,7 +403,7 @@ namespace OpenOLT.GUI
             var vh = rtChart.PeUserInterface.Scrollbar.ViewingHeight;
             var dor = rtChart.PeUserInterface.Scrollbar.DegreeOfRotation;
             rtChart.PeFunction.Reset();
-            rtChart.PeData.Subsets = 16;
+            rtChart.PeData.Subsets = count;
             rtChart.PeData.Points = count;
 
             rtChart.PeData.NullDataValue = rtChart.PeData.NullDataValueX = rtChart.PeData.NullDataValueZ = -9999;
@@ -336,6 +416,18 @@ namespace OpenOLT.GUI
             rtChart.PeColor.SubsetColors[(int)(SurfaceColors.WireFrame)] = Color.FromArgb(96, 198, 0, 0);
             rtChart.PeColor.SubsetColors[(int)(SurfaceColors.SolidSurface)] = Color.FromArgb(96, 0, 148, 0);
 
+            var palette = gbcValue.Checked ? gbcPalette : kgbcPalette;
+            if (onlineManager?.FirmwareManager?.Kgbc_press?.Min != null)
+            {
+                //throw new NotImplementedException("No min and max");
+                var step = onlineManager.FirmwareManager.Kgbc_press.xEnd - onlineManager.FirmwareManager.Kgbc_press.xStart;
+                //var step = 0.1;
+                for (int subset = rtChart.PeData.Subsets + 1; subset > 0; subset--)
+                {
+                    rtChart.PeColor.SubsetColors[subset] = Color.FromArgb(palette.GetColorOnValue((float)step * (subset), backColor));
+                }
+            }
+
             // Alternately, if the above SubsetColor indices are not assigned.
             // (0) will be wireframe color for wireframe plotting method //
             // (0) will be solid color if plotting method is solid
@@ -344,8 +436,8 @@ namespace OpenOLT.GUI
             // Set the plotting method //
             //! There are different plotting method values for each //
             //! case of PolyMode  //
-            rtChart.PePlot.Method = ThreeDGraphPlottingMethod.One;            
-
+            rtChart.PePlot.Method = ThreeDGraphPlottingMethod.Four;
+            //rtChart.PeColor.ViewingStyle
             // Set various other properties //
             rtChart.PeColor.BitmapGradientMode = true;
             rtChart.PeColor.QuickStyle = QuickStyle.DarkLine;
@@ -354,8 +446,13 @@ namespace OpenOLT.GUI
             rtChart.PeLegend.SimpleLine = true;
             rtChart.PeLegend.Style = SimpleLegendStyle.OneLine;
 
-            rtChart.PeString.MainTitle = "Wire Frame";
+            rtChart.PeString.MainTitle = gbcValue.Checked ? "БНЦ" : "ПНЦ";
             rtChart.PeString.SubTitle = "";
+            rtChart.PeString.XAxisLabel = "rpm";
+            rtChart.PeString.ZAxisLabel = "press/thr";
+            rtChart.PeString.YAxisLabel = gbcValue.Checked ? "мг.цикл" : "coef";
+            //rtChart.PeString.SubsetLabels[]
+
             rtChart.PeUserInterface.Scrollbar.ViewingHeight = vh;
             rtChart.PeUserInterface.Scrollbar.DegreeOfRotation = dor;
             rtChart.PeUserInterface.Scrollbar.MouseDraggingX = true;
@@ -366,13 +463,13 @@ namespace OpenOLT.GUI
             rtChart.PeUserInterface.Cursor.ProcessingMouseMove = true;
             // Help see data points //
             rtChart.PePlot.MarkDataPoints = true;
-           
+
             // This will allow you to move cursor by clicking data point //
             rtChart.PeUserInterface.HotSpot.Data = true;
             rtChart.PeUserInterface.HotSpot.Size = HotSpotSize.Large;
 
             rtChart.PeFont.Fixed = true;
-            rtChart.PeFont.FontSize = FontSize.Large;
+            rtChart.PeFont.FontSize = FontSize.Medium;
             rtChart.PeConfigure.PrepareImages = false;
             rtChart.PeConfigure.CacheBmp = false;
             rtChart.PeUserInterface.Allow.FocalRect = false;
@@ -387,6 +484,7 @@ namespace OpenOLT.GUI
             // Improves Metafile Export //
             rtChart.PeSpecial.DpiX = 600;
             rtChart.PeSpecial.DpiY = 600;
+
 
             rtChart.PeConfigure.RenderEngine = RenderEngine.Hybrid;
             rtChart.PeConfigure.AntiAliasGraphics = false;
@@ -415,11 +513,11 @@ namespace OpenOLT.GUI
             }
 
             rtGrid.Refresh();
-        }        
+        }
 
         private void LoadKGBCData()
         {
-            var tableKGBC = (TableValues<byte, float>) table;
+            var tableKGBC = (TableValues<byte, float>)table;
             if (cbCorrectionParams.Checked)
             {
                 for (var i = 0; i < rtGrid.RowCount; i++)
@@ -453,7 +551,7 @@ namespace OpenOLT.GUI
 
         private void LoadGBCData()
         {
-            var tableGBC = (TableValues<byte, short>) table;
+            var tableGBC = (TableValues<byte, short>)table;
 
             if (cbCorrectionParams.Checked)
             {
@@ -511,7 +609,7 @@ namespace OpenOLT.GUI
 
             var colCount = rtGrid.ColumnCount;
             var rowCount = rtGrid.RowCount;
-            var cellCount = colCount*rowCount;
+            var cellCount = colCount * rowCount;
 
             var currentIndex = rtGrid.CurrentCellAddress.Y * colCount + rtGrid.CurrentCellAddress.X;
 
@@ -533,6 +631,14 @@ namespace OpenOLT.GUI
                             var cell = onlineManager.FirmwareManager.Gbc.Cell(cellIndex);
                             color = cell.Count > 0
                                         ? Color.FromArgb(gbcStudyPalette.GetColorOnValue(cell.Error, backColor))
+                                        : color;
+                            color = cell.StopStudy ? Color.LimeGreen : color;
+                        }
+                        else if (veValue.Checked)
+                        {
+                            var cell = onlineManager.FirmwareManager.Kgbc_press.Cell(cellIndex);
+                            color = cell.Count > 0
+                                        ? Color.FromArgb(kgbcStudyPalette.GetColorOnValue(cell.Error, backColor))
                                         : color;
                             color = cell.StopStudy ? Color.LimeGreen : color;
                         }
@@ -560,7 +666,7 @@ namespace OpenOLT.GUI
                     }
                 }
             }
-        }        
+        }
 
         private void btnGridChart_Click(object sender, EventArgs e)
         {
@@ -571,9 +677,13 @@ namespace OpenOLT.GUI
 
         private void btnSmoothing_Click(object sender, EventArgs e)
         {
+
+
             var table = gbcValue.Checked
                             ? onlineManager.FirmwareManager.Gbc.Get2DArray()
-                            : onlineManager.FirmwareManager.Kgbc.Get2DArray();
+                            : veValue.Checked ? onlineManager.FirmwareManager.Kgbc_press.Get2DArray() : onlineManager.FirmwareManager.Kgbc.Get2DArray();
+
+
             byte factor;
             if (!byte.TryParse(smoothingFactor.Text, out factor))
             {
@@ -588,8 +698,17 @@ namespace OpenOLT.GUI
             }
             else if (pcnValue.Checked)
             {
-                onlineManager.FirmwareManager.Kgbc.Set2DArray(smoothing);
-                onlineManager.FirmwareManager.Kgbc.DoTableChanged();
+                if (veValue.Checked)
+                {
+                    onlineManager.FirmwareManager.Kgbc_press.Set2DArray(smoothing);
+                    onlineManager.FirmwareManager.Kgbc_press.DoTableChanged();
+                }
+                else
+                {
+                    onlineManager.FirmwareManager.Kgbc.Set2DArray(smoothing);
+                    onlineManager.FirmwareManager.Kgbc.DoTableChanged();
+                }
+
             }
 
             LoadData();
@@ -611,7 +730,7 @@ namespace OpenOLT.GUI
 
             // Calls PEgethotspot //'
             var ds = rtChart.PeFunction.GetHotSpotData();
-            if (ds.Type != HotSpotType.DataPoint) return;            
+            if (ds.Type != HotSpotType.DataPoint) return;
 
             var extra1 = ds.Data1;
             var extra2 = ds.Data2;
@@ -635,6 +754,15 @@ namespace OpenOLT.GUI
                 tableCell.StopStudy = tableCell.Count > 10;
                 UpdateValues(cellIndex);
             }
+            else if (veValue.Checked)
+            {
+                var cellIndex = e.RowIndex * onlineManager.FirmwareManager.Kgbc_press.ColCount + e.ColumnIndex;
+                var tableCell = onlineManager.FirmwareManager.Kgbc_press.Cell(cellIndex);
+                tableCell.Count++;
+                tableCell.Error += 0.1f;
+                tableCell.StopStudy = tableCell.Count > 10;
+                UpdateValues(cellIndex);
+            }
             else
             {
                 var cellIndex = e.RowIndex * onlineManager.FirmwareManager.Kgbc.ColCount + e.ColumnIndex;
@@ -643,8 +771,18 @@ namespace OpenOLT.GUI
                 tableCell.Error += 0.1f;
                 tableCell.StopStudy = tableCell.Count > 10;
                 UpdateValues(cellIndex);
-            }                        
+            }
 #endif
-        }       
+        }
+
+        private void veValue_CheckStateChanged(object sender, EventArgs e)
+        {
+
+            var source = sender as RadioButton;
+
+            if (source != null && !source.Checked) return;
+            onlineManager.FirmwareManager.IsVolumetricEfficiency = veValue.Checked;
+            LoadData();
+        }
     }
 }

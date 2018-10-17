@@ -28,7 +28,7 @@ namespace OpenOLT.GUI
 
             uiContext = SynchronizationContext.Current;
             ChartScale = 200;
-            MinChartHeight = 150;
+            MinChartHeight = 100;
 
             palette = new Color[]
                           {
@@ -192,6 +192,7 @@ namespace OpenOLT.GUI
 
         private void AligningCharts()
         {
+            MinChartHeight = MinChartHeight > 0 ? MinChartHeight : 1;
             var count = charts.Count;
             var frameChartCount = ClientSize.Height / MinChartHeight;
             diagChart.Height = frameChartCount < count ? count*MinChartHeight : ClientSize.Height;

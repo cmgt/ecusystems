@@ -134,5 +134,14 @@ namespace OpenOLT.GUI
             return res;
 
         }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            var res =
+                selectedChars.Items.OfType<string>().Select(
+                    item => dataKeeper.valueInfos.First(info => info.Title == item)).ToArray();
+            
+           // return res;
+        }
     }
 }

@@ -421,6 +421,9 @@ namespace OpenOLT
             {
                 if (updateThread.CancellationPending) break;
 
+                if (oltProtocol.Connected ) {
+                    EcuConnect();
+                }
                 uiContext.Send(
                     delegate
                         {

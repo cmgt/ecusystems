@@ -30,6 +30,9 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TableControl));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(3D, 29D);
             this.rtGrid = new System.Windows.Forms.DataGridView();
             this.editPanel = new System.Windows.Forms.Panel();
             this.toolStripEx = new Helper.ToolStripEx();
@@ -47,9 +50,12 @@
             this.persentOffsetBtn = new System.Windows.Forms.ToolStripButton();
             this.setBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ViewSwitch = new System.Windows.Forms.ToolStripButton();
+            this.RamChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.rtGrid)).BeginInit();
             this.editPanel.SuspendLayout();
             this.toolStripEx.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RamChart)).BeginInit();
             this.SuspendLayout();
             // 
             // rtGrid
@@ -98,7 +104,8 @@
             this.offsetBtn,
             this.persentOffsetBtn,
             this.setBtn,
-            this.toolStripSeparator2});
+            this.toolStripSeparator2,
+            this.ViewSwitch});
             this.toolStripEx.Location = new System.Drawing.Point(0, 0);
             this.toolStripEx.Name = "toolStripEx";
             this.toolStripEx.Size = new System.Drawing.Size(1280, 25);
@@ -226,10 +233,49 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // ViewSwitch
+            // 
+            this.ViewSwitch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ViewSwitch.Image = ((System.Drawing.Image)(resources.GetObject("ViewSwitch.Image")));
+            this.ViewSwitch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ViewSwitch.Name = "ViewSwitch";
+            this.ViewSwitch.Size = new System.Drawing.Size(23, 22);
+            this.ViewSwitch.Text = "toolStripButton1";
+            this.ViewSwitch.Click += new System.EventHandler(this.ViewSwitch_Click);
+            // 
+            // RamChart
+            // 
+            this.RamChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea1.Name = "ChartArea1";
+            this.RamChart.ChartAreas.Add(chartArea1);
+            this.RamChart.Location = new System.Drawing.Point(0, 26);
+            this.RamChart.Name = "RamChart";
+            series1.BorderWidth = 2;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.IsXValueIndexed = true;
+            series1.MarkerStep = 10;
+            series1.Name = "Series1";
+            dataPoint1.AxisLabel = "LABEL";
+            dataPoint1.Color = System.Drawing.Color.Lime;
+            series1.Points.Add(dataPoint1);
+            this.RamChart.Series.Add(series1);
+            this.RamChart.Size = new System.Drawing.Size(1280, 466);
+            this.RamChart.TabIndex = 3;
+            this.RamChart.Text = "chart1";
+            this.RamChart.Visible = false;
+            this.RamChart.Click += new System.EventHandler(this.RamChart_Click);
+            this.RamChart.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RamChart_MouseDown);
+            this.RamChart.MouseMove += new System.Windows.Forms.MouseEventHandler(this.RamChart_MouseMove);
+            this.RamChart.MouseUp += new System.Windows.Forms.MouseEventHandler(this.RamChart_MouseUp);
+            // 
             // TableControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.RamChart);
             this.Controls.Add(this.rtGrid);
             this.Controls.Add(this.editPanel);
             this.Name = "TableControl";
@@ -239,6 +285,7 @@
             this.editPanel.PerformLayout();
             this.toolStripEx.ResumeLayout(false);
             this.toolStripEx.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RamChart)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -262,5 +309,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton followTableRtBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripButton ViewSwitch;
+        private System.Windows.Forms.DataVisualization.Charting.Chart RamChart;
     }
 }
